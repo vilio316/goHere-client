@@ -1,42 +1,25 @@
-import {APIProvider, Map, useMapsLibrary} from '@vis.gl/react-google-maps';
+import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
+import { useLocationCoords } from '../contexts/LocationContext';
 
 const key = import.meta.env.VITE_PLACES_API_KEY
 
-const MapTest = () => (
+function MapComponent(){
+  const {location} = useLocationCoords()
+  console.log(location)
+  return(
   <APIProvider apiKey={key}>
     <Map
-      style={{width: '70vw', height: '75vh'}}
-      defaultCenter={{lat: 9.01, lng:7.50}}
+      style={{width: '45vw', height: '70vh'}}
+      defaultCenter={{lat: location.lat , lng: location.long}}
       defaultZoom={15}
       gestureHandling={'greedy'}
-      disableDefaultUI={true}
-    />
-    <PlacesTest/>
+      disableDefaultUI={false}>
+        <Marker position={{
+          lat: location.lat, lng: location.long
+        }} />
+      </Map>
   </APIProvider>
-)
-export default MapTest
-
-
-function PlacesTest (){
-    const places = useMapsLibrary('places')
-      const request = {
-        textQuery: "where to watch football",
-        fields: ['displayName', 'location', 'businessStatus', "internationalPhoneNumber", "websiteURI", "photos", 'primaryType', 'priceRange'],
-        includedType: '',
-        useStrictTypeFiltering: true,
-        locationBias: {lat: 9.01, lng: 7.5},
-        isOpenNow: true,
-        language: 'en-US',
-        maxResultCount: 8,
-    };
-
-    async function log(){
-    const places_result = await places?.Place.searchByText(request)
-    return places_result?.places
-    }
-
-    console.log(log())
-    return(
-        <p>Test!</p>
-    )
+  )
 }
+export default MapComponent
+

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { FaLocationPin } from "react-icons/fa6"
 import { Link } from "react-router"
 import axios from "axios"
 import { SearchResult } from "./components/SearchResults"
+import { useLocationCoords } from "./contexts/LocationContext"
+
 
 export interface resultType{
   id: string,
@@ -41,11 +42,23 @@ export interface resultType{
 function App() {
   const [search_query, updateSearchQuery] = useState("")
   const [search_results, updateSearchResults] = useState<resultType[]>([])
+  const { setLocation } = useLocationCoords()
+
+  navigator.geolocation.getCurrentPosition((position) => {setLocation(
+    {
+      lat: position.coords.latitude , long: position.coords.longitude
+    }
+  )
+  }
+)
 
 
   useEffect(()=>{
 
     async function searchFromServer(query: string) {
+      if (query.includes('near me') || query.includes('nearby')){
+        console.log("Using Nearby Search")
+      }
       const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}}`)
       updateSearchResults(data)
     }
@@ -54,42 +67,27 @@ function App() {
 
   return (
     <>
-    <div className="header grid md:grid-cols-4 items-center">
-      <div className="flex col-span-1 p-2 items-center gap-x-2">
-        <FaLocationPin size={40} fill="red" />
-        <Link to='/'>
-        <p className="text-2xl my-1">GoHere</p>
-        <p className="my-1 ">Your #1 Travel Companion</p>
-        </Link>
-      </div>
-
-      <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1">
-        <span>About</span>
-        <span>Locations</span>
-        <span>Contact Us</span>
-        <span>Contribute</span>
-        <span>Random...</span>
-      </div>
-
-      <div className="md:grid hidden col-span-1 justify-center">
-        <div className="bg-yellow-300 text-white text-xl p-2 rounded-2xl text-center hover:bg-yellow-400">
-          Login / Register
-        </div>
-      </div>
-    </div>
-
     <div className="grid justify-items-center p-4 md:p-2">
-        <input type="search" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-2 md:p-4 md:w-[80%] w-[90%] block border-2 h-[5rem] border-black outline-none" autoComplete="true"  onChange={(e) => {
+        <input type="search" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-2 md:p-4 md:w-[80%] w-[90%] block border-2 h-[5rem] border-black outline-none peer" autoComplete="true" minLength={3}  onChange={(e) => {
           if(e.target.value.length %3 ==0){
             updateSearchQuery(e.target.value)
           }
         }}/>
-        <div className="search_results w-full">
-          {search_query.length > 2 ? search_results?.map((item)=> (
-            <SearchResult item={item} />
+        <p className="peer-invalid:block hidden peer-invalid:text-red-400">
+          Please enter a longer search term
+        </p>
+
+        <div className="search_results w-4/5">
+          {search_query.length > 2 ? search_results?.slice(0,5).map((item)=> (
+            <SearchResult item={item} key = {item.id}/>
           ))
-        : <p>Please enter a longer search term</p>
+        : null
         }
+        <Link to={`/results?query=${
+          search_query
+        }`} 
+        className={`${search_results.length > 0 ? 'block' : 'hidden'}`
+        }>See More ... &gt; </Link>
       {/*Search Results  */}
       {/*Should have a Read More section that links to other page, uses URL state*/}
     </div>
