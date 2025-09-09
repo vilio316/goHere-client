@@ -1,7 +1,8 @@
 import { useParams, useSearchParams } from "react-router"
 import MapComponent from "./MapTestComponent"
 import { useEffect, useReducer, useState } from "react"
-import { FaGlobe, FaLocationPin, FaPhone, FaStar } from "react-icons/fa6"
+import { FaGlobe, FaLocationPin, FaPhone, FaRoute, FaStar } from "react-icons/fa6"
+import { useLocationCoords } from "../contexts/LocationContext"
 
 interface locationDetails{
         displayName: string,
@@ -72,8 +73,17 @@ interface locationDetails{
 
 export function LocationDetails(){
     const [searchParams] = useSearchParams()
+    const {location} = useLocationCoords()
     const id_value = searchParams.get('id')
     const params = useParams()
+    const [distanceObj, updateDistanceObj] = useState({
+        distance: {
+            text: '', value: 0
+        },
+        duration: {
+            text: '', value: 0
+        }
+    })
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
     const [photos, addPhoto] = useState('string')
 
@@ -123,8 +133,8 @@ export function LocationDetails(){
         async function getDistanceDetails(){
             const distanceService = new google.maps.DistanceMatrixService()
 
-             const origin1 = { lat: 55.93, lng: -3.118 };
-  const destinationB = { lat: 50.087, lng: 14.421 };
+             const origin1 = { lat: location.lat, lng: location.long };
+  const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
 
   const request = {
     origins: [origin1],
@@ -136,13 +146,13 @@ export function LocationDetails(){
   };
 
     distanceService.getDistanceMatrix(request).then((response) => {
-        console.log(response.rows[0].elements[0].distance, response.rows[0].elements[0].duration)
+        updateDistanceObj({...distanceObj, distance: response.rows[0].elements[0].distance, duration: response.rows[0].elements[0].duration})
     })
         }
 
 
-        getPlaceDetails();
-        getDistanceDetails();
+        getPlaceDetails()
+        getDistanceDetails()
     }, [])
 
 
@@ -155,7 +165,7 @@ export function LocationDetails(){
 
             <div>
             { photos !== 'string' ?
-            <img src={photos} className="rounded-2xl p-2 opacity-75 w-full max-h-[40vh] object-cover" loading="lazy"/>
+            <img src={photos} className="rounded-2xl p-2 w-full max-h-[40vh] object-cover" loading="lazy"/>
             : <></>}
 
             <p className="text-2xl font-bold">
@@ -164,12 +174,20 @@ export function LocationDetails(){
                 </p>
 
             <div className="flex gap-x-2 items-center">
-                <span>{state_value.primaryType}</span>
-                <div className="flex items-center">
+                <span className="capitalize">{state_value.primaryType}</span>
+                <div className="flex items-center p-2 gap-x-2">
+                    <div>
                 <span className="p-1">
                     <FaStar fill='gold'  className="inline" />
                     </span>
+                 </div>   
                 <span>{state_value.rating}</span>
+                <div>
+                <span>
+                    <FaRoute className="inline" fill='blue' />
+                </span>
+                <span className="md:text-xl text-sm">{distanceObj.distance.text} ({distanceObj.duration.text})</span>
+                </div>
                 </div>
             </div>
 
@@ -183,9 +201,12 @@ export function LocationDetails(){
                 <span className="p-2"><FaPhone className="inline" /></span>
                 {state_value.phone}</p>
 
-              <a href={state_value.website} className="hover:underline hover:font-bold">
+                <>
+              {state_value.website ?
+              <a href={state_value.website} className="hover:underline hover:font-bold"> 
                 <span className="p-2"><FaGlobe className="inline" /></span>
-                {state_value.website}</a>   
+                {state_value.website}</a> : null}  
+                </>
             <div>
 
             <div className="companion-apps p-2 my-2">
