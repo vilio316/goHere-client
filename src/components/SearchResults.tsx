@@ -12,7 +12,7 @@ function SearchResult(props: {
             <div className="col-span-4">
                 <Link to={`/location/${location.latitude
         }/${location.longitude}?id=${id}`}>
-            <p className="font-bold text-2xl">{displayName.text}</p>
+            <p className="font-bold text-2xl capitalize">{displayName.text}</p>
             <div className="flex md:gap-x-4">
             <span>{primaryTypeDisplayName ? primaryTypeDisplayName.text : ''}</span>
 

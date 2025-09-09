@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router"
 import { SearchResult } from "./SearchResults"
 
 export default function ViewAll(){
-    const [searchparams, changeParams] = useSearchParams()
+    const [searchparams] = useSearchParams()
     const queryVal = searchparams.get('query')
     const [searchResults, updateSearchResults] = useState<resultType[]>([])
 

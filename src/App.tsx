@@ -68,7 +68,7 @@ function App() {
   return (
     <>
     <div className="grid justify-items-center p-4 md:p-2">
-        <input type="search" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-2 md:p-4 md:w-[80%] w-[90%] block border-2 h-[5rem] border-black outline-none peer" autoComplete="true" minLength={3}  onChange={(e) => {
+        <input type="search" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-2 md:p-4 md:w-[80%] w-[90%] block border-2 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus" autoComplete="true" minLength={3}  onChange={(e) => {
           if(e.target.value.length %3 ==0){
             updateSearchQuery(e.target.value)
           }
