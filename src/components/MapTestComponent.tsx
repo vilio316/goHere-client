@@ -1,4 +1,4 @@
-import {Marker, APIProvider, Map, Pin} from '@vis.gl/react-google-maps';
+import {Marker, APIProvider, Map} from '@vis.gl/react-google-maps';
 import { useLocationCoords } from '../contexts/LocationContext';
 
 const key = import.meta.env.VITE_PLACES_API_KEY
@@ -23,7 +23,7 @@ function MapComponent(props: {
        </Marker>
        <Marker position={{
         lat:latitude , lng: longitude 
-       }} >
+       }}>
        </Marker>
       </Map>
   </APIProvider>

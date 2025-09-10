@@ -134,7 +134,7 @@ export function LocationDetails(){
             const distanceService = new google.maps.DistanceMatrixService()
 
              const origin1 = { lat: location.lat, lng: location.long };
-  const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
+          const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
 
   const request = {
     origins: [origin1],
@@ -160,7 +160,7 @@ export function LocationDetails(){
         <>
             <div className="grid p-2 md:grid-cols-2 gap-2">
             <div className="hidden md:grid justify-center p-2">
-                <MapComponent latitude={Number(params.lat)} longitude={Number(params?.long)} />
+                <MapComponent latitude={Number(Number(params.lat).toFixed(6))} longitude={Number(Number(params?.long))} />
             </div>
 
             <div>
@@ -168,25 +168,26 @@ export function LocationDetails(){
             <img src={photos} className="rounded-2xl p-2 w-full max-h-[40vh] object-cover" loading="lazy"/>
             : <></>}
 
-            <p className="text-2xl font-bold">
+            <p className="text-2xl font-bold capitalize">
                
                 {state_value.displayName}
                 </p>
 
             <div className="flex gap-x-2 items-center">
                 <span className="capitalize">{state_value.primaryType}</span>
-                <div className="flex items-center p-2 gap-x-2">
+                <div className="flex items-center gap-x-1">
                     <div>
                 <span className="p-1">
                     <FaStar fill='gold'  className="inline" />
                     </span>
                  </div>   
                 <span>{state_value.rating}</span>
-                <div>
+                
+                <div className="flex gap-x-1">
                 <span>
                     <FaRoute className="inline" fill='blue' />
                 </span>
-                <span className="md:text-xl text-sm">{distanceObj.distance.text} ({distanceObj.duration.text})</span>
+                <span className="text-sm md:text-[1rem]">{distanceObj.distance.text} ({distanceObj.duration.text})</span>
                 </div>
                 </div>
             </div>
@@ -197,9 +198,10 @@ export function LocationDetails(){
                     <FaLocationPin className="inline" />
                 </span>
                 {state_value.address}</p>
-            <p>
+            <p className={state_value.phone ? "block": 'hidden'}>
                 <span className="p-2"><FaPhone className="inline" /></span>
-                {state_value.phone}</p>
+                {state_value.phone}
+            </p>
 
                 <>
               {state_value.website ?

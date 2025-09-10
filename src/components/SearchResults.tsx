@@ -1,20 +1,20 @@
 import { FaGlobe, FaPhone, FaStar } from "react-icons/fa6";
-import type { resultType } from "../App";
+import type { resultType } from "../interfacesAndTypes";
 import { Link } from "react-router";
 
 function SearchResult(props: {
     item: resultType
 }){
-    const {displayName, id,location, rating, websiteUri, shortFormattedAddress, goodForGroups, goodForChildren, primaryTypeDisplayName, internationalPhoneNumber} = props.item
+    const {displayName, id,location, rating, websiteUri, shortFormattedAddress, primaryTypeDisplayName, internationalPhoneNumber} = props.item
     return(
      
         <div className="my-2 p-2 border-2 border-black grid grid-cols-5 group items-center">
             <div className="col-span-4">
-                <Link to={`/location/${location.latitude
-        }/${location.longitude}?id=${id}`}>
+                <Link to={`/location/${location.latitude.toFixed(6)
+        }/${location.longitude.toFixed(6)}?id=${id}`}>
             <p className="font-bold text-2xl capitalize">{displayName.text}</p>
             <div className="flex md:gap-x-4">
-            <span>{primaryTypeDisplayName ? primaryTypeDisplayName.text : ''}</span>
+            <span className="capitalise">{primaryTypeDisplayName ? primaryTypeDisplayName.text : ''}</span>
 
             <div className="flex gap-x-[2px] items-center">
             <FaStar fill="gold" size={16}/>

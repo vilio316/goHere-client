@@ -3,55 +3,21 @@ import { Link } from "react-router"
 import axios from "axios"
 import { SearchResult } from "./components/SearchResults"
 import { useLocationCoords } from "./contexts/LocationContext"
-
-
-export interface resultType{
-  id: string,
-  name: string,
-  internationalPhoneNumber: string,
-  formattedAddress: string,
-  shortFormattedAddress: string,
-  photos?: {
-    googleMapsUri: string
-  }[],
-  plusCode: {
-    globalCode: string,
-    compoundCode: string
-  },
-  location: {
-    longitude: number,
-    latitude: number,
-  },
-  rating?: number, 
-  googleMapsUri: string,
-  websiteUri: string, 
-  displayName: {
-    text: string, 
-    languageCode: string
-  },
-  primaryTypeDisplayName: {
-    text: string,
-    languageCode: string
-  }, 
-  openNow: boolean,
-  goodForGroups: boolean,
-  goodForWatchingSports: boolean,
-  goodForChildren: boolean
-}
+import type { resultType } from "./interfacesAndTypes"
+import GeocodedInfo from "./components/GeocodedInfo"
 
 function App() {
   const [search_query, updateSearchQuery] = useState("")
   const [search_results, updateSearchResults] = useState<resultType[]>([])
-  const { setLocation } = useLocationCoords()
+  const { setLocation, location } = useLocationCoords()
 
-  navigator.geolocation.getCurrentPosition((position) => {setLocation(
+  navigator.geolocation.getCurrentPosition((position) => {
+    setLocation(
     {
       lat: position.coords.latitude , long: position.coords.longitude
     }
-  )
-  }
 )
-
+})
 
   useEffect(()=>{
 
@@ -68,6 +34,7 @@ function App() {
   return (
     <>
     <div className="grid justify-items-center p-4 md:p-2">
+        <GeocodedInfo latitude={location.lat} longitude={location.long}/>
         <input type="search" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-2 md:p-4 md:w-[80%] w-[90%] block border-2 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus" autoComplete="true" minLength={3}  onChange={(e) => {
           if(e.target.value.length %3 ==0){
             updateSearchQuery(e.target.value)
@@ -86,7 +53,7 @@ function App() {
         <Link to={`/results?query=${
           search_query
         }`} 
-        className={`${search_results.length > 0 ? 'block' : 'hidden'}`
+        className={`${search_results.length > 0 ? 'grid' : 'hidden'} w-1/2 text-center rounded-[2.5rem] text-[1.75rem]`
         }>See More ... &gt; </Link>
       {/*Search Results  */}
       {/*Should have a Read More section that links to other page, uses URL state*/}
