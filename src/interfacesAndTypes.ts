@@ -32,3 +32,14 @@ export interface resultType{
   goodForWatchingSports: boolean,
   goodForChildren: boolean
 }
+
+export interface locationDetails{
+        displayName: string,
+        phone: string,
+        address: string,
+        website: string
+        primaryType: string
+        rating: string
+        deliveryStatus: boolean
+        mapsUri: string
+    }

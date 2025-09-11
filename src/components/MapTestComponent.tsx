@@ -11,7 +11,7 @@ function MapComponent(props: {
   return(
   <APIProvider apiKey={key}>
     <Map
-      className='md:w-[45vw] md:h-[90vh] w-[90vw] h-[30vh] rounded-[40px]'
+      className='md:w-[45vw] md:h-[75vh] w-[90vw] h-[30vh] rounded-[40px]'
       defaultCenter={{lat: latitude , lng: longitude}}
       defaultZoom={19}
       gestureHandling={'greedy'}

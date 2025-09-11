@@ -5,29 +5,34 @@ import SuperApp from './SuperApp.tsx'
 import { LocationDetails } from './components/LocationDetails.tsx'
 import { LocationProvider } from './contexts/LocationContext.tsx'
 import ViewAll from './components/SeeMorePage.tsx'
+import Login from './components/auth/LoginPage.tsx'
+import ErrorPage from './components/ErrorPage.tsx'
+import AuthLayout from './AuthLayout.tsx'
+import SignUp from './components/auth/SignUp.tsx'
 
 const browserRouter = createBrowserRouter([
   {
     path: '/',
     Component: SuperApp,
     children: [
-      {index: true, Component: App},
+      {index: true, Component: App, errorElement: <ErrorPage />},
       {
-        path: '/results', Component: ViewAll
-      }
-
-   ]
+        path: '/results', Component: ViewAll, errorElement: <ErrorPage />
+      },
+      {path: '/location/:lat/:long', Component: LocationDetails, errorElement: <ErrorPage /> },
+   ],
   },
   {
-    path: '/location/:lat/:long',
+    path: '/auth',
+    Component: AuthLayout,
     children: [
       {
-        index: true, Component: LocationDetails
-      }
+        index:true, Component: Login, errorElement: <ErrorPage />
+      }, 
+      { path: 'sign-up', Component: SignUp, errorElement:<ErrorPage/>}
+
     ]
-  },
-  
-  
+  }
 ])
 
 

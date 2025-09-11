@@ -8,7 +8,7 @@ function SearchResult(props: {
     const {displayName, id,location, rating, websiteUri, shortFormattedAddress, primaryTypeDisplayName, internationalPhoneNumber} = props.item
     return(
      
-        <div className="my-2 p-2 border-2 border-black grid grid-cols-5 group items-center">
+        <div className="my-2 p-2 border-2 border-black grid grid-cols-5 group items-center rounded-3xl">
             <div className="col-span-4">
                 <Link to={`/location/${location.latitude.toFixed(6)
         }/${location.longitude.toFixed(6)}?id=${id}`}>

@@ -17,7 +17,7 @@ function SuperApp(){
       </div>
 
       <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1">
-        <span>About</span>
+        <Link to='/'>Home</Link>
         <span>Locations</span>
         <span>Contact Us</span>
         <span>Contribute</span>
@@ -25,13 +25,13 @@ function SuperApp(){
       </div>
 
       <div className="md:grid hidden col-span-1 justify-center">
-        <div className="bg-yellow-300 text-white text-xl p-2 rounded-2xl text-center hover:bg-yellow-400">
+        <Link to={'/auth/login'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400">
           Login / Register
-        </div>
+        </Link>
       </div>
     </div>
 
-            <div className="p-2 md:p-4">
+            <div className="p-1 md:p-2">
             <Outlet />
             </div>
 
