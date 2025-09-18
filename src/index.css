@@ -3,3 +3,13 @@
     font-family: "DM Sans", sans-serif;
     box-sizing: border-box;
 }
+
+.form{
+    display: block;
+    border: 2px solid blue;
+    outline: none;
+    border-radius: 1.25rem;
+    padding:0.25rem;
+    text-indent: 1rem;
+    width: 80%;
+}

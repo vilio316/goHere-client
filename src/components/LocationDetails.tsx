@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router"
 import MapComponent from "./MapTestComponent"
 import { useEffect, useReducer, useState } from "react"
 import { FaGlobe, FaLocationPin, FaPhone, FaRoute, FaStar } from "react-icons/fa6"
-import { useLocationCoords } from "../contexts/LocationContext"
+//import { useLocationCoords } from "../contexts/LocationContext"
 import CompanionApps from "./CompanionApplications"
 import type { locationDetails } from "../interfacesAndTypes"
 import { PlaceContext } from "../contexts/PlaceDetailsContext"
@@ -66,17 +66,23 @@ function updateLocationDetails(state: locationDetails , action : {type: string, 
 
 export function LocationDetails(){
     const [searchParams] = useSearchParams()
-    const {location} = useLocationCoords()
+    const [additionalInfo, updateAdditionalInfo] = useState<{
+        childFriendly: boolean | null |undefined,
+        wifi: boolean | null |undefined,
+        sports: boolean | null |undefined ,
+    }>
+    ({childFriendly: null, wifi: null, sports: null })
+    //const {location, setLocation} = useLocationCoords()
     const id_value = searchParams.get('id')
     const params = useParams()
-    const [distanceObj, updateDistanceObj] = useState({
+    {/* const [distanceObj, updateDistanceObj] = useState({
         distance: {
             text: '', value: 0
         },
         duration: {
             text: '', value: 0
         }
-    })
+    }) */}
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
     const [photos, addPhoto] = useState('string')
 
@@ -107,6 +113,7 @@ export function LocationDetails(){
             })
     }
 
+    //Gets the details of a particular place
     useEffect(()=> {
         async function getPlaceDetails (){
             const { Place } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary
@@ -115,11 +122,14 @@ export function LocationDetails(){
             const requested_locale = new Place({
                 id: id_value
             })
-           
+          
             await requested_locale.fetchFields({
-                fields: ['displayName', 'internationalPhoneNumber', 'formattedAddress', 'photos', 'primaryTypeDisplayName', 'websiteURI', 'rating', 'hasDelivery', 'googleMapsURI' ]
+                fields: ['displayName', 'internationalPhoneNumber', 'formattedAddress', 'photos', 'primaryTypeDisplayName', 'websiteURI', 'rating', 'hasDelivery', 'googleMapsURI', 'hasWiFi', 'isGoodForChildren', "isGoodForWatchingSports" ]
             })
            updateFields(requested_locale)
+           updateAdditionalInfo({...additionalInfo
+            , childFriendly: requested_locale.isGoodForChildren, wifi: requested_locale.hasWiFi, sports: requested_locale.isGoodForWatchingSports
+           })
             if(requested_locale.photos && requested_locale.photos.length > 0) addPhoto(requested_locale.photos[0].getURI({maxHeight: 400}))
         }
         }
@@ -127,13 +137,26 @@ export function LocationDetails(){
         getPlaceDetails()
     }
     , [])
+//Effect ends here
+    {/*
+    useEffect(() =>
+    navigator.geolocation.getCurrentPosition((position) => {
+    setLocation(
+    {
+      lat: position.coords.latitude , long: position.coords.longitude
+    }
+     )
+    }
+    ), [])
+        */}
 
+    {/*
+    //This Effect should contact the Google Distance Service to show distance from the user's estimated location
     useEffect(() => {
             async function getDistanceDetails(){
             const distanceService = new google.maps.DistanceMatrixService()
-
-             const origin1 = { lat: location.lat, lng: location.long };
-          const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
+            const origin1 = { lat: location.lat, lng: location.long   };
+            const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
 
   const request = {
     origins: [origin1],
@@ -147,13 +170,13 @@ export function LocationDetails(){
     distanceService.getDistanceMatrix(request).then((response) => {
         updateDistanceObj({...distanceObj, distance: response.rows[0].elements[0].distance, duration: response.rows[0].elements[0].duration})
     })
-        }
+    }
 
-
-        
         getDistanceDetails()
     }
     , [location])
+    //Effect ends here
+    */}
 
     return(
         <>
@@ -185,8 +208,9 @@ export function LocationDetails(){
                 <span>
                     <FaRoute className="inline" fill='blue' />
                 </span>
-                <span className="text-sm md:text-[1rem]">{distanceObj.distance.text} ({distanceObj.duration.text})</span>
+                
                 </div>
+
                 </div>
             </div>
 
@@ -196,19 +220,30 @@ export function LocationDetails(){
                     <FaLocationPin className="inline fill-red-600" />
                 </span>
                 {state_value.address}</p>
-            <p className={state_value.phone ? "block": 'hidden'}>
-                <span className="p-2"><FaPhone className="inline fill-green-600" /></span>
+            <a className={state_value.phone ? "block": 'hidden'} href={`tel:${state_value.phone}`}>
+                <span className="p-2"> <FaPhone className="inline fill-green-600" /> </span>
                 {state_value.phone}
-            </p>
+            </a>
 
                 <>
               {state_value.website ?
-              <a href={state_value.website} className="hover:underline hover:font-bold"> 
+              <a href={state_value.website} className="hover:underline hover:font-bold text-sm md:text-[16px] "> 
                 <span className="p-2"><FaGlobe className="inline fill-blue-500" /></span>
                 {state_value.website}</a> : null}  
                 </>
             <div>
 
+            <div className="flairs">
+                {
+                    additionalInfo.childFriendly ? "Good for Children" : null
+                }
+                {
+                    additionalInfo.wifi ? "Has Wifi" : null
+                }
+                {
+                    additionalInfo.sports ? "Good for Watching Sports" : null
+                }
+            </div>
             <div className="companion-apps p-2 my-2">
                 <p className="text-xl font-bold">Companion Apps</p>
                 <PlaceContext value={state_value}>
