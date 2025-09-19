@@ -8,8 +8,8 @@
     display: block;
     border: 2px solid blue;
     outline: none;
-    border-radius: 1.25rem;
+    border-radius: 0.75rem;
     padding:0.25rem;
     text-indent: 1rem;
-    width: 80%;
+    width: 90%;
 }

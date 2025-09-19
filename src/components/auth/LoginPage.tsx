@@ -13,11 +13,11 @@ export default function Login(){
     } 
 
  return(
-    <div className="min-h-[50vh] md:h-7/10 grid border-2 border-black md:w-5/10 p-1 md:p-2 rounded-2xl ">
+    <div className="min-h-[50vh] grid border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
         <div className='text-center'>
         <Link to='/' className='md:text-3xl text-2xl font-bold text-center'>GoHere </Link>
         <p>Your Number One Tourism Companion</p>
-        <p>Sign In</p>
+        <p className='text-2xl font-bold md:my-3'>Sign In</p>
         </div>
 
         <form onSubmit={handleSignIn}>
@@ -27,14 +27,16 @@ export default function Login(){
             <label htmlFor="email">
                 Username or email address
             </label>
-            <input type='email' className='form md:my-2 my-1' name='email' id='email' onChange={(e) => setMail(e.target.value)} autoFocus required />
+            <input type='email' className='form my-1' name='email' id='email' onChange={(e) => setMail(e.target.value)} autoFocus required />
             <label htmlFor="pwd">
                 Password
             </label>
-            <input type="password" name="password" id="pwd" className='form md:my-2 my-1' onChange={(e) => setPwd(e.target.value)} required />
-            <button type="submit" className='bg-blue-400 p-2 rounded-2xl md:my-2 my-1 text-center min-w-[45%]'>
+            <input type="password" name="password" id="pwd" className='form my-1' onChange={(e) => setPwd(e.target.value)} required />
+
+            <button type="submit" className='bg-blue-400 p-2 rounded-2xl md:my-2 my-1 text-center min-w-[45%] hover:underline hover:md-text-[20px] hover:font-bold'>
                 Submit
             </button>
+
             </fieldset>
         </form>
 

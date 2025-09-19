@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router"
+import { FaGoogle, FaXTwitter } from "react-icons/fa6"; 
 
 export default function SignUp(){
     const [email, setEmail] = useState('')
@@ -15,11 +16,19 @@ export default function SignUp(){
     } 
 
     return(
-        <div className='min-h-[50vh] grid w-6/10 rounded-2xl p-1 md:p-2 bg-zinc-700'>
-            <p>GoHere</p>
-        <div>
-            <p>Sign Up</p>
+        <div className='min-h-[50vh] grid md:w-5/10 rounded-2xl p-2 md:p-4 border-2 border-black'>
+            <div className="grid">
+            <Link to='/' className="text-2xl font-bold text-center">GoHere </Link>
+             <p className="text-center">Your Number One Tourism Companion</p>
+
+            <p className="text-center my-1 md:my-2 font-bold text-2xl">Sign Up</p>
             <form onSubmit={handleSubmit}>
+
+                <legend className="text-xl font-bold">
+                    Sign-Up Information
+                </legend>
+
+                <fieldset>
                 <label htmlFor="email">
                     Email address
                 </label>
@@ -28,16 +37,36 @@ export default function SignUp(){
                     Password
                 </label>
                 <input type="password" name="password" id="password" className='form' onChange={(e)=> setPassword(e.target.value)}  />
-                <button type="submit">Submit</button>
+                 <label htmlFor="confPassword">
+                   Confirm Password
+                </label>
+                <input type="password" name="confirm_password" id="password" className='form'   />
+                </fieldset>
+
+                <button type="submit" className='bg-blue-400 p-2 rounded-2xl md:my-2 my-1 text-center min-w-[45%] hover:underline hover:md-text-[20px] hover:font-bold'>
+                Submit
+            </button>
+
             </form>
             <div>
-                <p>Another Way?</p>
-                <p>Continue with Google</p>
-                <p>Continue with X </p>
+                <p className="text-center">OR</p>
+                  <div className='grid md:grid-cols-2 gap-2 my-2 md:my-1'>
+                               <p className='md:p-2 p-1 md:rounded-2xl rounded-3xl bg-gradient-to-br from-white to-blue-400 text-center hover:to-blue-600 transition-colors'>Continue with 
+                                   <span className='md:p-2 p-1'>
+                                       <FaGoogle fill='red' size={24} className='inline' />
+                                   </span>
+                               </p>
+                               <p className='md:p-2 p-1 md:rounded-2xl rounded-3xl bg-gradient-to-br from-white to-blue-400 text-center hover:to-blue-600 transition-colors'>Continue with 
+                                    <span className='md:p-2 p-1'>
+                                       <FaXTwitter fill='black' size={24} className='inline' />
+                                   </span>
+                                   </p>
+                           </div>
             </div>
             
         </div>
-          <p>Already have an account? <Link to='/auth' className='underline font-bold'>Sign in</Link> </p>
+          <p className=" md:my-2 my-1 text-center">Already have an account? <Link to='/auth' className='underline font-bold'>Sign in</Link> </p>
+           <p className='md:my-2 my-1 text-center'>&copy; 2025 GoHere. All rights reserved. Lorem ipsum dolor amet</p>
         </div>
     )
 }
