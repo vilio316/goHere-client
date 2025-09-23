@@ -1,16 +1,27 @@
-import {Link } from 'react-router'
+import {Link, useNavigate } from 'react-router'
 import axios from 'axios'
 import { useState } from 'react'
 import { FaGoogle, FaXTwitter } from 'react-icons/fa6'
 
 export default function Login(){
+    const navigate = useNavigate();
     const [email, setMail] = useState('')
     const [pwd, setPwd] = useState('')
- 
-    const handleSignIn = (e : any) => {
-            e.preventDefault();
-            axios.post('http://localhost:8090/sign-in', {email, pwd})
-    } 
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+        try{
+            const {data} = await axios.post('http://localhost:8090/auth/sign-in', {email, pwd})
+            const {success, message} = data
+            if(success){
+                window.alert(message);
+                navigate('/')
+            }
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
 
  return(
     <div className="min-h-[50vh] grid border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
@@ -20,7 +31,7 @@ export default function Login(){
         <p className='text-2xl font-bold md:my-3'>Sign In</p>
         </div>
 
-        <form onSubmit={handleSignIn}>
+        <form onSubmit={handleSubmit}>
             <legend className='font-bold text-xl'>User Information</legend>
 
             <fieldset>

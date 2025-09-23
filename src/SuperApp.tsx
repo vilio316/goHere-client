@@ -6,8 +6,8 @@ function SuperApp(){
 
     return(
         <>
-        <div>
-            <div className="header grid md:grid-cols-4 items-center">
+      <div>
+      <div className="header grid md:grid-cols-4 items-center">
       <div className="flex col-span-1 p-2 items-center gap-x-2">
         <FaLocationPin size={40} fill="red" />
         <Link to='/'>
@@ -25,7 +25,7 @@ function SuperApp(){
       </div>
 
       <div className="md:grid hidden col-span-1 justify-center">
-        <Link to={'/auth/login'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400">
+        <Link to={'/auth/sign-in'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400">
           Login / Register
         </Link>
       </div>

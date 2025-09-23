@@ -27,7 +27,7 @@ const browserRouter = createBrowserRouter([
     Component: AuthLayout,
     children: [
       {
-        index:true, Component: Login, errorElement: <ErrorPage />
+        path:'sign-in', Component: Login, errorElement: <ErrorPage />
       }, 
       { path: 'sign-up', Component: SignUp, errorElement:<ErrorPage/>}
 

@@ -208,7 +208,9 @@ export function LocationDetails(){
                 <span>
                     <FaRoute className="inline" fill='blue' />
                 </span>
-                
+                <p className="italic"> 
+                    distance from target
+                </p>
                 </div>
 
                 </div>
