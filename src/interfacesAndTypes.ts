@@ -33,6 +33,18 @@ export interface resultType{
   goodForChildren: boolean
 }
 
+export interface mapboxRespsonse{
+  code: string, 
+  distances: {
+    0: number[],
+    1: number[]
+  },
+  durations: {
+     0: number[],
+    1: number[]
+  }
+}
+
 export interface locationDetails{
         displayName: string,
         phone: string,

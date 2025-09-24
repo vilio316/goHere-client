@@ -22,6 +22,9 @@ export default function CompanionApps(props: {primaryType: string})
          case 'fast food restaurant':{
             return {...basic_companions, orderProviders: ['Glovo', 'Chowdeck', "Company Website"]}
         }
+         case 'pizza restaurant':{
+            return {...basic_companions, orderProviders: ['Glovo', 'Chowdeck', "Company Website"]}
+        }
         case 'hotel': {
             return {...basic_companions, booking: 'Hotels.ng'}
         }

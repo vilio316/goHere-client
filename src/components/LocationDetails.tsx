@@ -1,10 +1,11 @@
 import { useParams, useSearchParams } from "react-router"
 import MapComponent from "./MapTestComponent"
+import axios from "axios"
 import { useEffect, useReducer, useState } from "react"
 import { FaGlobe, FaLocationPin, FaPhone, FaRoute, FaStar } from "react-icons/fa6"
-//import { useLocationCoords } from "../contexts/LocationContext"
+import { useLocationCoords } from "../contexts/LocationContext"
 import CompanionApps from "./CompanionApplications"
-import type { locationDetails } from "../interfacesAndTypes"
+import type { locationDetails, mapboxRespsonse } from "../interfacesAndTypes"
 import { PlaceContext } from "../contexts/PlaceDetailsContext"
        
 let locationStateObj : locationDetails = {
@@ -64,6 +65,10 @@ function updateLocationDetails(state: locationDetails , action : {type: string, 
     }
     }
 
+function processNumber(number: number){
+    if(number > 1000) return `${(Math.floor(number) / 1000).toFixed(1)} km`
+}
+
 export function LocationDetails(){
     const [searchParams] = useSearchParams()
     const [additionalInfo, updateAdditionalInfo] = useState<{
@@ -72,19 +77,12 @@ export function LocationDetails(){
         sports: boolean | null |undefined ,
     }>
     ({childFriendly: null, wifi: null, sports: null })
-    //const {location, setLocation} = useLocationCoords()
+    const {location} = useLocationCoords()
     const id_value = searchParams.get('id')
     const params = useParams()
-    {/* const [distanceObj, updateDistanceObj] = useState({
-        distance: {
-            text: '', value: 0
-        },
-        duration: {
-            text: '', value: 0
-        }
-    }) */}
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
     const [photos, addPhoto] = useState('string')
+    const [distanceDetails, setDistanceDetails] = useState({} as mapboxRespsonse) 
 
     function updateFields(object: google.maps.places.Place){
             dispatch({
@@ -138,45 +136,26 @@ export function LocationDetails(){
     }
     , [])
 //Effect ends here
-    {/*
-    useEffect(() =>
-    navigator.geolocation.getCurrentPosition((position) => {
-    setLocation(
+    
     {
-      lat: position.coords.latitude , long: position.coords.longitude
-    }
-     )
-    }
-    ), [])
-        */}
-
-    {/*
-    //This Effect should contact the Google Distance Service to show distance from the user's estimated location
+    //This Effect contacts Mapbox to show distance from the user's estimated location
     useEffect(() => {
             async function getDistanceDetails(){
-            const distanceService = new google.maps.DistanceMatrixService()
-            const origin1 = { lat: location.lat, lng: location.long   };
-            const destinationB = { lat: Number(params.lat), lng: Number(params.long) };
+                const {lat, long} = location
+                if(lat > 1 && long > 1){
+                const {data} = await axios.get(`http://localhost:8090/distance/${lat}/${long}/${params.lat}/${params.long}`)
+                setDistanceDetails(data)
+                }
 
-  const request = {
-    origins: [origin1],
-    destinations: [destinationB],
-    travelMode: google.maps.TravelMode.DRIVING,
-    unitSystem: google.maps.UnitSystem.METRIC,
-    avoidHighways: false,
-    avoidTolls: false,
-  };
-
-    distanceService.getDistanceMatrix(request).then((response) => {
-        updateDistanceObj({...distanceObj, distance: response.rows[0].elements[0].distance, duration: response.rows[0].elements[0].duration})
-    })
-    }
-
+            else{
+                console.log("Waiting...")
+            }
+        }
         getDistanceDetails()
     }
     , [location])
     //Effect ends here
-    */}
+    }
 
     return(
         <>
@@ -209,7 +188,7 @@ export function LocationDetails(){
                     <FaRoute className="inline" fill='blue' />
                 </span>
                 <p className="italic"> 
-                    distance from target
+                    {distanceDetails.code && distanceDetails.code == "Ok" && distanceDetails.distances ? processNumber(Number(distanceDetails.distances[1][0])): "Loading..."}
                 </p>
                 </div>
 

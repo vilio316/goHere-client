@@ -16,6 +16,11 @@ function LocationProvider({children}: Props){
     const [location, setLocation] = useState({
         lat: 0, long: 0
     })
+    navigator.geolocation.getCurrentPosition((position) => {
+        setLocation({...location, lat: position.coords.latitude
+            , long: position.coords.longitude
+        })
+    })
 
     return(
         <LocationContext value={{location, setLocation}}>

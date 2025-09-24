@@ -4,17 +4,7 @@ import { useLocationCoords } from "../contexts/LocationContext"
 
 export default function GeocodedInfo(){
     const [locationInformation , setLocationInformation] = useState<string>()
-    const {location, setLocation} = useLocationCoords()
-
-    useEffect(() =>
-        navigator.geolocation.getCurrentPosition((position) => {
-    setLocation(
-    {
-      lat: position.coords.latitude , long: position.coords.longitude
-    }
-     )
-    }
-    ), [])
+    const {location} = useLocationCoords()
 
     useEffect(() => {
         async function getGeoDetails(latitude: number, longitude: number){

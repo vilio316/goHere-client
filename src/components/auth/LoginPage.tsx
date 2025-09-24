@@ -2,10 +2,12 @@ import {Link, useNavigate } from 'react-router'
 import axios from 'axios'
 import { useState } from 'react'
 import { FaGoogle, FaXTwitter } from 'react-icons/fa6'
+import { useAuthStatus } from '../../contexts/AuthContext';
 
 export default function Login(){
     const navigate = useNavigate();
     const [email, setMail] = useState('')
+    const {logIn } = useAuthStatus()
     const [pwd, setPwd] = useState('')
 
     const handleSubmit = async (e: any) => {
@@ -15,6 +17,7 @@ export default function Login(){
             const {success, message} = data
             if(success){
                 window.alert(message);
+                logIn(true)
                 navigate('/')
             }
         }
@@ -42,7 +45,7 @@ export default function Login(){
             <label htmlFor="pwd">
                 Password
             </label>
-            <input type="password" name="password" id="pwd" className='form my-1' onChange={(e) => setPwd(e.target.value)} required />
+            <input type="password" name="password" id="pwd" className={`form my-1 peer:`} onChange={(e) => setPwd(e.target.value)} required />
 
             <button type="submit" className='bg-blue-400 p-2 rounded-2xl md:my-2 my-1 text-center min-w-[45%] hover:underline hover:md-text-[20px] hover:font-bold'>
                 Submit

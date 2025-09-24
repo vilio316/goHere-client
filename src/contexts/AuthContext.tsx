@@ -1,14 +1,18 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext({authState: false})
+type authContextType = {
+    isLoggedIn: boolean,
+    logIn: React.Dispatch<React.SetStateAction<boolean>>
+}
+const AuthContext = createContext({} as authContextType)
 
-const useAuthStatus = () => useContext(AuthContext)
+export const useAuthStatus = () => useContext(AuthContext)
 
 export function AuthProvider({children} : React.PropsWithChildren){
-    
+    const [isLoggedIn, logIn] = useState(false)
     return(
-        <AuthContext value={}>
+        <AuthContext value={{isLoggedIn, logIn}}>
             {children}
         </AuthContext>
-    )
+    ) 
 }

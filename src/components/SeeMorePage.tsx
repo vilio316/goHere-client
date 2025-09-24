@@ -27,7 +27,7 @@ export default function ViewAll(){
 
     return(
         <div className="grid p-1 md:p-2">
-        <p>Showing <span className="font-bold">{searchResults.length}</span> results for search term: "{queryVal}" </p>
+        <p>Showing <span className="font-bold">{searchResults.length>0 ? searchResults.length : null}</span> results for search term: "{queryVal}" </p>
         <div className="grid w-[90%]">
         {
             loadingState? <p>Loading...</p> : searchResults.map((item) => (

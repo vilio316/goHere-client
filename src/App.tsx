@@ -8,17 +8,18 @@ import GeocodedInfo from "./components/GeocodedInfo"
 function App() {
   const [search_query, updateSearchQuery] = useState("")
   const [search_results, updateSearchResults] = useState<resultType[]>([])
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(()=>{
     async function searchFromServer(query: string) {
-      if (query.includes('near me') || query.includes('nearby')){
-        console.log("Using Nearby Search")
-      }
       if(query.length > 1){
       const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}}`)
       updateSearchResults(data)
+      setLoaded(true)
     }
-    else{}
+    else{
+      setLoaded(false)
+    }
   }
     searchFromServer(search_query)
   }, [search_query])
@@ -37,10 +38,10 @@ function App() {
         </p>
 
         <div className="search_results w-[90%] md:w-4/5">
-          {search_query.length > 3 ? search_results?.slice(0,5).map((item)=> (
+          {search_query.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
             <SearchResult item={item} key = {item.id}/>
           ))
-        : null
+        : search_query.length > 2 ? <p>Loading...</p> : null
         }
         <div className="w-full grid justify-center">
         <Link to={`/results?query=${
