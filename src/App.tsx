@@ -4,6 +4,7 @@ import axios from "axios"
 import { SearchResult } from "./components/SearchResults"
 import type { resultType } from "./interfacesAndTypes"
 import GeocodedInfo from "./components/GeocodedInfo"
+import LoaderComp from "./components/LoaderComp"
 
 function App() {
   const [search_query, updateSearchQuery] = useState("")
@@ -13,7 +14,7 @@ function App() {
   useEffect(()=>{
     async function searchFromServer(query: string) {
       if(query.length > 1){
-      const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}}`)
+      const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}`)
       updateSearchResults(data)
       setLoaded(true)
     }
@@ -41,13 +42,13 @@ function App() {
           {search_query.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
             <SearchResult item={item} key = {item.id}/>
           ))
-        : search_query.length > 2 ? <p>Loading...</p> : null
+        : search_query.length > 2 ? <LoaderComp /> : null
         }
         <div className="w-full grid justify-center">
         <Link to={`/results?query=${
           search_query
         }`} 
-        className={`${search_results.length > 0 && search_query.length > 0 ? 'opacity-100' : 'opacity-0'} grid text-center rounded-[2.5rem] text-xl md:text-2xl`
+        className={`${search_results.length > 0 && search_query.length > 0 ? 'opacity-100' : 'opacity-0'} bg-yellow-300 grid text-center rounded-[1.5rem] text-xl md:text-2xl p-1 md:p-2`
         }>See More ... &gt; </Link>
         </div>
     </div>

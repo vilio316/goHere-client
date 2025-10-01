@@ -7,6 +7,7 @@ import { useLocationCoords } from "../contexts/LocationContext"
 import CompanionApps from "./CompanionApplications"
 import type { locationDetails, mapboxRespsonse } from "../interfacesAndTypes"
 import { PlaceContext } from "../contexts/PlaceDetailsContext"
+import LoaderComp from "./LoaderComp"
        
 let locationStateObj : locationDetails = {
         displayName: '',
@@ -67,6 +68,7 @@ function updateLocationDetails(state: locationDetails , action : {type: string, 
 
 function processNumber(number: number){
     if(number > 1000) return `${(Math.floor(number) / 1000).toFixed(1)} km`
+    else return `<1km away`
 }
 
 export function LocationDetails(){
@@ -81,6 +83,7 @@ export function LocationDetails(){
     const id_value = searchParams.get('id')
     const params = useParams()
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
+    const [loadingStatus, setLoadingStatus] = useState(false)
     const [photos, addPhoto] = useState('string')
     const [distanceDetails, setDistanceDetails] = useState({} as mapboxRespsonse) 
 
@@ -125,6 +128,7 @@ export function LocationDetails(){
                 fields: ['displayName', 'internationalPhoneNumber', 'formattedAddress', 'photos', 'primaryTypeDisplayName', 'websiteURI', 'rating', 'hasDelivery', 'googleMapsURI', 'hasWiFi', 'isGoodForChildren', "isGoodForWatchingSports" ]
             })
            updateFields(requested_locale)
+           setLoadingStatus(true)
            updateAdditionalInfo({...additionalInfo
             , childFriendly: requested_locale.isGoodForChildren, wifi: requested_locale.hasWiFi, sports: requested_locale.isGoodForWatchingSports
            })
@@ -157,15 +161,10 @@ export function LocationDetails(){
     //Effect ends here
     }
 
-    return(
-        <>
-            <div className="grid p-2 md:grid-cols-2 gap-2">
-            <div className="hidden md:grid justify-center p-2">
-                <MapComponent latitude={Number(Number(params.lat).toFixed(6))} longitude={Number(Number(params?.long))} />
-            </div>
-
-            <div>
-            { photos !== 'string' ?
+    function FullLocationDetails(){
+        return(
+            <>
+{ photos !== 'string' ?
             <img src={photos} className="rounded-2xl p-2 w-full max-h-[40vh] object-cover" loading="lazy"/>
             : <></>}
 
@@ -187,7 +186,7 @@ export function LocationDetails(){
                 <span>
                     <FaRoute className="inline" fill='blue' />
                 </span>
-                <p className="italic"> 
+                <p> 
                     {distanceDetails.code && distanceDetails.code == "Ok" && distanceDetails.distances ? processNumber(Number(distanceDetails.distances[1][0])): "Loading..."}
                 </p>
                 </div>
@@ -208,7 +207,7 @@ export function LocationDetails(){
 
                 <>
               {state_value.website ?
-              <a href={state_value.website} className="hover:underline hover:font-bold text-sm md:text-[16px] "> 
+              <a href={state_value.website} target="_blank" className="hover:underline hover:font-bold text-sm md:text-[16px] "> 
                 <span className="p-2"><FaGlobe className="inline fill-blue-500" /></span>
                 {state_value.website}</a> : null}  
                 </>
@@ -231,10 +230,28 @@ export function LocationDetails(){
                 <CompanionApps primaryType={state_value.primaryType} />
                 </PlaceContext>
             </div>
+        </div>
+        </>
+        )
+    }
 
+
+
+
+    return(
+        <>
+<div className="grid p-2 md:grid-cols-2 gap-2">
+            <div className="hidden md:grid justify-center p-2">
+                <MapComponent latitude={Number(Number(params.lat).toFixed(6))} longitude={Number(Number(params?.long))} />
             </div>
+            <div>  
+            {
+                !loadingStatus?
+                <LoaderComp />: <FullLocationDetails />
+                
+            }
             </div>
-            </div>
+</div>
         </>
     )
 }

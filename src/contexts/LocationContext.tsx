@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type Dispatch, type SetStateAction } from "react";
+import { createContext, useContext, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
 const LocationContext = createContext({} as location_context_type )
 
@@ -16,11 +16,13 @@ function LocationProvider({children}: Props){
     const [location, setLocation] = useState({
         lat: 0, long: 0
     })
+    
+    useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
         setLocation({...location, lat: position.coords.latitude
             , long: position.coords.longitude
         })
-    })
+    })} , [])
 
     return(
         <LocationContext value={{location, setLocation}}>
