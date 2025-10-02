@@ -22,7 +22,7 @@ export default function GeocodedInfo(){
     }, [location])
 
     return(
-            <p className="w-[80%] text-left h-12 text-wrap text-ellipsis overflow-clip">
+            <p className="w-[90%] text-left h-12 text-wrap text-ellipsis overflow-clip">
             Searching from <span className="font-bold">{locationInformation}</span>
             </p>
         

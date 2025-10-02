@@ -9,20 +9,21 @@ export default function Login(){
     const [email, setMail] = useState('')
     const {logIn } = useAuthStatus()
     const [pwd, setPwd] = useState('')
+    const [errorParagraph, changeError] = useState('')
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         try{
-            const {data} = await axios.post('http://localhost:8090/auth/sign-in', {email, pwd})
+            const {data} = await axios.post('http://localhost:8090/auth/sign-in', {email, pwd}, {withCredentials: true})
             const {success, message} = data
-            if(success){
+            if(success == true){
                 window.alert(message);
                 logIn(true)
                 navigate('/')
             }
         }
-        catch(error){
-            console.log(error)
+        catch(error: any){
+            changeError(error.response.data.message)
         }
     }
 
@@ -47,6 +48,7 @@ export default function Login(){
             </label>
             <input type="password" name="password" id="pwd" className={`form my-1 peer:`} onChange={(e) => setPwd(e.target.value)} required />
 
+            <p className='text-red-500'>{errorParagraph}</p>
             <button type="submit" className='bg-blue-400 p-2 rounded-2xl md:my-2 my-1 text-center min-w-[45%] hover:underline hover:md-text-[20px] hover:font-bold'>
                 Submit
             </button>

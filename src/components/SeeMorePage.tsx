@@ -3,6 +3,7 @@ import axios from "axios"
 import type { resultType } from "../interfacesAndTypes"
 import { useSearchParams } from "react-router"
 import { SearchResult } from "./SearchResults"
+import LoaderComp from "./LoaderComp"
 
 export default function ViewAll(){
     const [searchparams] = useSearchParams()
@@ -30,7 +31,7 @@ export default function ViewAll(){
         <p>Showing <span className="font-bold">{searchResults.length>0 ? searchResults.length : null}</span> results for search term: "{queryVal}" </p>
         <div className="grid w-[90%]">
         {
-            loadingState? <p>Loading...</p> : searchResults.map((item) => (
+            loadingState? <LoaderComp/> : searchResults.map((item) => (
             <SearchResult item={item} key={item.id} />))
         }
         </div>

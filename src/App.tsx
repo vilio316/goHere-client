@@ -29,7 +29,7 @@ function App() {
     <>
     <div className="grid justify-items-center p-2 md:p-1">
       <GeocodedInfo />
-        <input type="text" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-1 md:w-[80%] w-full block border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus" autoComplete="true" minLength={3}  onChange={(e) => {
+        <input type="text" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-1 md:w-[90%] w-full block border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus" autoComplete="true" minLength={3}  onChange={(e) => {
           if(e.target.value.length %2 ==0){
             updateSearchQuery(e.target.value)
           }
@@ -38,7 +38,7 @@ function App() {
           Please enter a longer search term
         </p>
 
-        <div className="search_results w-[90%] md:w-4/5">
+        <div className="search_results w-[90%] ">
           {search_query.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
             <SearchResult item={item} key = {item.id}/>
           ))
@@ -48,7 +48,7 @@ function App() {
         <Link to={`/results?query=${
           search_query
         }`} 
-        className={`${search_results.length > 0 && search_query.length > 0 ? 'opacity-100' : 'opacity-0'} bg-yellow-300 grid text-center rounded-[1.5rem] text-xl md:text-2xl p-1 md:p-2`
+        className={`${search_results.length > 0 && search_query.length > 4 ? 'opacity-100' : 'opacity-0'} bg-yellow-300 grid text-center rounded-[1.5rem] text-xl md:text-2xl p-1 md:p-2`
         }>See More ... &gt; </Link>
         </div>
     </div>

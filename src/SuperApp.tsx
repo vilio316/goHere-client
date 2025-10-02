@@ -18,16 +18,16 @@ function SuperApp(){
         </Link>
       </div>
 
-      <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1">
+      <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1 items-center">
         <Link to='/'>Home</Link>
-        <span>Locations</span>
-        <span>Contact Us</span>
-        <span>Contribute</span>
-        <span>Random...</span>
+        <span className="p-2">Locations</span>
+        <span className="p-2">Contact Us</span>
+        <span className="p-2">Contribute</span>
+        <span className="p-2">Random...</span>
       </div>
 
       <div className="md:grid hidden col-span-1 justify-center">
-        <Link to={'/auth/sign-in'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400">
+        <Link to={isLoggedIn? "": '/auth/sign-in'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400 min-w-[10rem]">
           {isLoggedIn? "Logged In!" : "Login/Register"}
         </Link>
       </div>

@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router"
 import MapComponent from "./MapTestComponent"
 import axios from "axios"
 import { useEffect, useReducer, useState } from "react"
-import { FaGlobe, FaLocationPin, FaPhone, FaRoute, FaStar } from "react-icons/fa6"
+import { FaBookmark, FaChild, FaGlobe, FaLocationPin, FaPhone, FaRoute, FaStar, FaTv, FaWifi } from "react-icons/fa6"
 import { useLocationCoords } from "../contexts/LocationContext"
 import CompanionApps from "./CompanionApplications"
 import type { locationDetails, mapboxRespsonse } from "../interfacesAndTypes"
@@ -164,19 +164,40 @@ export function LocationDetails(){
     function FullLocationDetails(){
         return(
             <>
-{ photos !== 'string' ?
+            { photos !== 'string' ?
             <img src={photos} className="rounded-2xl p-2 w-full max-h-[40vh] object-cover" loading="lazy"/>
             : <></>}
 
-            <p className="text-2xl font-bold capitalize">
+            <p className="md:text-2xl text-xl p-1 font-bold capitalize grid grid-cols-6 gap-x-2">
+                <div  className="grid col-span-4">
+                <span>
                 {state_value.displayName}
+                </span>
+
+                 <span className="flairs flex gap-x-2">
+                {
+                    additionalInfo.childFriendly ? <FaChild fill='blue' className="inline" title="Good for Children" size={14} />: null
+    }
+                
+                  {  additionalInfo.wifi ? <FaWifi fill="blue" className="inline" title="Has WiFi" size={14} /> : null
+                }
+                {
+                    additionalInfo.sports ? <FaTv className="inline" title="Good for Watching Sports" size={14} /> : null
+                }
+
+            </span>
+                </div>
+                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]">
+                    <FaBookmark fill='white' className="inline" />
+                    <span className="p-2">Save Location</span>
+                </button> 
                 </p>
 
-            <div className="flex gap-x-2 items-center">
+            <div className="flex gap-x-4 items-center my-2 md:my-1">
                 <span className="capitalize">{state_value.primaryType}</span>
-                <div className="flex items-center gap-x-1">
+                <div className="flex items-center gap-x-2">
                     <div className="flex gap-x-1 items-center">
-                <span className="p-1">
+                <span>
                     <FaStar fill='gold'  className="inline" />
                     </span>
                 <span>{state_value.rating}</span>
@@ -191,17 +212,16 @@ export function LocationDetails(){
                 </p>
                 </div>
 
-                </div>
+                </div>  
             </div>
 
-            <a href={state_value.mapsUri} className="hover:underline hover:font-bold md:hidden">View on Google Maps</a>
             <p className="capitalize">
                  <span className="p-2 ">
                     <FaLocationPin className="inline fill-red-600" />
                 </span>
                 {state_value.address}</p>
             <a className={state_value.phone ? "block": 'hidden'} href={`tel:${state_value.phone}`}>
-                <span className="p-2"> <FaPhone className="inline fill-green-600" /> </span>
+                <span className="p-2"><FaPhone className="inline fill-green-600" /> </span>
                 {state_value.phone}
             </a>
 
@@ -213,18 +233,8 @@ export function LocationDetails(){
                 </>
             <div>
 
-            <div className="flairs">
-                {
-                    additionalInfo.childFriendly ? "Good for Children" : null
-                }
-                {
-                    additionalInfo.wifi ? "Has Wifi" : null
-                }
-                {
-                    additionalInfo.sports ? "Good for Watching Sports" : null
-                }
-            </div>
-            <div className="companion-apps p-2 my-2">
+           
+            <div className="companion-apps p-1 md:p-2 my-2">
                 <p className="text-xl font-bold">Companion Apps</p>
                 <PlaceContext value={state_value}>
                 <CompanionApps primaryType={state_value.primaryType} />
