@@ -235,7 +235,7 @@ export function LocationDetails(){
 
            
             <div className="companion-apps p-1 md:p-2 my-2">
-                <p className="text-xl font-bold">Companion Apps</p>
+                <p className="text-xl font-bold">Related Services</p>
                 <PlaceContext value={state_value}>
                 <CompanionApps primaryType={state_value.primaryType} />
                 </PlaceContext>
