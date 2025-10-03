@@ -169,7 +169,7 @@ export function LocationDetails(){
             : <></>}
 
             <p className="md:text-2xl text-xl p-1 font-bold capitalize grid grid-cols-6 gap-x-2">
-                <div  className="grid col-span-4">
+                <p className="grid col-span-4">
                 <span>
                 {state_value.displayName}
                 </span>
@@ -186,7 +186,7 @@ export function LocationDetails(){
                 }
 
             </span>
-                </div>
+                </p>
                 <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]">
                     <FaBookmark fill='white' className="inline" />
                     <span className="p-2">Save Location</span>

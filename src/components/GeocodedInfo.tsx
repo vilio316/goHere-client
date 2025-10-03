@@ -12,6 +12,7 @@ export default function GeocodedInfo(){
             const request = await axios.get(`http://localhost:8090/geocoded_location/${latitude}/${longitude}`)
             if(request.data.results.length > 0){
                 setLocationInformation(request.data.results[1].formatted_address)
+                localStorage.setItem('user_location', `${request.data.results[1].address_components[4].long_name} , ${request.data.results[1].address_components[3].long_name}`)
             }
         }
             else{

@@ -16,7 +16,7 @@ export default function FromAI(props: {query: string}){
 
     return(<>
     {
-        contents.location ? <SearchResult item={contents} /> : null
+        contents && contents.location ? <SearchResult item={contents} /> : null
     }
     </>
     )
