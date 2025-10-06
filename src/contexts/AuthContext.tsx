@@ -11,6 +11,7 @@ export const useAuthStatus = () => useContext(AuthContext)
 
 export function AuthProvider({children} : React.PropsWithChildren){
     const [isLoggedIn, logIn] = useState(false)
+    //const [userDetails, updateUserDetails] = useState()
 
     useEffect(()=> {
         async function checkAuth(){
@@ -25,6 +26,8 @@ export function AuthProvider({children} : React.PropsWithChildren){
 
         checkAuth()
     }, [])
+
+    
 
     return(
         <AuthContext value={{isLoggedIn, logIn}}>

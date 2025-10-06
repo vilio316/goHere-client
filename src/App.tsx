@@ -15,14 +15,28 @@ function App() {
   const [search_results, updateSearchResults] = useState<resultType[]>([])
   const [loaded, setLoaded] = useState(false)
   const [AIResults, updateAIResults] = useState<string[]>([])
-  const [isUsingAI, setAIUseState ] = useState(true)
+  const [isUsingAI, setAIUseState ] = useState(false)
+
+  function handleCloseness(query : string, location: string|null ){
+    const check_one = query.toLowerCase().includes('near me')
+    const check_three = query.toLowerCase().includes('nearby')
+    const check_two = query.toLowerCase().includes('close by')
+
+    if(check_one || check_two || check_three){
+      return `${query} near ${location}`
+    }
+    else{
+      return ''
+    }
+  }
+
 
   useEffect(()=>{
     async function searchFromServer(query: string) {
       const userLocation = localStorage.getItem('user_location')
       if(isUsingAI && query.length > 3){
         try{
-      const {data} : {data: any[]} = await axios.get(`http://localhost:8090/ai/${query} ${query.toLowerCase().includes('near')?`near ${userLocation}`: ''}`)
+      const {data} : {data: any[]} = await axios.get(`http://localhost:8090/ai/${query} ${handleCloseness(query, userLocation)}`)
       if(data.length > 0){
       updateAIResults(data)
       }
@@ -34,6 +48,7 @@ function App() {
     else{
       if(query.length > 1){
       const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}`)
+      setLoaded(false)
       updateSearchResults(data)
       setLoaded(true)
     }

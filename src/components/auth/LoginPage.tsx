@@ -24,6 +24,7 @@ export default function Login(){
         }
         catch(error: any){
             changeError(error.response.data.message)
+            window.alert(error.response.data.message)
         }
     }
 
