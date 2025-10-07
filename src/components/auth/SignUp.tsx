@@ -10,7 +10,7 @@ export default function SignUp(){
     const [username, updateUsername] = useState('')
     const [doublePassword, confirmPassword] = useState('')
     const navigate = useNavigate()
-    const locations = {}
+    const locations = {locations: ['Empty']}
     const passBool = doublePassword === password && password.length > 0 && doublePassword.length > 0
 
     const handleSubmit = async(e:any) => {
@@ -21,7 +21,8 @@ export default function SignUp(){
                 const {success} = data
                 const result = await axios.post('http://localhost:8090/auth/add_profile_details', {email, username, locations})
                 const successful = result.data.success
-                if(success && successful){
+                const locationData = await axios.post('http://localhost:8090/auth/add_location', {email, locations})
+                if(success && successful && locationData.data.success){
                     window.alert("Sign up Successful!")
                    navigate('/auth/sign-in')
                 }

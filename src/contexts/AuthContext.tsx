@@ -18,6 +18,13 @@ export function AuthProvider({children} : React.PropsWithChildren){
     const string = localStorage.getItem('userMail')
     const [username, updateUsername] = useState('')
 
+    useEffect(()=> {
+        async function getLoc(query: string|null) {
+        const userLocations = await axios.get(`http://localhost:8090/auth/user_location/${query}`)
+        console.log(userLocations.data)
+        }
+        getLoc(string)
+    }, [string])
 
     useEffect(() => {
         async function getUser(query: string|null) {
