@@ -5,7 +5,7 @@ import { useAuthStatus } from "./contexts/AuthContext";
 import axios from "axios";
 
 function SuperApp(){
-  const {isLoggedIn, logIn } = useAuthStatus() 
+  const {isLoggedIn, logIn, username } = useAuthStatus() 
   const navigate = useNavigate()
 
    async function logOutUser(){
@@ -13,6 +13,7 @@ function SuperApp(){
           const {message} = data 
           window.alert(message)
           logIn(false)
+          localStorage.setItem('userMail', '')
           navigate('/')
           
       }
@@ -39,7 +40,7 @@ function SuperApp(){
 
       <div className="md:grid hidden col-span-1 justify-center relative group">
         <Link to={isLoggedIn? "": '/auth/sign-in'} className="bg-yellow-300 text-white text-xl p-1 md:p-2 rounded-2xl text-center hover:bg-yellow-400 min-w-[10rem]">
-          {isLoggedIn? "Logged In!" : "Login/Register"}
+          {isLoggedIn ? username : "Login/Register"}
         </Link>
 
         <div className={`absolute z-10 top-0 w-3/4 opacity-0 group-hover:opacity-100 transition-all p-4 bg-yellow-200 

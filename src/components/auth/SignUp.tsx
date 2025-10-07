@@ -7,20 +7,23 @@ import axios from "axios";
 export default function SignUp(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [usernameState, updateUsername] = useState('')
+    const [username, updateUsername] = useState('')
     const [doublePassword, confirmPassword] = useState('')
     const navigate = useNavigate()
+    const locations = {}
     const passBool = doublePassword === password && password.length > 0 && doublePassword.length > 0
 
     const handleSubmit = async(e:any) => {
         e.preventDefault();
         if(doublePassword === password){
             try {
-                const {data} = await axios.post('http://localhost:8090/auth/sign-up', {email, password}, {withCredentials: true})
+                const {data} = await axios.post('http://localhost:8090/auth/sign-up', {email, password, username, locations}, {withCredentials: true})
                 const {success} = data
-                if(success){
+                const result = await axios.post('http://localhost:8090/auth/add_profile_details', {email, username, locations})
+                const successful = result.data.success
+                if(success && successful){
                     window.alert("Sign up Successful!")
-                   navigate('/sign-in')
+                   navigate('/auth/sign-in')
                 }
             } catch (error) {
                 console.error(error)

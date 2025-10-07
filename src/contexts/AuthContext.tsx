@@ -3,7 +3,11 @@ import axios from "axios";
 
 type authContextType = {
     isLoggedIn: boolean,
-    logIn: React.Dispatch<React.SetStateAction<boolean>>
+    logIn: React.Dispatch<React.SetStateAction<boolean>>,
+    //userEmail: string,
+    //updateUserDetails: React.Dispatch<React.SetStateAction<string>>,
+    username: string,
+    updateUsername: React.Dispatch<React.SetStateAction<string>>
 }
 const AuthContext = createContext({} as authContextType)
 
@@ -11,7 +15,20 @@ export const useAuthStatus = () => useContext(AuthContext)
 
 export function AuthProvider({children} : React.PropsWithChildren){
     const [isLoggedIn, logIn] = useState(false)
-    //const [userDetails, updateUserDetails] = useState()
+    const string = localStorage.getItem('userMail')
+    const [username, updateUsername] = useState('')
+
+
+    useEffect(() => {
+        async function getUser(query: string|null) {
+            if(string !== null){
+            const {data} = await axios.get(`http://localhost:8090/auth/get-user/${query}`)
+            console.log(data)
+            updateUsername(data.result.username)
+        }}
+        getUser(string)
+       
+    }, [string])
 
     useEffect(()=> {
         async function checkAuth(){
@@ -30,7 +47,7 @@ export function AuthProvider({children} : React.PropsWithChildren){
     
 
     return(
-        <AuthContext value={{isLoggedIn, logIn}}>
+        <AuthContext value={{isLoggedIn, logIn, username, updateUsername}}>
             {children}
         </AuthContext>
     ) 

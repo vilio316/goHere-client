@@ -16,11 +16,14 @@ export default function Login(){
         try{
             const {data} = await axios.post('http://localhost:8090/auth/sign-in', {email, pwd}, {withCredentials: true})
             const {success, message} = data
+            if(email){
             if(success == true){
                 window.alert(message);
+                localStorage.setItem('userMail', email)
                 logIn(true)
                 navigate('/')
             }
+        }
         }
         catch(error: any){
             changeError(error.response.data.message)
