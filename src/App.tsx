@@ -70,7 +70,7 @@ function App() {
         <HiSparkles fill="blue" size={28}/>
         </span>
         </button>
-        <input type="text" name="search" id="location_query" required placeholder="Where do you wanna go?" className="rounded-4xl p-1 md:w-full md:col-span-9 col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus" autoComplete="true" minLength={3}  onChange={(e) => {
+        <input type="text" name="search" id="location_query" required placeholder="Where do you wanna go?" className={`rounded-4xl p-1 md:w-full ${isUsingAI ? 'md:col-span-9': 'md:col-span-10'} col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus`} autoComplete="true" minLength={3}  onChange={(e) => {
          if(!isUsingAI){
          if(e.target.value.length %2 ==0){
             updateSearchQuery(e.target.value)
@@ -81,7 +81,7 @@ function App() {
         }
 
         }}/>
-        <button className={`ai_submit items-center grid grid-cols-2 md:p-2 p-1 md:text-lg text-sm col-span-2 ${isUsingAI ? 'opacity-100': "opacity-0"} justify-self-center place-items-center w-[75%] rounded-2xl md:bg-amber-300 md:hover:bg-amber-400`} onClick={()=> {
+        <button className={`ai_submit items-center grid grid-cols-2 md:p-2 p-1 md:text-lg text-sm col-span-2 ${isUsingAI ? 'grid': "hidden"} justify-self-center place-items-center w-[75%] rounded-2xl md:bg-amber-300 md:hover:bg-amber-400`} onClick={()=> {
           console.log(intermediateState)
           updateSearchQuery(intermediateState);
         }}>

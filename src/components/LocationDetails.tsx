@@ -8,6 +8,7 @@ import CompanionApps from "./CompanionApplications"
 import type { locationDetails, mapboxRespsonse } from "../interfacesAndTypes"
 import { PlaceContext } from "../contexts/PlaceDetailsContext"
 import LoaderComp from "./LoaderComp"
+import { useAuthStatus } from "../contexts/AuthContext"
        
 let locationStateObj : locationDetails = {
         displayName: '',
@@ -18,7 +19,8 @@ let locationStateObj : locationDetails = {
         rating: '',
         deliveryStatus: false, 
         mapsUri: ''
-    }    
+    }   
+
 function updateLocationDetails(state: locationDetails , action : {type: string, payload: any }){
         switch(action.type){
             case 'setDisplayName': {
@@ -80,6 +82,7 @@ export function LocationDetails(){
     }>
     ({childFriendly: null, wifi: null, sports: null })
     const {location} = useLocationCoords()
+    const {updateLocations, locations, isLoggedIn} = useAuthStatus()
     const id_value = searchParams.get('id')
     const params = useParams()
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
@@ -114,7 +117,7 @@ export function LocationDetails(){
             })
     }
 
-    //Gets the details of a particular place
+    //Gets the details of a particular place from the Google Maps API
     useEffect(()=> {
         async function getPlaceDetails (){
             const { Place } = await google.maps.importLibrary('places') as google.maps.PlacesLibrary
@@ -162,36 +165,55 @@ export function LocationDetails(){
     }
 
     function FullLocationDetails(){
+        const {displayName} = state_value
+        function saveLocation(){
+            if(isLoggedIn){
+            if(locations.indexOf(displayName) == -1){
+            updateLocations([...locations, displayName]);
+            window.alert("Location saved successfully")
+        }
+            else{
+                window.alert("Location already added")
+            }
+            }
+            else{
+                window.alert('Please log in to save locations')
+            }
+    }
+
+
         return(
             <>
             { photos !== 'string' ?
             <img src={photos} className="rounded-2xl p-2 w-full max-h-[40vh] object-cover" loading="lazy"/>
             : <></>}
 
-            <p className="md:text-2xl text-xl p-1 font-bold capitalize grid grid-cols-6 gap-x-2">
-                <p className="grid col-span-4">
+            <div className="md:text-2xl text-xl p-1 font-bold capitalize grid grid-cols-6 gap-x-2">
+                <p className="grid col-span-4 items-center">
                 <span>
                 {state_value.displayName}
                 </span>
 
                  <span className="flairs flex gap-x-2">
                 {
-                    additionalInfo.childFriendly ? <FaChild fill='blue' className="inline" title="Good for Children" size={14} />: null
+                    additionalInfo.childFriendly ? <FaChild fill='blue' className="inline" title="Good for Children" size={16} />: null
     }
                 
-                  {  additionalInfo.wifi ? <FaWifi fill="blue" className="inline" title="Has WiFi" size={14} /> : null
+                  {  additionalInfo.wifi ? <FaWifi fill="blue" className="inline" title="Has WiFi" size={16} /> : null
                 }
                 {
-                    additionalInfo.sports ? <FaTv className="inline" title="Good for Watching Sports" size={14} /> : null
+                    additionalInfo.sports ? <FaTv className="inline" title="Good for Watching Sports" size={16} /> : null
                 }
 
             </span>
                 </p>
-                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]">
+                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]" onClick={
+                    saveLocation
+                }>
                     <FaBookmark fill='white' className="inline" />
                     <span className="p-2">Save Location</span>
                 </button> 
-                </p>
+                </div>
 
             <div className="flex gap-x-4 items-center my-2 md:my-1">
                 <span className="capitalize">{state_value.primaryType}</span>
@@ -244,9 +266,6 @@ export function LocationDetails(){
         </>
         )
     }
-
-
-
 
     return(
         <>

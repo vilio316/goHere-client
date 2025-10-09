@@ -10,6 +10,7 @@ import ErrorPage from './components/ErrorPage.tsx'
 import AuthLayout from './AuthLayout.tsx'
 import SignUp from './components/auth/SignUp.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
+import ProfilePage from './components/ProfilePage.tsx'
 
 const browserRouter = createBrowserRouter([
   {
@@ -19,6 +20,9 @@ const browserRouter = createBrowserRouter([
       {index: true, Component: App, errorElement: <ErrorPage />},
       {
         path: '/results', Component: ViewAll, errorElement: <ErrorPage />
+      },
+      {
+        path: '/me', Component: ProfilePage, errorElement: <ErrorPage />
       },
       {path: '/location/:lat/:long', Component: LocationDetails, errorElement: <ErrorPage /> },
    ],

@@ -4,8 +4,8 @@ import axios from "axios";
 type authContextType = {
     isLoggedIn: boolean,
     logIn: React.Dispatch<React.SetStateAction<boolean>>,
-    //userEmail: string,
-    //updateUserDetails: React.Dispatch<React.SetStateAction<string>>,
+    locations: string[],
+    updateLocations: React.Dispatch<React.SetStateAction<string[]>>,
     username: string,
     updateUsername: React.Dispatch<React.SetStateAction<string>>
 }
@@ -17,12 +17,15 @@ export function AuthProvider({children} : React.PropsWithChildren){
     const [isLoggedIn, logIn] = useState(false)
     const string = localStorage.getItem('userMail')
     const [username, updateUsername] = useState('')
+    const [locations, updateLocations] = useState<string[]>([])
 
     useEffect(()=> {
         async function getLoc(query: string|null) {
         const userLocations = await axios.get(`http://localhost:8090/auth/user_location/${query}`)
-        console.log(userLocations.data)
-        }
+        const usable_locations : string[] = userLocations.data.foundUser.locations.locations
+        const newLocations = usable_locations.filter((item) => (item !== "Empty"))
+        updateLocations(newLocations)
+    }
         getLoc(string)
     }, [string])
 
@@ -54,7 +57,7 @@ export function AuthProvider({children} : React.PropsWithChildren){
     
 
     return(
-        <AuthContext value={{isLoggedIn, logIn, username, updateUsername}}>
+        <AuthContext value={{isLoggedIn, logIn, username, updateUsername, locations, updateLocations}}>
             {children}
         </AuthContext>
     ) 
