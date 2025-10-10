@@ -22,10 +22,11 @@ export function AuthProvider({children} : React.PropsWithChildren){
     useEffect(()=> {
         async function getLoc(query: string|null) {
         const userLocations = await axios.get(`http://localhost:8090/auth/user_location/${query}`)
+        if(userLocations.data.foundUser){
         const usable_locations : string[] = userLocations.data.foundUser.locations.locations
         const newLocations = usable_locations.filter((item) => (item !== "Empty"))
         updateLocations(newLocations)
-    }
+    }}
         getLoc(string)
     }, [string])
 
@@ -33,9 +34,9 @@ export function AuthProvider({children} : React.PropsWithChildren){
         async function getUser(query: string|null) {
             if(string !== null){
             const {data} = await axios.get(`http://localhost:8090/auth/get-user/${query}`)
-            console.log(data)
+            if(data.result){
             updateUsername(data.result.username)
-        }}
+        }}}
         getUser(string)
        
     }, [string])

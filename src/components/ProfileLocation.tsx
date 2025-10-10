@@ -22,7 +22,7 @@ export function ProfileLocation(props: {query: string}){
        <div className="p-2 grid border-1 border-gray shadow-2xl shadow-green-200 rounded-3xl h-full">
         <div className="flex gap-x-1 md:gap-x-2 my-1 md:my-2 items-center">
             {resultState.location && resultState.displayName ?
-        <Link className="font-bold hover:underline" to={`/location/${resultState.location.latitude}/${resultState.location.longitude}`}>
+        <Link className="font-bold hover:underline w-3/5" to={`/location/${resultState.location.latitude}/${resultState.location.longitude}`}>
             {resultState.displayName ? resultState.displayName.text: 'Loading...'}
         </Link> : <p>
              {resultState.displayName ? resultState.displayName.text: 'Loading...'}
@@ -33,7 +33,7 @@ export function ProfileLocation(props: {query: string}){
         </div>
         
         <div className="flex gap-x-1 md:gap-x-2">
-          <span className="capitalize">{resultState.primaryTypeDisplayName? resultState.primaryTypeDisplayName.text : ''}</span>  
+          <span className="capitalize ">{resultState.primaryTypeDisplayName? resultState.primaryTypeDisplayName.text : ''}</span>  
            
             {resultState.rating?
             <div>

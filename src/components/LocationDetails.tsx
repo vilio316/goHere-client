@@ -82,7 +82,7 @@ export function LocationDetails(){
     }>
     ({childFriendly: null, wifi: null, sports: null })
     const {location} = useLocationCoords()
-    const {updateLocations, locations, isLoggedIn} = useAuthStatus()
+   
     const id_value = searchParams.get('id')
     const params = useParams()
     const [state_value, dispatch] = useReducer(updateLocationDetails, locationStateObj)
@@ -166,10 +166,12 @@ export function LocationDetails(){
 
     function FullLocationDetails(){
         const {displayName} = state_value
+         const {updateLocations, locations, isLoggedIn } = useAuthStatus()
         function saveLocation(){
             if(isLoggedIn){
             if(locations.indexOf(displayName) == -1){
             updateLocations([...locations, displayName]);
+            postLocations(locations)
             window.alert("Location saved successfully")
         }
             else{
@@ -179,7 +181,14 @@ export function LocationDetails(){
             else{
                 window.alert('Please log in to save locations')
             }
-    }
+        }
+
+        async function postLocations(body: any){
+            const email = localStorage.getItem('userMail')
+            const newBody = [...body, displayName]
+            const {data} = await axios.post(`http://localhost:8090/auth/update_locations`, {newBody, email})
+            console.log(data)
+        }
 
 
         return(
@@ -207,11 +216,11 @@ export function LocationDetails(){
 
             </span>
                 </p>
-                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]" onClick={
-                    saveLocation
-                }>
+                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]" onClick={() => {
+                saveLocation()
+                }}>
                     <FaBookmark fill='white' className="inline" />
-                    <span className="p-2">Save Location</span>
+                    <span className="p-2">{locations.indexOf(displayName) !== -1 ? "Unsave Location" : "Save Location"}</span>
                 </button> 
                 </div>
 
