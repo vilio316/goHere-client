@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import type { resultType } from "../interfacesAndTypes"
-import { FaStar } from "react-icons/fa6"
+import { FaLocationPin, FaStar } from "react-icons/fa6"
 import { Link } from "react-router"
 
 export function ProfileLocation(props: {query: string}){
@@ -32,7 +32,7 @@ export function ProfileLocation(props: {query: string}){
         </button>
         </div>
         
-        <div className="flex gap-x-1 md:gap-x-2">
+        <div className="flex gap-x-1 md:gap-x-2 my-1">
           <span className="capitalize ">{resultState.primaryTypeDisplayName? resultState.primaryTypeDisplayName.text : ''}</span>  
            
             {resultState.rating?
@@ -44,8 +44,10 @@ export function ProfileLocation(props: {query: string}){
                  
             </div>
         
+        <div className="flex gap-x-1">
+        <FaLocationPin className="inline fill-red-600" size={18}/>
         <p className="indent-2 text-left w-full">{resultState.shortFormattedAddress? resultState.shortFormattedAddress: ''}</p>
-
+        </div>
 
        
        </div> 

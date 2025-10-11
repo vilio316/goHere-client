@@ -8,12 +8,14 @@ import LoaderComp from "./components/LoaderComp"
 import FromAI from "./components/FromAI"
 import { HiSparkles } from "react-icons/hi"
 import { FaPaperPlane } from "react-icons/fa6"
+import ErrorComponent from "./components/ErrorComp"
 
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
   const [search_query, updateSearchQuery] = useState("")
   const [search_results, updateSearchResults] = useState<resultType[]>([])
   const [loaded, setLoaded] = useState(false)
+  const [error, updateError] = useState({message: null} as any)
   const [AIResults, updateAIResults] = useState<string[]>([])
   const [isUsingAI, setAIUseState ] = useState(false)
 
@@ -41,17 +43,23 @@ function App() {
       updateAIResults(data)
       }
      
-  } catch(error){
+  } catch(error : any){
         console.log(error)
+        updateError({...error, message: error.message})
       }
 }
     else{
       if(query.length > 1){
+      try{
       const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}`)
       setLoaded(false)
       updateSearchResults(data)
       setLoaded(true)
     }
+    catch(error: any){
+      updateError(error.message)
+    }
+  }
     else{
       setLoaded(false)
     }
@@ -92,6 +100,8 @@ function App() {
         <p className="peer-invalid:block hidden peer-invalid:text-red-400 text-sm">
           Please enter a longer search term
         </p>
+        {error && error.message ? <ErrorComponent message={error.message}/> :
+        <>
         {isUsingAI ? 
         <div className="search_results w-[90%]">
               {AIResults.length > 0 && search_query.length > 5 ? AIResults.map((result) => <FromAI query={result} key={result} />): search_query.length > 5 ? <LoaderComp/>: null}
@@ -110,6 +120,7 @@ function App() {
         }>See More ... &gt; </Link>
         </div>
     </div>}
+    </>}
     </div>
     </>
   )
