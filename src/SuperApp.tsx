@@ -4,20 +4,19 @@ import { FaLocationPin, FaUser } from "react-icons/fa6";
 import { useAuthStatus } from "./contexts/AuthContext";
 import axios from "axios";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { useToast } from "./contexts/ToastContext";
 
 function SuperApp(){
-  const {isLoggedIn, logIn, username, updateLocations } = useAuthStatus() 
-  const navigate = useNavigate()
+  const {isLoggedIn, username, updateLocations } = useAuthStatus() 
+  const {showToast, updateMessageObj, messageObject} = useToast()
 
    async function logOutUser(){
           const {data} = await axios.post('http://localhost:8090/auth/logout')
-          const {message} = data 
-          window.alert(message)
-          logIn(false)
+          const {success} = data
+          updateMessageObj({...messageObject, action: "Log Out", success: success})
+          showToast(true)
           updateLocations([''])
-          localStorage.setItem('userMail', '')
-          navigate('/')   
-          
+          localStorage.setItem('userMail', '')          
       }
 
     return(
@@ -35,7 +34,7 @@ function SuperApp(){
       <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1 items-center">
         <Link to='/' className="hover:underline" >Home</Link>
         <Link to='/me#locations' className="hover:underline">Locations</Link>
-        <span className="p-2">Contact Us</span>
+        <span className="p-2" >Contact Us</span>
         <span className="p-2">Contribute</span>
         <span className="p-2">Random...</span>
       </div>

@@ -3,11 +3,14 @@ import axios from 'axios'
 import { useState } from 'react'
 import { FaGoogle, FaXTwitter } from 'react-icons/fa6'
 import { useAuthStatus } from '../../contexts/AuthContext';
+import { ToastNotification } from '../ToastComponents';
+import { useToast } from '../../contexts/ToastContext';
 
 export default function Login(){
     const navigate = useNavigate();
     const [email, setMail] = useState('')
     const {logIn } = useAuthStatus()
+    const {messageObject, updateMessageObj, showToast} = useToast()
     const [pwd, setPwd] = useState('')
     const [errorParagraph, changeError] = useState('')
 
@@ -15,31 +18,34 @@ export default function Login(){
         e.preventDefault()
         try{
             const {data} = await axios.post('http://localhost:8090/auth/sign-in', {email, pwd}, {withCredentials: true})
-            const {success, message} = data
+            const {success} = data
             if(email){
             if(success == true){
-                window.alert(message);
                 localStorage.setItem('userMail', email)
-                logIn(true)
-                navigate('/')
+                updateMessageObj({...messageObject, action: 'Sign In', success: true})
+                showToast(true)
+                //logIn(true)
+                //navigate('/')
             }
         }
         }
         catch(error: any){
             changeError(error.response.data.message)
-            window.alert(error.response.data.message)
+            updateMessageObj({...messageObject, action: error.response.data.message, success: false})
+            showToast(true)
         }
     }
 
  return(
-    <div className="min-h-[50vh] grid border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
+    <div className="min-h-[50vh] grid justify-items-center border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
+            <ToastNotification />
         <div className='text-center'>
         <Link to='/' className='md:text-3xl text-2xl font-bold text-center'>GoHere </Link>
         <p>Your Number One Tourism Companion</p>
         <p className='text-2xl font-bold md:my-3'>Sign In</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='w-full'>
             <legend className='font-bold text-xl'>User Information</legend>
 
             <fieldset>

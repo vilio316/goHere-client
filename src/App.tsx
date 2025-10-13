@@ -9,6 +9,7 @@ import FromAI from "./components/FromAI"
 import { HiSparkles } from "react-icons/hi"
 import { FaPaperPlane } from "react-icons/fa6"
 import ErrorComponent from "./components/ErrorComp"
+import ToastContainer, { ToastNotification } from "./components/ToastComponents"
 
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
@@ -71,6 +72,7 @@ function App() {
   return (
     <>
     <div className="grid justify-items-center p-2 md:p-1">
+        <ToastNotification />
       <GeocodedInfo />
       <div className="grid md:w-[90vw] w-[100%] grid-cols-12 items-center my-2 md:my-0">
         <button className={`grid md:justify-items-end justify-items-center md:col-span-1 col-span-2 ${isUsingAI ? "opacity-100" : 'opacity-25'} transition-opacity`} onClick={()=> setAIUseState(!isUsingAI)} title={`${isUsingAI? "Disable AI Search" : "Use AI Search"}`}>

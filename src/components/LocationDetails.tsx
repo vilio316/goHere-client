@@ -9,6 +9,8 @@ import type { locationDetails, mapboxRespsonse } from "../interfacesAndTypes"
 import { PlaceContext } from "../contexts/PlaceDetailsContext"
 import LoaderComp from "./LoaderComp"
 import { useAuthStatus } from "../contexts/AuthContext"
+import { useToast } from "../contexts/ToastContext"
+import { ToastNotification } from "./ToastComponents"
        
 let locationStateObj : locationDetails = {
         displayName: '',
@@ -167,19 +169,23 @@ export function LocationDetails(){
     function FullLocationDetails(){
         const {displayName} = state_value
          const {updateLocations, locations, isLoggedIn } = useAuthStatus()
+         const {updateMessageObj, messageObject, showToast} = useToast()
         function saveLocation(){
             if(isLoggedIn){
             if(locations.indexOf(displayName) == -1){
             updateLocations([...locations, displayName]);
             postLocations(locations)
-            window.alert("Location saved successfully")
+            updateMessageObj({...messageObject, action: 'Location Save Successful', success: true})
+            showToast(true)
         }
             else{
-                window.alert("Location already added")
+                updateMessageObj({...messageObject, action: "Location already added", success: false})
+                showToast(true)
             }
             }
             else{
-                window.alert('Please log in to save locations')
+                updateMessageObj({...messageObject, action: "Please Log in to save Locations", success: false})
+                showToast(true)
             }
         }
 
@@ -279,6 +285,7 @@ export function LocationDetails(){
     return(
         <>
 <div className="grid p-2 md:grid-cols-2 gap-2">
+    <ToastNotification/>
             <div className="hidden md:grid justify-center p-2">
                 <MapComponent latitude={Number(Number(params.lat).toFixed(6))} longitude={Number(Number(params?.long))} />
             </div>

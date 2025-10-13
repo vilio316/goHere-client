@@ -3,10 +3,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router"
 import { FaGoogle, FaXTwitter } from "react-icons/fa6"; 
 import axios from "axios";
+import { useToast } from "../../contexts/ToastContext";
+import ToastContainer, { ToastNotification } from "../ToastComponents";
 
 export default function SignUp(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const {isVisible, showToast, updateMessageObj, messageObject} = useToast()
     const [username, updateUsername] = useState('')
     const [doublePassword, confirmPassword] = useState('')
     const navigate = useNavigate()
@@ -34,6 +37,10 @@ export default function SignUp(){
 
     return(
         <div className='min-h-[50vh] grid md:w-5/10 rounded-2xl p-2 md:p-4 border-2 border-black'>
+            <ToastContainer>
+                <ToastNotification />
+            </ToastContainer>    
+
             <div className="grid">
             <Link to='/' className="text-2xl font-bold text-center">GoHere </Link>
              <p className="text-center">Your Number One Tourism Companion</p>

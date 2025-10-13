@@ -11,6 +11,7 @@ import AuthLayout from './AuthLayout.tsx'
 import SignUp from './components/auth/SignUp.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import ProfilePage from './components/ProfilePage.tsx'
+import ToastProvider from './contexts/ToastContext.tsx'
 
 const browserRouter = createBrowserRouter([
   {
@@ -44,7 +45,9 @@ const browserRouter = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <AuthProvider>
     <LocationProvider>
+      <ToastProvider >
     <RouterProvider router={browserRouter}/>
+    </ToastProvider>
   </LocationProvider>
   </AuthProvider>
 )
