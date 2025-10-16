@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 import { Link } from "react-router";
 import { FaLocationPin, FaUser } from "react-icons/fa6";
 import { useAuthStatus } from "./contexts/AuthContext";

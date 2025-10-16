@@ -1,15 +1,12 @@
-import {Link, useNavigate } from 'react-router'
+import {Link} from 'react-router'
 import axios from 'axios'
 import { useState } from 'react'
 import { FaGoogle, FaXTwitter } from 'react-icons/fa6'
-import { useAuthStatus } from '../../contexts/AuthContext';
 import { ToastNotification } from '../ToastComponents';
 import { useToast } from '../../contexts/ToastContext';
 
 export default function Login(){
-    const navigate = useNavigate();
     const [email, setMail] = useState('')
-    const {logIn } = useAuthStatus()
     const {messageObject, updateMessageObj, showToast} = useToast()
     const [pwd, setPwd] = useState('')
     const [errorParagraph, changeError] = useState('')
@@ -24,8 +21,6 @@ export default function Login(){
                 localStorage.setItem('userMail', email)
                 updateMessageObj({...messageObject, action: 'Sign In', success: true})
                 showToast(true)
-                //logIn(true)
-                //navigate('/')
             }
         }
         }
@@ -37,12 +32,12 @@ export default function Login(){
     }
 
  return(
-    <div className="min-h-[50vh] grid justify-items-center border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
+    <div className="md:min-h-[50vh] min-h-[80vh] grid border-2 border-black md:w-5/10 p-2 md:p-4 rounded-2xl ">
             <ToastNotification />
         <div className='text-center'>
         <Link to='/' className='md:text-3xl text-2xl font-bold text-center'>GoHere </Link>
         <p>Your Number One Tourism Companion</p>
-        <p className='text-2xl font-bold md:my-3'>Sign In</p>
+        <p className='text-2xl font-bold md:my-3 my-2'>Sign In</p>
         </div>
 
         <form onSubmit={handleSubmit} className='w-full'>

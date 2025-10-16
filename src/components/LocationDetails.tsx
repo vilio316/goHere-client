@@ -170,16 +170,21 @@ export function LocationDetails(){
         const {displayName} = state_value
          const {updateLocations, locations, isLoggedIn } = useAuthStatus()
          const {updateMessageObj, messageObject, showToast} = useToast()
-        function saveLocation(){
+        const thisItem = locations.filter((item) => item.name == displayName)
+    
+         function saveLocation(){
             if(isLoggedIn){
-            if(locations.indexOf(displayName) == -1){
-            updateLocations([...locations, displayName]);
+            if(thisItem.length < 1){
+            updateLocations([...locations, {name: displayName, placeID : id_value}]);
             postLocations(locations)
             updateMessageObj({...messageObject, action: 'Location Save Successful', success: true})
             showToast(true)
         }
             else{
-                updateMessageObj({...messageObject, action: "Location already added", success: false})
+                const newArr = locations.filter((item) => item.name !== displayName)
+                updateLocations(newArr);
+                postLocationsUnsave(locations);
+                updateMessageObj({...messageObject, action: "Location Unsaved Successfully", success: true})
                 showToast(true)
             }
             }
@@ -191,11 +196,17 @@ export function LocationDetails(){
 
         async function postLocations(body: any){
             const email = localStorage.getItem('userMail')
-            const newBody = [...body, displayName]
+            const newBody = [...body, {name: displayName, id: id_value}]
             const {data} = await axios.post(`http://localhost:8090/auth/update_locations`, {newBody, email})
             console.log(data)
         }
 
+        async function postLocationsUnsave(body: any){
+            const email = localStorage.getItem('userMail')
+            const newBody = body.filter((item: any) => item.name !== displayName)
+            const {data} = await axios.post(`http://localhost:8090/auth/update_locations`, {newBody, email})
+            console.log(data)
+        }
 
         return(
             <>
@@ -226,7 +237,7 @@ export function LocationDetails(){
                 saveLocation()
                 }}>
                     <FaBookmark fill='white' className="inline" />
-                    <span className="p-2">{locations.indexOf(displayName) !== -1 ? "Unsave Location" : "Save Location"}</span>
+                    <span className="p-2">{thisItem.length > 0 ? "Unsave Location" : "Save Location"}</span>
                 </button> 
                 </div>
 
@@ -285,7 +296,7 @@ export function LocationDetails(){
     return(
         <>
 <div className="grid p-2 md:grid-cols-2 gap-2">
-    <ToastNotification/>
+            <ToastNotification/>
             <div className="hidden md:grid justify-center p-2">
                 <MapComponent latitude={Number(Number(params.lat).toFixed(6))} longitude={Number(Number(params?.long))} />
             </div>

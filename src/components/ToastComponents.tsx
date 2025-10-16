@@ -22,7 +22,7 @@ export function ToastNotification(){
         if(action == 'Sign In' && success == true){
             return 'Sign In Successful'
         }
-        else if(action == 'Sign Up' && success){
+        else if(action == 'Sign Up' && success == true){
             return 'Sign Up Successful'
         }
         else if(action == 'Log Out' && success == true){
@@ -45,6 +45,9 @@ export function ToastNotification(){
                     if(messageObject.action == "Log Out" && messageObject.success == true){
                         logIn(false);
                         navigate('/')
+                    }
+                    if(messageObject.action == "Sign Up" && messageObject.success == true){
+                        navigate('/auth/sign-in')
                     }
                     showToast(false)
                     

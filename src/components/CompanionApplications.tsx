@@ -9,7 +9,7 @@ export default function CompanionApps(props: {primaryType: string})
     const { primaryType } = props 
     const basic_companions = {
         maps: 'Google Maps',
-        cabs: ['Bolt', 'Uber', "InDrive"],
+        cabs: ["Uber",'Bolt', "InDrive"],
         planes: '',
         orderProviders: [],
         booking: '',

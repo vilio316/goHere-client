@@ -1,18 +1,17 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { FaGoogle, FaXTwitter } from "react-icons/fa6"; 
 import axios from "axios";
 import { useToast } from "../../contexts/ToastContext";
-import ToastContainer, { ToastNotification } from "../ToastComponents";
+import { ToastNotification } from "../ToastComponents";
 
 export default function SignUp(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const {isVisible, showToast, updateMessageObj, messageObject} = useToast()
+    const {showToast, updateMessageObj, messageObject} = useToast()
     const [username, updateUsername] = useState('')
     const [doublePassword, confirmPassword] = useState('')
-    const navigate = useNavigate()
     const locations = {locations: ['Empty']}
     const passBool = doublePassword === password && password.length > 0 && doublePassword.length > 0
 
@@ -26,8 +25,8 @@ export default function SignUp(){
                 const successful = result.data.success
                 const locationData = await axios.post('http://localhost:8090/auth/add_location', {email, locations})
                 if(success && successful && locationData.data.success){
-                    window.alert("Sign up Successful!")
-                   navigate('/auth/sign-in')
+                    updateMessageObj({...messageObject, action: "Sign Up", success: true})
+                    showToast(true)
                 }
             } catch (error) {
                 console.error(error)
@@ -37,10 +36,7 @@ export default function SignUp(){
 
     return(
         <div className='min-h-[50vh] grid md:w-5/10 rounded-2xl p-2 md:p-4 border-2 border-black'>
-            <ToastContainer>
                 <ToastNotification />
-            </ToastContainer>    
-
             <div className="grid">
             <Link to='/' className="text-2xl font-bold text-center">GoHere </Link>
              <p className="text-center">Your Number One Tourism Companion</p>
