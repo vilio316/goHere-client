@@ -39,11 +39,11 @@ export function ProfileLocation(props: {query: string, id: any}){
        <>
        <div className="md:p-4 p-2 grid border-1 border-gray shadow-2xl shadow-green-200 rounded-3xl md:min-h-[12.5rem] min-h-[15rem]">
         <div className="flex gap-x-1 md:gap-x-2 my-1 md:my-2 items-center">
-            {resultState.location && resultState.displayName && resultState.id ?
+            {resultState.location && resultState.id ?
         <Link className="font-bold hover:underline w-3/5 capitalize" to={`/location/${resultState.location.latitude}/${resultState.location.longitude}?id=${resultState.id}`}>
-            {resultState.displayName ? resultState.displayName.text: 'Loading...'}
+          {query}
         </Link> : <p>
-             {resultState.displayName ? resultState.displayName.text: 'Loading...'}
+            {query}
             </p>}
         <button className="justify-self-end  outline-none border-none rounded-xl text-center bg-yellow-400 text-white p-1 w-2/5 hover:font-bold" onClick={()=> {
             postLocationsUnsave(locations)

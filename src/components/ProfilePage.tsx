@@ -4,16 +4,18 @@ import { ProfileLocation } from "./ProfileLocation"
 import { Link } from "react-router"
 import axios from "axios"
 import { ToastNotification } from "./ToastComponents"
+import SuggestedLocationWrapper from "./SuggestedLocations"
+
 
 export default function ProfilePage(){
     const {locations, username, isLoggedIn} = useAuthStatus()
 
-     async function clearLocations(body: any){
+     async function clearLocations(){
             const email = localStorage.getItem('userMail')
             const clearedArray = ["Empty"]
             const {data} = await axios.post(`http://localhost:8090/auth/update_locations`, {clearedArray, email})
-        }
-
+            console.log(data)
+        } 
 
     return(
         <div className="grid">
@@ -27,8 +29,11 @@ export default function ProfilePage(){
         <div>
             <p className="text-xl underline ">Suggested Locations</p>
             <div className="min-h-[15vh] grid place-items-center">
-                <p>No Suggested Locations</p>
+              {locations.length > 0 ? <SuggestedLocationWrapper /> :  
+              <>
+              <p>No Suggested Locations</p>
                 <p>Add more locations for better suggestions</p>
+                </>}
             </div>
         </div>
         <div>

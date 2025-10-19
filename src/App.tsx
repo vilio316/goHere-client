@@ -9,7 +9,7 @@ import FromAI from "./components/FromAI"
 import { HiSparkles } from "react-icons/hi"
 import { FaPaperPlane } from "react-icons/fa6"
 import ErrorComponent from "./components/ErrorComp"
-import ToastContainer, { ToastNotification } from "./components/ToastComponents"
+import { ToastNotification } from "./components/ToastComponents"
 
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
