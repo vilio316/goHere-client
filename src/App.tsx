@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router"
+import { Link, useSearchParams } from "react-router"
 import axios from "axios"
 import { SearchResult } from "./components/SearchResults"
 import type { resultType } from "./interfacesAndTypes"
@@ -13,7 +13,10 @@ import { ToastNotification } from "./components/ToastComponents"
 
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
-  const [search_query, updateSearchQuery] = useState("")
+  const [search, updateSearchParams] = useSearchParams()
+  
+  const qVal = search.get('q')
+  const [search_query, updateSearchQuery] = useState(String(qVal))
   const [search_results, updateSearchResults] = useState<resultType[]>([])
   const [loaded, setLoaded] = useState(false)
   const [error, updateError] = useState({message: null} as any)
@@ -35,9 +38,9 @@ function App() {
 
 
   useEffect(()=>{
-    async function searchFromServer(query: string) {
+    async function searchFromServer(query: string | null) {
       const userLocation = localStorage.getItem('user_location')
-      if(isUsingAI && query.length > 3){
+      if(isUsingAI && query && query.length > 3){
         try{
       const {data} : {data: any[]} = await axios.get(`http://localhost:8090/ai/${query} ${handleCloseness(query, userLocation)}`)
       if(data.length > 0){
@@ -50,7 +53,7 @@ function App() {
       }
 }
     else{
-      if(query.length > 1){
+      if(query && query.length > 1){
       try{
       const {data} : {data : resultType[]} = await axios.get(`http://localhost:8090/search/${query}`)
       setLoaded(false)
@@ -66,8 +69,8 @@ function App() {
     }
     }
   }
-    searchFromServer(search_query)
-  }, [search_query, isUsingAI])
+    searchFromServer(qVal)
+  }, [qVal, isUsingAI])
 
   return (
     <>
@@ -80,10 +83,10 @@ function App() {
         <HiSparkles fill="blue" size={28}/>
         </span>
         </button>
-        <input type="text" name="search" id="location_query" required placeholder="Where do you wanna go?" className={`rounded-4xl p-1 md:w-full ${isUsingAI ? 'md:col-span-9': 'md:col-span-10'} col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus`} autoComplete="true" minLength={3}  onChange={(e) => {
+        <input type="text" defaultValue={search_query} name="search" id="location_query" required placeholder="Where do you wanna go?" className={`rounded-4xl p-1 md:w-full ${isUsingAI ? 'md:col-span-9': 'md:col-span-10'} col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus`} autoComplete="true" minLength={3}  onChange={(e) => {
          if(!isUsingAI){
          if(e.target.value.length %2 ==0){
-            updateSearchQuery(e.target.value)
+            updateSearchParams(`?q=${e.target.value}`)
           }
         }
         else{
@@ -116,9 +119,9 @@ function App() {
         }
         <div className="w-full grid justify-center">
         <Link to={`/results?query=${
-          search_query
+          qVal
         }`} 
-        className={`${search_results.length > 0 && search_query.length > 4 ? 'opacity-100' : 'opacity-0'} bg-yellow-300 grid text-center rounded-[1.5rem] text-xl md:text-2xl p-1 md:p-2`
+        className={`${search_results.length > 0 && qVal &&qVal.length > 4 ? 'opacity-100' : 'opacity-0'} bg-yellow-300 grid text-center rounded-[1.5rem] text-xl md:text-2xl p-1 md:p-2`
         }>See More ... &gt; </Link>
         </div>
     </div>}

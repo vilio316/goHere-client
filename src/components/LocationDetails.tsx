@@ -233,7 +233,7 @@ export function LocationDetails(){
 
             </span>
                 </p>
-                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm gap-x-1 items-center w-[85%]" onClick={() => {
+                <button className="outline-none col-span-2 justify-right bg-yellow-400 p-2 rounded-2xl text-white text-sm hover:font-bold gap-x-1 items-center w-[85%] max-h-[3rem]" onClick={() => {
                 saveLocation()
                 }}>
                     <FaBookmark fill='white' className="inline" />

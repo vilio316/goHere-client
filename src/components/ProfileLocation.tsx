@@ -59,14 +59,14 @@ export function ProfileLocation(props: {query: string, id: any}){
             <div>
         <FaStar fill='gold' className="inline"  />
         <span>{resultState.rating? resultState.rating : ''}</span>
-            </div> : null
+            </div> : "Loading..."
             }
                  
             </div>
         
         <div className="flex gap-x-1">
         <FaLocationPin className="inline fill-red-600" size={18}/>
-        <p className="indent-2 text-left w-full">{resultState.shortFormattedAddress? resultState.shortFormattedAddress: ''}</p>
+        <p className="indent-2 text-left w-full capitalize">{resultState.shortFormattedAddress? resultState.shortFormattedAddress: 'Loading...'}</p>
         </div>
 
        
