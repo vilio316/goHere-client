@@ -242,13 +242,13 @@ export function LocationDetails(){
                 </div>
 
             <div className="flex gap-x-4 items-center my-2 md:my-1">
-                <span className="capitalize">{state_value.primaryType}</span>
+                <span className="capitalize">{state_value.primaryType ? state_value.primaryType : ''}</span>
                 <div className="flex items-center gap-x-2">
                     <div className="flex gap-x-1 items-center">
                 <span>
                     <FaStar fill='gold'  className="inline" />
                     </span>
-                <span>{state_value.rating}</span>
+                <span>{state_value.rating ? state_value.rating : '0.00'}</span>
                 </div>
 
                 <div className="flex gap-x-1">

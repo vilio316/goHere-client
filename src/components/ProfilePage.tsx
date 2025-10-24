@@ -32,21 +32,9 @@ export default function ProfilePage(){
         <FaUser size={24}/>
         <p className="text-2xl font-bold">Welcome Back, @{username}</p>
         </div>
-        <div>
-            <p className="text-xl underline ">Suggested Locations</p>
-            <div className="min-h-[15vh] grid place-items-center">
-              {locations.length > 0 ? <SuggestedLocationWrapper /> :  
-              <>
-              <p>No Suggested Locations</p>
-                <p>Add more locations for better suggestions</p>
-                </>}
-            </div>
-        </div>
 
         <div>
-      
         <p className="md:text-xl w-full grid grid-cols-5 gap-x-4 my-2 md:my-1 items-center">
-            
             <span className="grid md:col-span-4 col-span-3 underline font-bold">Your Saved Locations ({locations.length}) </span>
 
             <span className="col-span-2 md:col-span-1 justify-end grid"> 
@@ -67,6 +55,18 @@ export default function ProfilePage(){
                <p>Please save more locations and view them here.</p>
                 </div>}
         </div>
+
+           <div>
+            <p className="text-2xl underline font-bold my-2">AI-Suggested Locations</p>
+            <div className="min-h-[15vh] grid place-items-center">
+              {locations.length > 0 ? <SuggestedLocationWrapper /> :  
+              <>
+              <p>No Suggested Locations</p>
+                <p>Add more locations for better suggestions</p>
+                </>}
+            </div>
+        </div>
+
         </div> : <div className="grid place-items-center h-[90vh]">
             <div>
             <p className="text-2xl font-bold">Oops!</p>

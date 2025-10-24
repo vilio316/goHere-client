@@ -11,7 +11,7 @@ function SuperApp(){
   const {showToast, updateMessageObj, messageObject} = useToast()
 
    async function logOutUser(){
-          const {data} = await axios.post('http://localhost:8090/auth/logout')
+          const {data} = await axios.post('http://localhost:8090/auth/logout', {}, {withCredentials: true} )
           const {success} = data
           updateMessageObj({...messageObject, action: "Log Out", success: success})
           showToast(true)
@@ -32,7 +32,7 @@ function SuperApp(){
       </div>
 
       <div className="md:grid hidden md:col-span-2 md:grid-cols-5 p-1 items-center">
-        <Link to='/' className="hover:underline" >Home</Link>
+        <Link to='/?q=' className="hover:underline" >Home</Link>
         <Link to='/me#locations' className="hover:underline">Locations</Link>
         <span className="p-2" >Contact Us</span>
         <span className="p-2">Contribute</span>
@@ -44,7 +44,7 @@ function SuperApp(){
         <div className="group relative p-2">
           {isLoggedIn? <FaUser size={24} fill="gray"/> :<GiHamburgerMenu fill='gray' size={24} />}
           <div className="links grid group-hover:opacity-100 transition-opacity opacity-0 absolute top-0 right-0 bg-gray-400 p-2 w-[10rem] rounded-2xl">
-        <Link to='/' className="hover:font-bold hover:underline link ">Home</Link>
+        <Link to='/q=' className="hover:font-bold hover:underline link ">Home</Link>
         <Link to='/me' className="hover:font-bold hover:underline link">Your Profile</Link>
         <Link to='/' className="hover:font-bold hover:underline link">Contact Us</Link >
         <span className="block my-1">Contribute</span>

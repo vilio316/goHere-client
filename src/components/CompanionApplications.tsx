@@ -17,10 +17,14 @@ export default function CompanionApps(props: {primaryType: string})
     }
 
     function addCompanions(){
+     if(primaryType == null){
+    return basic_companions
+}
+
+    if(primaryType){
      if(primaryType.toLowerCase().includes('airport')){
         return {...basic_companions, planes: 'Wakanow'}
      }   
-    if(primaryType){
     switch (primaryType.toLowerCase()){
         case 'restaurant':{
             return {...basic_companions, orderProviders: ['Glovo', 'Chowdeck', "Website"]}
@@ -46,6 +50,7 @@ export default function CompanionApps(props: {primaryType: string})
 else{
     return basic_companions
 }
+
 }
     const full_companions = addCompanions()
     return(

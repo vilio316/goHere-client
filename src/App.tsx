@@ -14,7 +14,6 @@ import { ToastNotification } from "./components/ToastComponents"
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
   const [search, updateSearchParams] = useSearchParams()
-  
   const qVal = search.get('q')
   const [search_query, updateSearchQuery] = useState(String(qVal))
   const [search_results, updateSearchResults] = useState<resultType[]>([])
@@ -69,8 +68,8 @@ function App() {
     }
     }
   }
-    searchFromServer(qVal)
-  }, [qVal, isUsingAI])
+    searchFromServer(search_query)
+  }, [search_query, isUsingAI])
 
   return (
     <>
@@ -83,14 +82,16 @@ function App() {
         <HiSparkles fill="blue" size={28}/>
         </span>
         </button>
-        <input type="text" defaultValue={search_query} name="search" id="location_query" required placeholder="Where do you wanna go?" className={`rounded-4xl p-1 md:w-full ${isUsingAI ? 'md:col-span-9': 'md:col-span-10'} col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus`} autoComplete="true" minLength={3}  onChange={(e) => {
+        <input type="text" defaultValue={qVal == null ? '': qVal } name="search" id="location_query" required placeholder="Where do you wanna go?" className={`rounded-4xl p-1 md:w-full ${isUsingAI ? 'md:col-span-9': 'md:col-span-10'} col-span-8 w-full border-2 indent-4 h-[5rem] border-black outline-none peer invalid:border-2 invalid:border-red-500 autofocus`} autoComplete="true" minLength={3}  onChange={(e) => {
          if(!isUsingAI){
          if(e.target.value.length %2 ==0){
             updateSearchParams(`?q=${e.target.value}`)
+            updateSearchQuery(e.target.value)
           }
         }
         else{
-            updateIntermediateState(e.target.value)
+            updateIntermediateState(e.target.value);
+            updateSearchParams(`q=${e.target.value}`);
         }
 
         }}/>
@@ -112,10 +113,10 @@ function App() {
               {AIResults.length > 0 && search_query.length > 5 ? AIResults.map((result) => <FromAI query={result} key={result} />): search_query.length > 5 ? <LoaderComp/>: null}
         </div> :
         <div className="search_results w-[90%] ">
-          {search_query.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
+          {qVal && qVal.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
             <SearchResult item={item} key = {item.id}/>
           ))
-        : search_query.length > 2 ? <LoaderComp /> : null
+        : qVal && qVal.length > 2 ? <LoaderComp /> : null
         }
         <div className="w-full grid justify-center">
         <Link to={`/results?query=${
