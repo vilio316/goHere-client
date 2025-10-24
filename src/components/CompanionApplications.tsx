@@ -57,7 +57,7 @@ else{
         <>{
         full_companions? 
         <div className="grid md:grid-cols-2 gap-x-2">
-        <div className="flex gap-x-2 p-1">
+        <div className="flex gap-x-2 p-1 items-center">
             <FaCar fill="blue" size={24} className="inline"/>
             <a className="underline">Book a ride</a> with <select className="border-1 p-0.5 rounded-md border-black">
                 {full_companions.cabs.map((cab) => <option className="font-bold" value={cab} key={cab}>{cab}</option>)}
@@ -66,7 +66,7 @@ else{
         
         <div className="flex gap-x-2 p-1">
             <FaMap className="inline" fill='blue' size={24} />
-           <p>View on <a className="hover:font-bold hover:underline" target="_blank" href={value.mapsUri}>{full_companions?.maps}</a></p>
+           <p>View on <a className="hover:font-bold underline" target="_blank" href={value.mapsUri}>{full_companions?.maps}</a></p>
         </div>
             {
                 full_companions.scheduleVisit.length > 1 ? 

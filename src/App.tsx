@@ -113,10 +113,10 @@ function App() {
               {AIResults.length > 0 && search_query.length > 5 ? AIResults.map((result) => <FromAI query={result} key={result} />): search_query.length > 5 ? <LoaderComp/>: null}
         </div> :
         <div className="search_results w-[90%] ">
-          {qVal && qVal.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
+          {search_query && search_query.length > 3 && loaded ? search_results?.slice(0,5).map((item)=> (
             <SearchResult item={item} key = {item.id}/>
           ))
-        : qVal && qVal.length > 2 ? <LoaderComp /> : null
+        : search_query && search_query.length > 2 ? <LoaderComp /> : null
         }
         <div className="w-full grid justify-center">
         <Link to={`/results?query=${

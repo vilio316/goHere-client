@@ -16,7 +16,9 @@ export function ProfileLocation(props: {query: string, id: any}){
         async function getResult(query: string, id: any) {
             const {data} = await axios.get(`http://localhost:8090/search/${query}`)
            const specificLocation = data?.filter((item: resultType) => item.id == id)
+           console.log(specificLocation)
            if(specificLocation[0]){
+            console.log(specificLocation[0])
            updateResultState(specificLocation[0])
         }
     }
@@ -39,6 +41,7 @@ export function ProfileLocation(props: {query: string, id: any}){
        <>
        <div className="md:p-4 p-2 grid border-1 border-gray shadow-2xl shadow-green-200 rounded-3xl md:min-h-[12.5rem] min-h-[15rem]">
         <div className="flex gap-x-1 md:gap-x-2 my-1 md:my-2 items-center">
+            
             {resultState.location && resultState.id ?
         <Link className="font-bold hover:underline w-3/5 capitalize" to={`/location/${resultState.location.latitude}/${resultState.location.longitude}?id=${resultState.id}`}>
           {query}

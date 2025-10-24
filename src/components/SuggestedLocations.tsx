@@ -77,7 +77,7 @@ function SuggestedLocation(props: {query: string}){
         </Link>
         
         <div className='flex md:gap-x-2 gap-x-1'>
-        <span>{locationDetailsState.primaryTypeDisplayName ? locationDetailsState.primaryTypeDisplayName.text : ""}</span>
+        <span className="capitalize">{locationDetailsState.primaryTypeDisplayName ? locationDetailsState.primaryTypeDisplayName.text : ""}</span>
         <div className="flex md:gap-x-2 gap-x-1">
         <FaStar fill="gold" size={20} className="inline"  />
         <p>{locationDetailsState.rating? locationDetailsState.rating : 'Loading...'}</p>
