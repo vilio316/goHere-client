@@ -38,8 +38,8 @@ export function ProfileLocation(props: {query: string, id: any}){
         }
 
     return(
-       <>{resultState.location ?
-       <div className="md:p-4 p-2 grid border-1 border-gray shadow-2xl shadow-green-200 rounded-3xl md:min-h-[12.5rem] min-h-[15rem]">
+       <>
+       <div className={`md:p-4 p-2 ${resultState.location ? "grid": 'hidden'} border-1 border-gray shadow-2xl shadow-green-200 rounded-3xl md:min-h-[12.5rem] min-h-[15rem]`}>
         <div className="flex gap-x-1 md:gap-x-2 my-1 md:my-2 items-center">
             
             {resultState.location && resultState.id ?
@@ -73,7 +73,7 @@ export function ProfileLocation(props: {query: string, id: any}){
         </div>
 
        
-       </div> : null} 
+       </div> 
         </>
     )
 

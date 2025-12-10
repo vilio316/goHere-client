@@ -14,7 +14,17 @@ import { ToastNotification } from "./components/ToastComponents"
 function App() {
   const [intermediateState, updateIntermediateState] = useState('')
   const [search, updateSearchParams] = useSearchParams()
-  const qVal = search.get('q')
+  function verifyParam(
+  ){
+    let query = search.get("q")
+    if(query == null){
+      return ""
+    }
+    else{
+      return search.get('q')
+    }
+  }
+  const qVal = verifyParam()
   const [search_query, updateSearchQuery] = useState(String(qVal))
   const [search_results, updateSearchResults] = useState<resultType[]>([])
   const [loaded, setLoaded] = useState(false)

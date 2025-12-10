@@ -12,6 +12,11 @@ import SignUp from './components/auth/SignUp.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import ProfilePage from './components/ProfilePage.tsx'
 import ToastProvider from './contexts/ToastContext.tsx'
+import DashLayout from './DashboardLayout.tsx'
+import Dashboard from './components/OwnerDashboard.tsx'
+import PaymentsAndSubs from './components/DashboardPayments.tsx'
+import DashboardListings from './components/DashboardListings.tsx'
+import ForgotPassword from './components/auth/ForgotPassword.tsx'
 
 const browserRouter = createBrowserRouter([
   {
@@ -29,13 +34,31 @@ const browserRouter = createBrowserRouter([
    ],
   },
   {
+    path: '/owner', 
+    Component: DashLayout,
+    children: [
+      {
+        index: true, Component: Dashboard, errorElement: <ErrorPage/>
+      }, 
+      {
+        path: 'payments-and-subscriptions', Component: PaymentsAndSubs, errorElement: <ErrorPage/>
+      }, 
+      {
+        path: 'listings', Component: DashboardListings, errorElement: <ErrorPage/>
+      }
+    ]
+  },
+  {
     path: '/auth',
     Component: AuthLayout,
     children: [
       {
         path:'sign-in', Component: Login, errorElement: <ErrorPage />
       }, 
-      { path: 'sign-up', Component: SignUp, errorElement:<ErrorPage/>}
+      { path: 'sign-up', Component: SignUp, errorElement:<ErrorPage/>}, 
+      {
+        path: 'forgot-password', Component: ForgotPassword, errorElement: <ErrorPage/>
+      }
 
     ]
   }
