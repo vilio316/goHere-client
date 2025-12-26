@@ -22,7 +22,9 @@ function LocationProvider({children}: Props){
         setLocation({...location, lat: position.coords.latitude
             , long: position.coords.longitude
         })
-    })} , [])
+    }
+, 
+)} , [])
 
     return(
         <LocationContext value={{location, setLocation}}>

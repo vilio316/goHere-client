@@ -28,6 +28,9 @@ export function ToastNotification(){
         else if(action == 'Log Out' && success == true){
             return 'Log Out Successful'
         }
+        else if(action == 'Update Password' && success == true){
+            return 'Password Updated Successfully'
+        }
         else{
             return action
         }
@@ -47,6 +50,9 @@ export function ToastNotification(){
                         navigate('/')
                     }
                     if(messageObject.action == "Sign Up" && messageObject.success == true){
+                        navigate('/auth/sign-in')
+                    }
+                     if(messageObject.action == "Update Password" && messageObject.success == true){
                         navigate('/auth/sign-in')
                     }
                     showToast(false)
