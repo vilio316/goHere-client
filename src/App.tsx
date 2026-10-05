@@ -1,7 +1,11 @@
+import { Outlet } from "react-router";
+import { BottomNavigation } from "./components/layout";
+
 export default function App() {
   return (
-    <>
-      <p>We're backk to absolute zero. </p>
-    </>
+    <div className="min-h-screen relative">
+      <Outlet />
+      <BottomNavigation />
+    </div>
   );
 }

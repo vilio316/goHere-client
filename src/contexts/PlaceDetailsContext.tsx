@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import type { locationDetails } from "../interfacesAndTypes";
+import type { LocationDetails } from "../interfacesAndTypes";
 
-export const PlaceContext = createContext({} as locationDetails)
+export const PlaceContext = createContext({} as LocationDetails)
