@@ -1,20 +1,5 @@
 @import "tailwindcss";
-*{
-    font-family: "DM Sans", sans-serif;
-    box-sizing: border-box;
-}
-
-.form{
-    display: block;
-    border: 2px solid blue;
-    outline: none;
-    border-radius: 0.75rem;
-    padding:0.25rem;
-    width: 90%;
-    text-indent: 1rem;
-    width: 90%;
-}
-
-.toast{
-    transition: ease-in-out 0.5s all;
+* {
+  font-family: "DM Sans", sans-serif;
+  box-sizing: border-box;
 }
