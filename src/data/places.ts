@@ -123,7 +123,16 @@ export const dummyPlaces: Place[] = [
   },
 ];
 
-export const moods = ["☕ Coffee", "🍽️ Food", "🎨 Culture", "🌳 Nature", "📸 A view", "🎵 Music", "📚 Books", "🍷 Drinks"];
+export const moods = [
+  "Coffee",
+  "Food",
+  "Culture",
+  "Nature",
+  "A view",
+  "Music",
+  "Books",
+  "Drinks",
+];
 
 export function getPlaceById(id: string): Place | undefined {
   return dummyPlaces.find((place) => place.id === id);

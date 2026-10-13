@@ -9,13 +9,8 @@ export function HomeScreen() {
     navigate("/explore");
   };
 
-  const handleSearchClick = () => {
-    navigate("/explore");
-  };
-
   const handleMoodSelect = (mood: string) => {
-    console.log("Mood selected:", mood);
-    navigate("/explore");
+    navigate(`/explore?q=${mood}`);
   };
 
   return (
@@ -26,10 +21,7 @@ export function HomeScreen() {
           <HeroCTA onClick={handleExplore} />
           <MoodChips moods={moods} onMoodSelect={handleMoodSelect} />
           <div className="flex-1" />
-          <SearchField
-            placeholder="Search or explore…"
-            onClick={handleSearchClick}
-          />
+          <SearchField placeholder="Search or explore…" />
         </div>
       </div>
     </div>
