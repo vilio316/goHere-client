@@ -32,7 +32,7 @@ function LocationProvider({ children }: Props) {
         long: position.coords.longitude,
       });
     });
-  }, []);
+  }, [location]);
 
   return (
     <LocationContext value={{ location, setLocation }}>
