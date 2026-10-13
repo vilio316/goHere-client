@@ -1,12 +1,26 @@
-export function StatusBar(props: { time?: string } = {}) {
-  const { time = "9:41" } = props;
+import { useState, useEffect } from "react";
+import { FiMenu } from "react-icons/fi";
+export function StatusBar() {
+  function DigitalClock() {
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+      const timerId = setInterval(() => {
+        setTime(new Date());
+      }, 1000);
+
+      return () => clearInterval(timerId);
+    }, []);
+
+    return (
+      <span className="text-lg font-bold">{time.toLocaleTimeString()}</span>
+    );
+  }
   return (
     <div className="h-11 bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-fog-050">
-      <span className="font-semibold">{time}</span>
-      <div className="flex items-center gap-3">
-        <div className="w-3.5 h-3.5 bg-signal-500 rounded-[2px]" aria-hidden="true" />
-        <div className="w-3.5 h-3.5 bg-signal-500 rounded-[2px]" aria-hidden="true" />
-        <div className="w-3.5 h-3.5 bg-signal-500 rounded-[2px]" aria-hidden="true" />
+      <DigitalClock />
+      <div>
+        <FiMenu />
       </div>
     </div>
   );

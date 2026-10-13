@@ -1,36 +1,44 @@
-import { createContext, useContext, useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
-const LocationContext = createContext({} as location_context_type )
+const LocationContext = createContext({} as location_context_type);
 
 type location_context_type = {
-    location: {lat: number, long: number},
-    setLocation: Dispatch<SetStateAction<{lat: number, long: number }>>
-}
+  location: { lat: number; long: number };
+  setLocation: Dispatch<SetStateAction<{ lat: number; long: number }>>;
+};
 
+const useLocationCoords = () => useContext(LocationContext);
 
-const useLocationCoords = () => useContext(LocationContext)
+type Props = React.PropsWithChildren<{}>;
 
-type Props = React.PropsWithChildren<{}>
+function LocationProvider({ children }: Props) {
+  const [location, setLocation] = useState({
+    lat: 0,
+    long: 0,
+  });
 
-function LocationProvider({children}: Props){
-    const [location, setLocation] = useState({
-        lat: 0, long: 0
-    })
-    
-    useEffect(() => {
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-        setLocation({...location, lat: position.coords.latitude
-            , long: position.coords.longitude
-        })
-    }
-, 
-)} , [])
+      setLocation({
+        ...location,
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+      });
+    });
+  }, []);
 
-    return(
-        <LocationContext value={{location, setLocation}}>
-            {children}
-        </LocationContext>
-    )
+  return (
+    <LocationContext value={{ location, setLocation }}>
+      {children}
+    </LocationContext>
+  );
 }
 
-export {useLocationCoords, LocationProvider}
+export { useLocationCoords, LocationProvider };

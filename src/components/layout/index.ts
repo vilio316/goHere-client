@@ -1,4 +1,3 @@
-export { ContextBar, type ContextBarProps } from "./ContextBar";
 export { HeroCTA, type HeroCTAProps } from "./HeroCTA";
 export { MoodChips, type MoodChipsProps } from "./MoodChips";
 export { PlaceCard, type PlaceCardProps, type Place } from "./PlaceCard";
