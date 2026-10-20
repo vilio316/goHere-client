@@ -1,4 +1,4 @@
-import { Card, CardPhoto, CardBody, CardMeta, CardActions } from "../ui/Card";
+import { Card, CardBody, CardMeta, CardActions } from "../ui/Card";
 import { Button } from "../ui/Button";
 
 export interface Place {

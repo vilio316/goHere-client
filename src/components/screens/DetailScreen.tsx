@@ -1,10 +1,12 @@
 import { useParams, useNavigate, useSearchParams } from "react-router";
 import { StatusBar } from "../layout";
-import { Card, CardPhoto, CardBody } from "../ui/Card";
+import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import type { OSMPlace } from "../../types/osm";
 import LoaderComp from "../LoaderComp";
+import { FaMap } from "react-icons/fa6";
+import { MapRender } from "../maps/RenderMap";
 
 export function DetailScreen() {
   const { id } = useParams<{ id: string }>();
@@ -82,11 +84,6 @@ export function DetailScreen() {
   const handleDirections = () => {
     navigate(`/directions/${place.osm_id}`);
   };
-
-  {
-    isSuccess && <p>Successful</p>;
-  }
-
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <StatusBar />
@@ -151,8 +148,10 @@ export function DetailScreen() {
                     variant="primary"
                     fullWidth
                     onClick={handleDirections}
+                    className="gap-x-3 p-2"
                   >
-                    🗺️ Get Directions
+                    <FaMap />
+                    <span>Get Directions</span>
                   </Button>
                   <Button variant="secondary" fullWidth>
                     💾 Save
@@ -161,6 +160,7 @@ export function DetailScreen() {
               </CardBody>
             </Card>
           </div>
+          <MapRender />
         </div>
       )}
     </div>
