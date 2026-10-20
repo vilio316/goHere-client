@@ -5,7 +5,17 @@ export interface MoodChipsProps {
   onMoodSelect?: (mood: string) => void;
 }
 
-export function MoodChips({ moods = ["☕ Coffee", "🍽️ Food", "🎨 Culture", "🌳 Nature", "📸 A view"], onMoodSelect }: MoodChipsProps) {
+export function MoodChips({
+  moods = [
+    "Food & Drinks",
+    "Parks/Gardens",
+    "Healthcare & Wellness",
+    "Spas & Relaxation",
+    "Shopping",
+    "Nightlife",
+  ],
+  onMoodSelect,
+}: MoodChipsProps) {
   const [activeMood, setActiveMood] = useState<string | null>(null);
 
   const handleClick = (mood: string) => {
@@ -15,8 +25,11 @@ export function MoodChips({ moods = ["☕ Coffee", "🍽️ Food", "🎨 Culture
 
   return (
     <div>
-      <p className="text-label-s text-slate-400 mb-3">I'm in the mood for…</p>
-      <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4" style={{ scrollbarWidth: "none" }}>
+      <p className="text-label-s text-slate-400 mb-3">I'm looking for: </p>
+      <div
+        className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4"
+        style={{ scrollbarWidth: "none" }}
+      >
         {moods.map((mood) => (
           <button
             key={mood}

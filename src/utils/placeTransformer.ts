@@ -3,7 +3,10 @@ import type { Place } from "../components/layout/PlaceCard";
 
 const WALKING_SPEED_M_PER_MIN = 80; // ~4.8 km/h average walking speed
 
-function parseDistance(distanceMeters: string): { distance: string; walkTime: string } {
+function parseDistance(distanceMeters: string): {
+  distance: string;
+  walkTime: string;
+} {
   const meters = parseFloat(distanceMeters);
   if (isNaN(meters)) return { distance: "?", walkTime: "?" };
 
@@ -16,13 +19,19 @@ function parseDistance(distanceMeters: string): { distance: string; walkTime: st
   return { distance: `${km} km`, walkTime: `${walkTime} min` };
 }
 
-function parseOpeningHours(openingHours: string | undefined): { isOpenNow: boolean; hoursText: string } {
+function parseOpeningHours(openingHours: string | undefined): {
+  isOpenNow: boolean;
+  hoursText: string;
+} {
   if (!openingHours || openingHours.trim() === "") {
     return { isOpenNow: false, hoursText: "Hours unknown" };
   }
 
   // Check for 24/7
-  if (openingHours.toLowerCase().includes("24/7") || openingHours.toLowerCase().includes("24h")) {
+  if (
+    openingHours.toLowerCase().includes("24/7") ||
+    openingHours.toLowerCase().includes("24h")
+  ) {
     return { isOpenNow: true, hoursText: "Open 24 hours" };
   }
 
@@ -71,7 +80,10 @@ function inferSoloFriendly(tags: OSMTags, category: string): boolean {
   }
 
   if (tags.cuisine) {
-    const cuisines = tags.cuisine.toLowerCase().split(";").map((c) => c.trim());
+    const cuisines = tags.cuisine
+      .toLowerCase()
+      .split(";")
+      .map((c) => c.trim());
     if (cuisines.some((c) => soloFriendlyCuisines.includes(c))) {
       return true;
     }
@@ -80,14 +92,20 @@ function inferSoloFriendly(tags: OSMTags, category: string): boolean {
   return true; // Default to true for food places
 }
 
-function generateWhyText(tags: OSMTags, category: string, isOpenNow: boolean): string {
+function generateWhyText(
+  tags: OSMTags,
+  category: string,
+  isOpenNow: boolean,
+): string {
   const parts: string[] = [];
 
   // Cuisine
   if (tags.cuisine) {
     const cuisines = tags.cuisine.split(";").map((c) => c.trim());
     const mainCuisine = cuisines[0];
-    parts.push(`${mainCuisine.charAt(0).toUpperCase() + mainCuisine.slice(1)} cuisine`);
+    parts.push(
+      `${mainCuisine.charAt(0).toUpperCase() + mainCuisine.slice(1)} cuisine`,
+    );
   }
 
   // Opening hours context
@@ -114,21 +132,29 @@ function generateWhyText(tags: OSMTags, category: string, isOpenNow: boolean): s
   return parts.length > 0 ? parts.join(", ") : "Local spot worth checking out";
 }
 
-function generateVibe(tags: OSMTags, category: string, isOpenNow: boolean): string {
+function generateVibe(
+  tags: OSMTags,
+  category: string,
+  isOpenNow: boolean,
+): string {
   const vibes: string[] = [];
 
   if (isOpenNow) vibes.push("open now");
   if (tags.opening_hours?.toLowerCase().includes("24/7")) vibes.push("24/7");
   if (category.includes("restaurant")) vibes.push("dining");
-  if (category.includes("cafe") || category.includes("coffee")) vibes.push("casual");
-  if (tags.cuisine?.includes("coffee_shop") || tags.cuisine?.includes("cafe")) vibes.push("work-friendly");
+  if (category.includes("cafe") || category.includes("coffee"))
+    vibes.push("casual");
+  if (tags.cuisine?.includes("coffee_shop") || tags.cuisine?.includes("cafe"))
+    vibes.push("work-friendly");
 
   return vibes.length > 0 ? vibes.join(", ") : "local spot";
 }
 
 export function transformOSMPlaceToPlace(osmPlace: OSMPlace): Place {
   const { distance, walkTime } = parseDistance(osmPlace.distance_meters);
-  const { isOpenNow, hoursText } = parseOpeningHours(osmPlace.tags.opening_hours);
+  const { isOpenNow, hoursText } = parseOpeningHours(
+    osmPlace.tags.opening_hours,
+  );
   const isSoloFriendly = inferSoloFriendly(osmPlace.tags, osmPlace.category);
   const why = generateWhyText(osmPlace.tags, osmPlace.category, isOpenNow);
   const vibe = generateVibe(osmPlace.tags, osmPlace.category, isOpenNow);
@@ -143,6 +169,8 @@ export function transformOSMPlaceToPlace(osmPlace: OSMPlace): Place {
     rating: 4.0, // Default rating since OSM doesn't provide ratings
     reviewCount: 0,
     isOpenNow,
+    phone: osmPlace.tags.phone,
+    website: osmPlace.tags.website,
     isSoloFriendly,
     vibe,
     hours: hoursText,

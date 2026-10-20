@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
+import LoaderComp from "../LoaderComp";
 
 export function FeedScreen() {
   const navigate = useNavigate();
@@ -46,8 +47,8 @@ export function FeedScreen() {
     },
   });
 
-  const handleDetailClick = (placeId: string) => {
-    navigate(`/place/${placeId}`);
+  const handleDetailClick = (placeId: string, placeName: string) => {
+    navigate(`/place/${placeId}?q=${placeName}`);
   };
 
   const handleSaveClick = (placeId: string) => {
@@ -66,11 +67,7 @@ export function FeedScreen() {
             </p>
           </div>
 
-          {isLoading && (
-            <div className="text-center py-8 text-slate-400">
-              Loading places…
-            </div>
-          )}
+          {isLoading && <LoaderComp />}
 
           {isError && (
             <div className="text-center py-8 text-transit-500">
@@ -89,10 +86,12 @@ export function FeedScreen() {
             <div className="grid md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-3">
               {data.data.places.map((place: any) => (
                 <PlaceCard
-                  key={place.id}
+                  key={place.osm_id}
                   place={transformOSMPlaceToPlace(place)}
-                  onDetailClick={() => handleDetailClick(place.id)}
-                  onSaveClick={() => handleSaveClick(place.id)}
+                  onDetailClick={() =>
+                    handleDetailClick(place.osm_id, place.name)
+                  }
+                  onSaveClick={() => handleSaveClick(place.osm_id)}
                 />
               ))}
             </div>

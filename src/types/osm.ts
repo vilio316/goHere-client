@@ -5,7 +5,7 @@ export interface OSMTags {
   email?: string;
   website?: string;
   "contact:instagram"?: string;
-  phone?: string;
+  mobile?: string;
   [key: string]: string | undefined;
 }
 

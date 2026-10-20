@@ -133,7 +133,3 @@ export const moods = [
   "Books",
   "Drinks",
 ];
-
-export function getPlaceById(id: string): Place | undefined {
-  return dummyPlaces.find((place) => place.id === id);
-}
