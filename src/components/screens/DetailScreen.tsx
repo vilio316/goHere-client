@@ -7,12 +7,15 @@ import type { OSMPlace } from "../../types/osm";
 import LoaderComp from "../LoaderComp";
 import { FaMap } from "react-icons/fa6";
 import { MapRender } from "../maps/RenderMap";
+import { useLocationCoords } from "../../contexts/LocationContext";
+import RouteDirections from "./DirectionsScreen";
 
 export function DetailScreen() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const navigate = useNavigate();
+  const location = useLocationCoords();
 
   const searchProcessor = (q: string) => {
     if (q.includes("Medix")) return "medix";
@@ -41,6 +44,19 @@ export function DetailScreen() {
 
       return data;
     },
+  });
+
+  const {data: routeData, isFetching, isLoading: loadingRoute, refetch} = useQuery({
+    queryKey: ["geometry", id],
+    staleTime: 1 * 60 * 60 * 1000,  
+    queryFn: async () => {
+      const request = await fetch(
+        `${import.meta.env.VITE_API_URL}/osrm/route/${`${place?.lon},${place?.lat};${location.location.long},${location.location.lat}`}`,
+      );
+      const response = await request.json();
+      return response;
+    }, 
+    enabled: !!place
   });
 
   if (isSuccess && !place) {
@@ -82,14 +98,15 @@ export function DetailScreen() {
   //   );
 
   const handleDirections = () => {
-    navigate(`/directions/${place.osm_id}`);
+    refetch()
   };
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <>
+    <div className="flex flex-col overflow-hidden">
       <StatusBar />
       {isLoading && <LoaderComp />}
       {isSuccess && (
-        <div className="flex-1 overflow-y-auto px-4 pb-20">
+        <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
           <div className="max-w-xl mx-auto w-full">
             <div className="flex items-center justify-between mb-4">
               <Button
@@ -160,9 +177,14 @@ export function DetailScreen() {
               </CardBody>
             </Card>
           </div>
-          <MapRender />
+          {routeData && <MapRender geometry={routeData.routes[0].geometry} />}
+         
         </div>
       )}
     </div>
+    <div className="p-4">
+     {routeData && <RouteDirections leg={routeData.routes[0].legs[0]} className="min-h-[600px]"/>}
+    </div>
+  </>
   );
 }
