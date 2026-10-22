@@ -61,7 +61,7 @@ export function FeedScreen() {
       <div className="flex-1 overflow-y-auto px-4 pb-20">
         <div className="w-full">
           <div className="mb-6">
-            <h2 className="font-display font-bold text-2xl mb-2">Right now</h2>
+            <h2 className="font-display font-bold text-2xl mb-2">Right Now</h2>
             <p className="text-label-s text-slate-400">
               Solo-friendly {moodQuery} places near you
             </p>
