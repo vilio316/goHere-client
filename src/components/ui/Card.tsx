@@ -70,7 +70,7 @@ export const CardMeta = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
     return (
       <div
         ref={ref}
-        className={`flex justify-between items-center pt-3 border-t border-dusk-600 font-data text-xs text-fog-100 ${className}`}
+        className={`grid justify-between items-center pt-3 border-t border-dusk-600 font-data text-xs text-fog-100 ${className}`}
         {...props}
       >
         {children}

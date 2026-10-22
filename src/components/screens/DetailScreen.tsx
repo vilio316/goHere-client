@@ -51,7 +51,7 @@ export function DetailScreen() {
     staleTime: 1 * 60 * 60 * 1000,  
     queryFn: async () => {
       const request = await fetch(
-        `${import.meta.env.VITE_API_URL}/osrm/route/${`${place?.lon},${place?.lat};${location.location.long},${location.location.lat}`}`,
+        `${import.meta.env.VITE_API_URL}/osrm/route/${`${location.location.long},${location.location.lat};${place?.lon},${place?.lat}`}`,
       );
       const response = await request.json();
       return response;

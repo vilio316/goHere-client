@@ -1,5 +1,6 @@
 import { Card, CardBody, CardMeta, CardActions } from "../ui/Card";
 import { Button } from "../ui/Button";
+import { FaEye } from "react-icons/fa6";
 
 export interface Place {
   id: string;
@@ -71,7 +72,7 @@ export function PlaceCard({
   return (
     <Card className="mb-6">
       <CardBody>
-        <h3 className="font-display font-bold text-xl text-fog-050 mb-2">
+        <h3 className="font-display font-bold text-xl text-fog-050 mb-2 h-12 overflow-clip">
           {place.name}
         </h3>
         {/* <p className="text-slate-400 text-sm mb-4">{place.why}</p> */}
@@ -81,7 +82,7 @@ export function PlaceCard({
             <span>📍 {place.distance}</span>
           </div>
         </CardMeta>
-        <CardMeta>
+        <CardMeta className="h-12">
           {place.phone && (
             <div className="flex items-center gap-1">
               <span>Phone: </span>
@@ -89,9 +90,9 @@ export function PlaceCard({
             </div>
           )}
           {place.website && (
-            <div className="block items-center gap-1 text-sm font-light">
+            <div className="flex items-center gap-1 text-sm font-light">
               <span>Website: </span>
-              <a className="font-medium" href={place.website} target="_blank">
+              <a className="font-medium max-w-25 truncate" href={place.website} target="_blank">
                 {place.website}
               </a>
             </div>
@@ -103,8 +104,12 @@ export function PlaceCard({
             size="sm"
             fullWidth
             onClick={onDetailClick}
+            className="group hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1"
           >
-            👁️ Details
+            <span>
+              <FaEye/>
+            </span>
+            <span>Details</span>
           </Button>
           <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}>
             💾 Save

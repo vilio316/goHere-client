@@ -20,10 +20,6 @@ export function MapRender({geometry}: {
   const location = useLocationCoords();
 
   useEffect(() => {
-    console.log(geometry)
-  }, [])
-
-  useEffect(() => {
     const container = containerRef.current;
 
     if (!container || mapRef.current) {
@@ -109,7 +105,7 @@ export function MapRender({geometry}: {
 
   return (
     <div>
-      <p>Detailed Map</p>
+      <p className="font-family-display font-bold text-xl my-2">Detailed Map</p>
     <div
       ref={containerRef}
       role="region"
