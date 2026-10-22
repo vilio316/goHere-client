@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { HeroCTA, MoodChips, SearchField, StatusBar } from "../layout";
+import { HeroCTA, MoodChips, SearchField } from "../layout";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
@@ -43,7 +43,6 @@ export function HomeScreen() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <StatusBar />
       <div className="flex-1 overflow-y-auto px-4 pb-20">
         <div className="flex flex-col md:w-4/5 w-full mx-auto gap-y-2">
           <HeroCTA onClick={handleExplore} />

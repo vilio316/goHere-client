@@ -1,11 +1,9 @@
-import { StatusBar } from "../layout";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 
 export function ProfileScreen() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <StatusBar />
       <div className="flex-1 overflow-y-auto px-4 pb-20">
         <div className="max-w-xl mx-auto w-full py-12">
           <h2 className="font-display font-bold text-2xl mb-6">Profile</h2>

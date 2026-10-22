@@ -1,6 +1,7 @@
 import { Card, CardBody, CardMeta, CardActions } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { FaEye } from "react-icons/fa6";
+import { FaClock, FaEye } from "react-icons/fa6";
+import { FaWalking, FaSave } from "react-icons/fa"
 
 export interface Place {
   id: string;
@@ -60,8 +61,10 @@ export function PlaceCard({
               size="sm"
               fullWidth
               onClick={onSaveClick}
+              className="group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1" 
             >
-              💾 Save
+            <FaSave/>
+            <span>Save</span>
             </Button>
           </CardActions>
         </CardBody>
@@ -78,8 +81,12 @@ export function PlaceCard({
         {/* <p className="text-slate-400 text-sm mb-4">{place.why}</p> */}
         <CardMeta>
           <div className="flex gap-2 font-data text-xs">
-            <span>⏱️ {place.walkTime}</span>
-            <span>📍 {place.distance}</span>
+            <span>
+              <FaClock size={18}/>
+            </span>
+            <span>{place.walkTime} walk</span>
+            <span><FaWalking size={20}/></span>
+            <span>{place.distance}</span>
           </div>
         </CardMeta>
         <CardMeta className="h-12">
@@ -104,15 +111,16 @@ export function PlaceCard({
             size="sm"
             fullWidth
             onClick={onDetailClick}
-            className="group hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1"
+            className="group hover:bg-slate-600/45 hover:text-amber-500 hover:text-[15px] rounded-xl transition-standard px-2 py-1 gap-x-1"
           >
             <span>
               <FaEye/>
             </span>
             <span>Details</span>
           </Button>
-          <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}>
-            💾 Save
+          <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}  className="group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1" >
+            <span><FaSave /></span>
+            <span>Save Location</span>
           </Button>
         </CardActions>
       </CardBody>

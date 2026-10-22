@@ -1,9 +1,31 @@
 import { useState, useEffect } from "react";
 import { FiMenu } from "react-icons/fi";
+import { useLocationCoords } from "../../contexts/LocationContext";
+import { useQuery } from "@tanstack/react-query";
 export function StatusBar() {
+   const {location} = useLocationCoords();
+   const {data: placeData} = useQuery({
+      queryKey: ["location"],
+      staleTime: 30 * 60 * 1000,  
+      queryFn: async () => {
+        try {
+          const request = await fetch(
+            `${import.meta.env.VITE_API_URL}/search/reverse/${location.lat}/${location.long}`,
+          );
+          const response = await request.json();
+          return response;
+        }catch (error) {
+          throw new Error(
+            error instanceof Error ? error.message : "Unknown error",
+          );
+        } 
+      }  
+    }) 
   function DigitalClock() {
     const [time, setTime] = useState(new Date());
+   
 
+   
     useEffect(() => {
       const timerId = setInterval(() => {
         setTime(new Date());
@@ -17,8 +39,15 @@ export function StatusBar() {
     );
   }
   return (
-    <div className="h-11 bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-fog-050">
+    <div className="bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-fog-050 py-2">
+      <div>
       <DigitalClock />
+      {placeData && (
+        <p className="text-lg font-bold">
+          {placeData.address.suburb}, {placeData.address.city}
+        </p>
+      )}
+      </div>
       <div>
         <FiMenu />
       </div>

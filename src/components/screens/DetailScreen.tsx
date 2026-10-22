@@ -1,11 +1,11 @@
 import { useParams, useNavigate, useSearchParams } from "react-router";
-import { StatusBar } from "../layout";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import type { OSMPlace } from "../../types/osm";
 import LoaderComp from "../LoaderComp";
 import { FaMap } from "react-icons/fa6";
+import { FaSave } from "react-icons/fa";
 import { MapRender } from "../maps/RenderMap";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import RouteDirections from "./DirectionsScreen";
@@ -46,7 +46,7 @@ export function DetailScreen() {
     },
   });
 
-  const {data: routeData, isFetching, isLoading: loadingRoute, refetch} = useQuery({
+  const {data: routeData, isLoading: loadingRoute, refetch} = useQuery({
     queryKey: ["geometry", id],
     staleTime: 1 * 60 * 60 * 1000,  
     queryFn: async () => {
@@ -62,7 +62,6 @@ export function DetailScreen() {
   if (isSuccess && !place) {
     return (
       <div className="flex flex-col h-screen overflow-hidden">
-        <StatusBar />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center">
             <h2 className="font-display font-bold text-xl mb-2">
@@ -103,7 +102,6 @@ export function DetailScreen() {
   return (
     <>
     <div className="flex flex-col overflow-hidden">
-      <StatusBar />
       {isLoading && <LoaderComp />}
       {isSuccess && (
         <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
@@ -165,13 +163,15 @@ export function DetailScreen() {
                     variant="primary"
                     fullWidth
                     onClick={handleDirections}
-                    className="gap-x-3 p-2"
+                    className="gap-x-3 p-2 hover:bg-amber-500/10 hover:text-white transition-standard"
                   >
                     <FaMap />
                     <span>Get Directions</span>
                   </Button>
-                  <Button variant="secondary" fullWidth>
-                    💾 Save
+                  <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-pill transition-standard"
+                  >
+                    <span><FaSave /></span>
+                    <span>Save</span>
                   </Button>
                 </div>
               </CardBody>

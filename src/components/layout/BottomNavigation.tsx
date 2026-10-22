@@ -1,17 +1,18 @@
 import { useLocation } from "react-router";
 import { NavLink } from "react-router";
+import{ FaCompass, FaSave, FaUser, FaHome  } from "react-icons/fa";
 
 interface NavItem {
   path: string;
-  icon: string;
+  icon: React.ReactNode
   label: string;
 }
 
 const navItems: NavItem[] = [
-  { path: "/", icon: "🏠", label: "Home" },
-  { path: "/explore", icon: "✨", label: "Explore" },
-  { path: "/saved", icon: "💾", label: "Saved" },
-  { path: "/profile", icon: "👤", label: "Profile" },
+  { path: "/", icon: <FaHome />, label: "Home" },
+  { path: "/explore", icon:<FaCompass />, label: "Explore" },
+  { path: "/saved", icon: <FaSave/>, label: "Saved" },
+  { path: "/profile", icon: <FaUser />, label: "Profile" },
 ];
 
 export function BottomNavigation() {

@@ -1,5 +1,4 @@
 import { useNavigate, useSearchParams } from "react-router";
-import { StatusBar } from "../layout";
 import { PlaceCard } from "../layout/PlaceCard";
 import { SwipeHint } from "../layout/SwipeHint";
 import { useEffect } from "react";
@@ -54,10 +53,16 @@ export function FeedScreen() {
   const handleSaveClick = (placeId: string) => {
     console.log("Save place:", placeId);
   };
-
-  return (
+    
+  if (!moodQuery) {
+    return (
+      <div>
+        <p>You haven't selected a mood yet.</p>
+      </div>
+    )
+    }
+    return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <StatusBar />
       <div className="flex-1 overflow-y-auto px-4 pb-20">
         <div className="w-full">
           <div className="mb-6">
