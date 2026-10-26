@@ -9,6 +9,7 @@ import { SavedScreen } from "./components/screens/SavedScreen";
 import { ProfileScreen } from "./components/screens/ProfileScreen";
 import ErrorPage from "./components/ErrorPage";
 import { LocationProvider } from "./contexts/LocationContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -39,9 +40,10 @@ const browserRouter = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
-    <LocationProvider>
-      <RouterProvider router={browserRouter} />,
-    </LocationProvider>
-    ,
+    <ThemeProvider>
+      <LocationProvider>
+        <RouterProvider router={browserRouter} />
+      </LocationProvider>
+    </ThemeProvider>
   </QueryClientProvider>,
 );

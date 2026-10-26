@@ -13,9 +13,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       "inline-flex items-center justify-center font-body font-semibold transition-standard focus-visible-ring";
 
     const variantClasses = {
-      primary: "bg-amber-500 text-ink-900 hover:bg-amber-600 active:scale-[0.98]",
-      secondary: "bg-transparent text-fog-050 border-1.5 border-dusk-600 hover:border-fog-050 active:bg-white/5",
-      ghost: "bg-transparent text-amber-500 px-2",
+      primary: "bg-accent-fill text-on-accent hover:bg-amber-600 active:scale-[0.98]",
+      secondary:
+        "bg-transparent text-text-primary border-1.5 border-border-strong hover:border-text-primary hover:bg-secondary-hover active:bg-surface-active",
+      ghost:
+        "bg-transparent text-accent-text px-2 light:underline light:underline-offset-4",
     };
 
     const sizeClasses = {

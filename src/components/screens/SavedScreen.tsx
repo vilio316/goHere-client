@@ -11,8 +11,8 @@ export function SavedScreen() {
           </h2>
           <Card>
             <CardBody className="text-center py-12">
-              <p className="text-slate-400 mb-6">No saved places yet</p>
-              <p className="text-fog-200 text-sm mb-6">
+              <p className="text-text-secondary mb-6">No saved places yet</p>
+              <p className="text-text-lede text-sm mb-6">
                 Tap the save icon on any place to add it here
               </p>
               <Button variant="primary" onClick={() => window.history.back()}>

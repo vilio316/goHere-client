@@ -8,7 +8,7 @@ export default function ErrorPage() {
           <h2 className="font-display font-bold text-2xl mb-4">
             Resource not found
           </h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-text-secondary mb-6">
             The page you're looking for doesn't exist or has been moved.
           </p>
           <Button

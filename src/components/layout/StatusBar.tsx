@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiMenu } from "react-icons/fi";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { useQuery } from "@tanstack/react-query";
+import { ThemeToggle } from "./ThemeToggle";
 export function StatusBar() {
    const {location} = useLocationCoords();
    const {data: placeData} = useQuery({
@@ -14,13 +15,14 @@ export function StatusBar() {
           );
           const response = await request.json();
           return response;
-        }catch (error) {
+        } catch (error) {
           throw new Error(
             error instanceof Error ? error.message : "Unknown error",
           );
-        } 
-      }  
-    }) 
+        }
+      },
+      enabled: location.lat !== 0 && location.long !== 0,
+    })
   function DigitalClock() {
     const [time, setTime] = useState(new Date());
    
@@ -39,7 +41,7 @@ export function StatusBar() {
     );
   }
   return (
-    <div className="bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-fog-050 py-2">
+    <div className="bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-text-on-dark py-2">
       <div>
       <DigitalClock />
       {placeData && (
@@ -48,7 +50,8 @@ export function StatusBar() {
         </p>
       )}
       </div>
-      <div>
+      <div className="flex items-center gap-1">
+        <ThemeToggle />
         <FiMenu />
       </div>
     </div>

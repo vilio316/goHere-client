@@ -46,7 +46,7 @@ export function DetailScreen() {
     },
   });
 
-  const {data: routeData, isLoading: loadingRoute, refetch} = useQuery({
+  const {data: routeData, refetch} = useQuery({
     queryKey: ["geometry", id],
     staleTime: 1 * 60 * 60 * 1000,  
     queryFn: async () => {
@@ -125,18 +125,18 @@ export function DetailScreen() {
             </CardPhoto> */}
 
               <CardBody>
-                <h3 className="font-display font-bold text-xl text-fog-050 mb-4">
+                <h3 className="font-display font-bold text-xl text-text-primary mb-4">
                   {place.name}
                 </h3>
                 <p className="underline">Detailed Address</p>
-                <p className="text-fog-100 text-body-m mb-6">
+                <p className="text-text-meta text-body-m mb-6">
                   {place.display_name}
                 </p>
 
                 <div className="space-y-4 mb-6">
-                  <div className="pb-4 border-b border-dusk-600">
-                    {/* <p className="text-label-s text-slate-400 mb-1">Site</p>
-                    <p className="font-semibold text-signal-500">
+                  <div className="pb-4 border-b border-border-subtle">
+                    {/* <p className="text-label-s text-text-secondary mb-1">Site</p>
+                    <p className="font-semibold text-live-text">
                       {place.website}
                     </p> */}
                   </div>
@@ -146,11 +146,11 @@ export function DetailScreen() {
                       {place.walkTime} walk · {place.distance}
                     </p>
                   </div> */}
-                  <div className="pb-4 border-b border-dusk-600">
-                    <p className="text-label-s text-slate-400 mb-1">
+                  <div className="pb-4 border-b border-border-subtle">
+                    <p className="text-label-s text-text-secondary mb-1">
                       Place Type
                     </p>
-                    <p className="font-semibold text-fog-050">
+                    <p className="font-semibold text-text-primary">
                       {String(place.type).charAt(0).toUpperCase() +
                         String(place.type).slice(1)}
                     </p>
@@ -163,12 +163,12 @@ export function DetailScreen() {
                     variant="primary"
                     fullWidth
                     onClick={handleDirections}
-                    className="gap-x-3 p-2 hover:bg-amber-500/10 hover:text-white transition-standard"
+                    className="gap-x-3 p-2"
                   >
                     <FaMap />
                     <span>Get Directions</span>
                   </Button>
-                  <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-pill transition-standard"
+                  <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
                   >
                     <span><FaSave /></span>
                     <span>Save</span>

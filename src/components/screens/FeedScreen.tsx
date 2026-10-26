@@ -67,7 +67,7 @@ export function FeedScreen() {
         <div className="w-full">
           <div className="mb-6">
             <h2 className="font-display font-bold text-2xl mb-2">Right Now</h2>
-            <p className="text-label-s text-slate-400">
+            <p className="text-label-s text-text-secondary">
               Solo-friendly {moodQuery} places near you
             </p>
           </div>
@@ -75,14 +75,14 @@ export function FeedScreen() {
           {isLoading && <LoaderComp />}
 
           {isError && (
-            <div className="text-center py-8 text-transit-500">
+            <div className="text-center py-8 text-alert-text">
               Failed to load places:{" "}
               {error instanceof Error ? error.message : "Unknown error"}
             </div>
           )}
 
           {/* {isSuccess && data.places.length === 0 && (
-            <div className="text-center py-8 text-slate-400">
+            <div className="text-center py-8 text-text-secondary">
               No places found for this mood
             </div>
           )} */}

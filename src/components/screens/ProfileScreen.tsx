@@ -1,5 +1,6 @@
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
+import { ThemeToggle } from "../layout/ThemeToggle";
 
 export function ProfileScreen() {
   return (
@@ -10,14 +11,14 @@ export function ProfileScreen() {
           <Card className="mb-4">
             <CardBody className="py-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-dusk-700 flex items-center justify-center text-3xl">
+                <div className="w-16 h-16 rounded-full bg-surface-muted flex items-center justify-center text-3xl">
                   👤
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-lg">
                     Solo Traveler
                   </h3>
-                  <p className="text-slate-400 text-sm">Exploring since 2026</p>
+                  <p className="text-text-secondary text-sm">Exploring since 2026</p>
                 </div>
               </div>
             </CardBody>
@@ -25,21 +26,21 @@ export function ProfileScreen() {
 
           <Card className="mb-4">
             <CardBody className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-dusk-600">
-                <span className="text-fog-050">Saved places</span>
-                <span className="font-data font-semibold text-amber-500">
+              <div className="flex justify-between items-center py-2 border-b border-border-subtle">
+                <span className="text-text-primary">Saved places</span>
+                <span className="font-data font-semibold text-accent-text">
                   0
                 </span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-dusk-600">
-                <span className="text-fog-050">Places visited</span>
-                <span className="font-data font-semibold text-amber-500">
+              <div className="flex justify-between items-center py-2 border-b border-border-subtle">
+                <span className="text-text-primary">Places visited</span>
+                <span className="font-data font-semibold text-accent-text">
                   0
                 </span>
               </div>
               <div className="flex justify-between items-center py-2">
-                <span className="text-fog-050">Cities explored</span>
-                <span className="font-data font-semibold text-amber-500">
+                <span className="text-text-primary">Cities explored</span>
+                <span className="font-data font-semibold text-accent-text">
                   0
                 </span>
               </div>
@@ -48,13 +49,22 @@ export function ProfileScreen() {
 
           <Card>
             <CardBody className="space-y-3">
+              <div className="flex justify-between items-center py-2 border-b border-border-subtle">
+                <div>
+                  <p className="text-text-primary">Appearance</p>
+                  <p className="text-text-secondary text-xs">
+                    Switch between light and dark mode
+                  </p>
+                </div>
+                <ThemeToggle tone="surface" showLabel />
+              </div>
               <Button variant="secondary" fullWidth>
                 ⚙️ Settings
               </Button>
               <Button
                 variant="ghost"
                 fullWidth
-                className="text-transit-500 border-transit-500/30 hover:bg-transit-500/10"
+                className="text-alert-text border-alert-text/30 hover:bg-alert-text/10"
               >
                 Sign out
               </Button>

@@ -343,8 +343,8 @@ export default function RouteDirections({
       <div
         className={[
           "flex w-full items-center justify-center gap-3",
-          "rounded-2xl border border-gray-200 bg-white p-6",
-          "text-sm text-gray-500 shadow-sm",
+          "rounded-2xl border border-border-subtle bg-surface-raised p-6",
+          "text-sm text-text-secondary shadow-card",
           className,
         ].join(" ")}
       >
@@ -359,8 +359,8 @@ export default function RouteDirections({
       <div
         className={[
           "flex min-h-28 w-full max-w-md items-center justify-center gap-3",
-          "rounded-2xl border border-gray-200 bg-white p-6",
-          "text-sm text-gray-500 shadow-sm",
+          "rounded-2xl border border-border-subtle bg-surface-raised p-6",
+          "text-sm text-text-secondary shadow-card",
           className,
         ].join(" ")}
       >
@@ -377,29 +377,29 @@ export default function RouteDirections({
     <section
       className={[
         "w-full overflow-hidden rounded-2xl",
-        "border border-gray-200 bg-white text-gray-900",
-        "shadow-[0_8px_24px_rgba(0,0,0,0.06)]",
+        "border border-border-subtle bg-surface-raised text-text-primary",
+        "shadow-card",
         className,
       ].join(" ")}
     >
       {/* Route summary */}
-      <header className="flex items-center justify-between gap-6 border-b border-gray-100 px-5 py-5">
+      <header className="flex items-center justify-between gap-6 border-b border-border-subtle px-5 py-5">
         <div className="min-w-0">
-          <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
             Route
           </span>
 
-          <h2 className="truncate text-lg font-bold text-gray-900">
+          <h2 className="truncate text-lg font-bold text-text-primary">
             {leg.summary?.trim() || "Directions"}
           </h2>
         </div>
 
         <div className="shrink-0 text-right">
-          <strong className="block text-[15px] font-semibold text-gray-900">
+          <strong className="block text-[15px] font-semibold text-text-primary">
             {formatDuration(leg.duration)}
           </strong>
 
-          <span className="mt-0.5 block text-sm text-gray-500">
+          <span className="mt-0.5 block text-sm text-text-secondary">
             {formatDistance(leg.distance)}
           </span>
         </div>
@@ -425,7 +425,7 @@ export default function RouteDirections({
                   className={[
                     "relative z-10 mt-4 flex h-10 w-10",
                     "items-center justify-center rounded-xl",
-                    "bg-gray-100 text-gray-900",
+                    "bg-surface-muted text-text-primary",
                   ].join(" ")}
                 >
                   <ManeuverIcon step={step} />
@@ -434,7 +434,7 @@ export default function RouteDirections({
                 {!isLast && (
                   <div
                     aria-hidden="true"
-                    className="absolute bottom-[-16px] left-1/2 top-14 w-0.5 -translate-x-1/2 bg-gray-200"
+                    className="absolute bottom-[-16px] left-1/2 top-14 w-0.5 -translate-x-1/2 bg-border-subtle"
                   />
                 )}
               </div>
@@ -443,21 +443,21 @@ export default function RouteDirections({
               <div
                 className={[
                   "min-w-0 py-4 pl-2",
-                  !isLast ? "border-b border-gray-100" : "",
+                  !isLast ? "border-b border-border-subtle" : "",
                 ].join(" ")}
               >
-                <p className="text-[15px] font-semibold leading-6 text-gray-900">
+                <p className="text-[15px] font-semibold leading-6 text-text-primary">
                   {instruction}
                 </p>
 
                 {(distance || duration) && (
-                  <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
+                  <div className="mt-1 flex items-center gap-1.5 text-sm text-text-secondary">
                     {distance && <span>{distance}</span>}
 
                     {distance && duration && (
                       <span
                         aria-hidden="true"
-                        className="text-gray-300"
+                        className="text-border-strong"
                       >
                         •
                       </span>
@@ -468,7 +468,7 @@ export default function RouteDirections({
                 )}
 
                 {step.destinations && (
-                  <p className="mt-1.5 truncate text-xs text-gray-500">
+                  <p className="mt-1.5 truncate text-xs text-text-secondary">
                     Toward {step.destinations}
                   </p>
                 )}

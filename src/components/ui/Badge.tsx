@@ -8,9 +8,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   ({ children, variant = "live", className = "", ...props }, ref) => {
     const variantClasses = {
-      live: "bg-signal-500/14 text-signal-500",
-      solo: "bg-amber-500/14 text-amber-500",
-      closed: "bg-transit-500/14 text-transit-500",
+      live: "bg-badge-live-bg text-badge-live-text",
+      solo: "bg-badge-solo-bg text-badge-solo-text",
+      closed: "bg-badge-closed-bg text-badge-closed-text",
     };
 
     const baseClasses = "inline-flex items-center gap-1.5 font-data text-xs px-2.5 py-1.5 rounded-pill";

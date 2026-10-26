@@ -20,8 +20,8 @@ export function SearchField({ placeholder = "Search for your favorite places..."
       className="cursor-pointer"
       autoComplete="off"
     />
-    <button type="submit" onClick={submit} className="bg-amber-500 hover:bg-amber-600 transition-standard rounded-lg p-2 flex items-center justify-center">
-      <FaMagnifyingGlassArrowRight className="text-fog-050" size={24} />
+    <button type="submit" onClick={submit} className="bg-accent-fill hover:bg-amber-600 transition-standard rounded-lg p-2 flex items-center justify-center">
+      <FaMagnifyingGlassArrowRight className="text-on-accent" size={24} />
     </button>
     </div>
 

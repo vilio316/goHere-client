@@ -8,8 +8,8 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ children, variant = "default", className = "", ...props }, ref) => {
     const variantClasses = {
-      default: "bg-dusk-800 border border-dusk-600",
-      elevated: "bg-dusk-800 border border-dusk-600 shadow-[0_16px_30px_rgba(0,0,0,0.35)]",
+      default: "bg-surface-raised border border-border-subtle shadow-card",
+      elevated: "bg-surface-raised border border-border-subtle shadow-card-elevated",
     };
 
     return (
@@ -34,7 +34,7 @@ export const CardPhoto = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
         className={`relative overflow-hidden ${className}`}
         style={{
           height: "160px",
-          background: "linear-gradient(135deg, rgba(242, 166, 61, 0.4), rgba(52, 211, 153, 0.2)), linear-gradient(0deg, var(--color-dusk-950), var(--color-dusk-700))",
+          background: "var(--photo-gradient)",
           ...style,
         }}
         {...props}
@@ -70,7 +70,7 @@ export const CardMeta = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
     return (
       <div
         ref={ref}
-        className={`grid justify-between items-center pt-3 border-t border-dusk-600 font-data text-xs text-fog-100 ${className}`}
+        className={`grid justify-between items-center pt-3 border-t border-border-subtle font-data text-xs text-text-meta ${className}`}
         {...props}
       >
         {children}

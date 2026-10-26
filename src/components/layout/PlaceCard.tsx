@@ -38,7 +38,7 @@ export function PlaceCard({
     return (
       <Card className="mb-6">
         <CardBody>
-          <h3 className="font-display font-bold text-lg text-fog-050 mb-2">
+          <h3 className="font-display font-bold text-lg text-text-primary mb-2">
             {place.name}
           </h3>
           <CardMeta>
@@ -61,7 +61,7 @@ export function PlaceCard({
               size="sm"
               fullWidth
               onClick={onSaveClick}
-              className="group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1" 
+              className="group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-xl transition-standard px-2 py-1 gap-x-1" 
             >
             <FaSave/>
             <span>Save</span>
@@ -75,7 +75,7 @@ export function PlaceCard({
   return (
     <Card className="mb-6">
       <CardBody>
-        <h3 className="font-display font-bold text-xl text-fog-050 mb-2 h-12 overflow-clip">
+        <h3 className="font-display font-bold text-xl text-text-primary mb-2 h-12 overflow-clip">
           {place.name}
         </h3>
         {/* <p className="text-slate-400 text-sm mb-4">{place.why}</p> */}
@@ -111,14 +111,14 @@ export function PlaceCard({
             size="sm"
             fullWidth
             onClick={onDetailClick}
-            className="group hover:bg-slate-600/45 hover:text-amber-500 hover:text-[15px] rounded-xl transition-standard px-2 py-1 gap-x-1"
+            className="group hover:bg-surface-hover hover:text-accent-text hover:text-[15px] rounded-xl transition-standard px-2 py-1 gap-x-1"
           >
             <span>
               <FaEye/>
             </span>
             <span>Details</span>
           </Button>
-          <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}  className="group hover:text-amber-500 hover:text-[15px] hover:bg-slate-600/45 rounded-xl transition-standard px-2 py-1 gap-x-1" >
+          <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}  className="group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-xl transition-standard px-2 py-1 gap-x-1" >
             <span><FaSave /></span>
             <span>Save Location</span>
           </Button>
