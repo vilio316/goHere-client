@@ -2,7 +2,6 @@ import { useParams, useNavigate, useSearchParams } from "react-router";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
-import type { OSMPlace } from "../../types/osm";
 import GlobeLoader from "../GlobeLoader";
 import { FaMap } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
@@ -17,13 +16,6 @@ export function DetailScreen() {
   const navigate = useNavigate();
   const location = useLocationCoords();
 
-  const searchProcessor = (q: string) => {
-    if (q.includes("Medix")) return "medix";
-    else {
-      return q;
-    }
-  };
-
   const {
     data: place,
     isSuccess,
@@ -37,10 +29,12 @@ export function DetailScreen() {
       }
       try{
       const request = await fetch(
-        `${import.meta.env.VITE_API_URL}/lookup/${id}`,
+        `${import.meta.env.VITE_API_URL}/search/lookup/${id}`,
       );
       const response = await request.json();
-      return response;
+      const [data] = response;
+      console.log(data)
+      return data;
     }catch (error) {
       throw new Error(
         error instanceof Error ? error.message : "Unknown error",
@@ -78,32 +72,12 @@ export function DetailScreen() {
     );
   }
 
-  // const badges = [];
-  // if (place.isOpenNow)
-  //   badges.push(
-  //     <Badge key="live" variant="live">
-  //       Open now
-  //     </Badge>,
-  //   );
-  // if (place.isSoloFriendly)
-  //   badges.push(
-  //     <Badge key="solo" variant="solo">
-  //       🎯 Solo-friendly
-  //     </Badge>,
-  //   );
-  // if (!place.isOpenNow)
-  //   badges.push(
-  //     <Badge key="closed" variant="closed">
-  //       Closed
-  //     </Badge>,
-  //   );
-
   const handleDirections = () => {
     refetch()
   };
   return (
     <>
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4">
       {isLoading && <GlobeLoader />}
       {isSuccess && (
         <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">

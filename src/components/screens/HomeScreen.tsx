@@ -4,19 +4,28 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { moodLabels } from "../../data/moods";
+import { useLocationCoords } from "../../contexts/LocationContext";
 
 export function HomeScreen() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-
-  const {data: searchResults, isSuccess: resultsRetrieved, refetch, isLoading: isSearching} = useQuery({
-    queryKey: ["search_result", searchQuery],
+  const {location} = useLocationCoords();
+  
+  const {data: searchResults, isSuccess: resultsRetrieved, isFetching: isSearching, refetch: useAISearch} = useQuery({
+    queryKey: ["search_result_AI", searchQuery],
     enabled: false, 
     queryFn: async () => {
       try{
-      const request = await fetch(`${import.meta.env.VITE_API_URL}/search/${searchQuery}`);
+      const request = await fetch(`${import.meta.env.VITE_API_URL}/poi/search`, {
+        method: "POST",
+        headers: {
+              "Content-Type": "application/json",
+            },
+        body: JSON.stringify({ query: searchQuery, latitude: location.lat, longitude: location.long })
+      } );
       const response = await request.json();
-      return response;
+      console.log(response)
+      return response
     }
     catch (error) {
       throw new Error(`Error fetching search results: ${error instanceof Error ? error.message : "Unknown error"}`);
@@ -24,6 +33,19 @@ export function HomeScreen() {
   },
     staleTime: 1 * 60 * 60 * 1000,
   })
+
+  const {data: plainSearchResults, isSuccess: plainResultsRetrieved, refetch: doPlain, isFetching: isPlainSearching} = useQuery({
+    queryKey: ["search_result", searchQuery],
+    enabled: false,
+    staleTime: 1 * 60 * 60 * 1000,
+    queryFn: async () => {
+      try{   
+    const request = await fetch(`${import.meta.env.VITE_API_URL}/search/${searchQuery}`)
+    const response = await request.json();
+    return response
+           }catch(error) {
+        throw new Error(`Error fetching search results: ${error instanceof Error ? error.message : "Unknown error"}`);
+      } }})
 
   const handleExplore = () => {
     const randomMood =
@@ -44,30 +66,59 @@ export function HomeScreen() {
           <MoodChips onMoodSelect={handleMoodSelect} />
           <div className="flex-1" />
           <SearchField placeholder="Search or explore…" submit={()=> {
-            if(searchQuery.trim() !== '') {
-              refetch();
-            }
+           if (searchQuery.length > 15){
+            useAISearch()
+           }
+           else{
+            doPlain()
+           }
           }} onChange={(e)=> {
             setSearchQuery(e.target.value);
             }}  />
           {
-            isSearching && (
+            isPlainSearching && (
               <div className="mt-4">
                 <p className="text-label-s text-text-secondary mb-2">Searching...</p>
               </div>
             )
           }
+           {
+            isSearching && <p>Searching with AI...</p>
+           } 
             {
               resultsRetrieved && searchResults.length === 0 && (
                 <p className="text-label-s text-text-secondary mb-2">No results found.</p>
               )
              }
           {
-            resultsRetrieved && searchResults.length > 0 && (
+            resultsRetrieved && searchResults.data.places.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-text-secondary mb-2">Search Results:</h3>   
               {
-                resultsRetrieved && searchResults.length > 0 && searchResults.map((result: any) => (
+                resultsRetrieved && searchResults.data.places.length > 0 && searchResults.data.places.map((result: any) => (
+                  <Link key={result.osm_id} to={`/place/${result.osm_id}`} className="mb-2 md:p-4 p-2 block bg-surface-raised rounded-md cursor-pointer hover:bg-surface-sunken transition-standard">
+                    <span className="text-text-primary font-bold w-3/4">{result.name}</span>
+                    {
+                    result.type !== "yes" ? <span className="text-sm font-light w-1/4 text-right"> || { String(result.osm_class).charAt(0).toUpperCase() +
+                        String(result.osm_class).slice(1)}</span>: null}
+                  </Link>
+                ))
+              }
+              </div>
+            )
+          }
+
+          {
+            plainResultsRetrieved && plainSearchResults.length === 0 && (
+              <p className="text-label-s text-text-secondary mb-2">No results found.</p>
+            )
+          }
+          {
+            plainResultsRetrieved && plainSearchResults.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-text-secondary mb-2">Search Results:</h3>   
+              {
+                plainResultsRetrieved && plainSearchResults.length > 0 && plainSearchResults.map((result: any) => (
                   <Link key={result.osm_id} to={`/place/${result.osm_id}?q=${result.name}`} className="mb-2 md:p-4 p-2 block bg-surface-raised rounded-md cursor-pointer hover:bg-surface-sunken transition-standard">
                     <p className="text-text-primary font-bold">{result.name}</p>
                     <span className="text-sm font-light" >{result.display_name}</span> {

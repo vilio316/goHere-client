@@ -64,7 +64,7 @@ export function GlobeLoader({
   return (
     <div
       role="status"
-      className={`flex h-full w-full flex-col items-center justify-center gap-6 px-4 py-10 text-center ${className}`}
+      className={`flex h-[90vh] w-full flex-col items-center justify-center gap-6 px-4 py-10 text-center ${className}`}
     >
       <span className="sr-only">Loading</span>
 

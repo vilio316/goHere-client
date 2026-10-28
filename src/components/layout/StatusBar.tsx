@@ -1,9 +1,21 @@
+import type { RefObject } from "react";
 import { useState, useEffect } from "react";
 import { FiMenu } from "react-icons/fi";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { useQuery } from "@tanstack/react-query";
 import { ThemeToggle } from "./ThemeToggle";
-export function StatusBar() {
+
+export interface StatusBarProps {
+  onMenuClick: () => void;
+  isMenuOpen: boolean;
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
+}
+
+export function StatusBar({
+  onMenuClick,
+  isMenuOpen,
+  menuButtonRef,
+}: StatusBarProps) {
    const {location} = useLocationCoords();
    const {data: placeData} = useQuery({
       queryKey: ["location"],
@@ -25,9 +37,6 @@ export function StatusBar() {
     })
   function DigitalClock() {
     const [time, setTime] = useState(new Date());
-   
-
-   
     useEffect(() => {
       const timerId = setInterval(() => {
         setTime(new Date());
@@ -52,7 +61,17 @@ export function StatusBar() {
       </div>
       <div className="flex items-center gap-1">
         <ThemeToggle />
-        <FiMenu />
+        <button
+          ref={menuButtonRef}
+          type="button"
+          onClick={onMenuClick}
+          aria-label="Open navigation"
+          aria-controls="mobile-navigation"
+          aria-expanded={isMenuOpen}
+          className="focus-visible-ring -mr-2 rounded-md p-2 text-text-on-dark transition-colors hover:bg-dusk-800 md:hidden"
+        >
+          <FiMenu aria-hidden="true" className="text-xl" />
+        </button>
       </div>
     </div>
   );
