@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { PlaceCard } from "../layout/PlaceCard";
 import { SwipeHint } from "../layout/SwipeHint";
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
+import { moods } from "../../data/moods";
 import LoaderComp from "../LoaderComp";
 
 export function FeedScreen() {
@@ -13,13 +13,10 @@ export function FeedScreen() {
   const moodQuery = searchParams.get("q");
   const { location } = useLocationCoords();
 
-  useEffect(() => {
-    console.log(moodQuery);
-  }, [moodQuery]);
-
   const { data, isSuccess, isLoading, isError, error } = useQuery({
     queryKey: ["moodResults", moodQuery],
     staleTime: 1 * 60 * 60 * 1000,
+    enabled: Boolean(moodQuery),
     queryFn: async () => {
       try {
         const request = await fetch(
@@ -56,11 +53,51 @@ export function FeedScreen() {
     
   if (!moodQuery) {
     return (
-      <div>
-        <p>You haven't selected a mood yet.</p>
+      <div className="flex flex-col h-screen overflow-hidden">
+        <div className="flex-1 overflow-y-auto px-4 pb-20">
+          <div className="max-w-4xl mx-auto w-full py-8 md:py-12">
+            <div className="mb-6 md:mb-8">
+              <p className="text-label-s text-text-secondary uppercase mb-2">
+                Explore
+              </p>
+              <h2 className="font-display font-bold text-2xl md:text-3xl">
+                What are you in the mood for?
+              </h2>
+              <p className="text-body-m text-text-secondary mt-2 max-w-xl">
+                Pick a mood and we'll find solo-friendly places near you.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
+              {moods.map(({ label, description, icon: Icon }) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() =>
+                    navigate(`/explore?q=${encodeURIComponent(label)}`)
+                  }
+                  className="group flex min-h-[150px] sm:min-h-[180px] flex-col justify-between rounded-lg border border-border-subtle bg-surface-raised p-4 sm:p-5 text-left shadow-card transition-standard hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface-hover focus-visible-ring active:translate-y-0"
+                >
+                  <span className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-accent-tint text-accent-text transition-standard group-hover:bg-accent-fill group-hover:text-on-accent">
+                    <Icon size={22} aria-hidden="true" />
+                  </span>
+
+                  <span className="mt-4 block">
+                    <span className="block font-display text-base sm:text-lg font-bold leading-tight text-text-primary">
+                      {label}
+                    </span>
+                    <span className="mt-1 block text-xs sm:text-sm leading-snug text-text-secondary line-clamp-2">
+                      {description}
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-    )
-    }
+    );
+  }
     return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4 pb-20">

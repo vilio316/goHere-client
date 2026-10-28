@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { moodLabels } from "../../data/moods";
 
 export interface MoodChipsProps {
   moods?: string[];
@@ -6,14 +7,7 @@ export interface MoodChipsProps {
 }
 
 export function MoodChips({
-  moods = [
-    "Food & Drinks",
-    "Parks/Gardens",
-    "Healthcare & Wellness",
-    "Spas & Relaxation",
-    "Shopping",
-    "Nightlife",
-  ],
+  moods = moodLabels,
   onMoodSelect,
 }: MoodChipsProps) {
   const [activeMood, setActiveMood] = useState<string | null>(null);

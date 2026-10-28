@@ -122,14 +122,3 @@ export const dummyPlaces: Place[] = [
     hours: "Open until 23:30",
   },
 ];
-
-export const moods = [
-  "Coffee",
-  "Food",
-  "Culture",
-  "Nature",
-  "A view",
-  "Music",
-  "Books",
-  "Drinks",
-];

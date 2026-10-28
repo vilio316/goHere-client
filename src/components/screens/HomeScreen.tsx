@@ -3,6 +3,7 @@ import { HeroCTA, MoodChips, SearchField } from "../layout";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
+import { moodLabels } from "../../data/moods";
 
 export function HomeScreen() {
   const navigate = useNavigate();
@@ -24,21 +25,14 @@ export function HomeScreen() {
   })
 
   const handleExplore = () => {
-    const moods = [
-    "Food & Drinks",
-    "Parks/Gardens",
-    "Healthcare & Wellness",
-    "Spas & Relaxation",
-    "Shopping",
-    "Nightlife",
-  ];
+    const randomMood =
+      moodLabels[Math.floor(Math.random() * moodLabels.length)];
 
-  const randomMood = moods[Math.floor(Math.random() * moods.length)];
-    navigate(`/explore?q=${randomMood}`);
+    navigate(`/explore?q=${encodeURIComponent(randomMood)}`);
   };
 
   const handleMoodSelect = (mood: string) => {
-    navigate(`/explore?q=${mood}`);
+    navigate(`/explore?q=${encodeURIComponent(mood)}`);
   };
 
   return (
