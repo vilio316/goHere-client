@@ -19,8 +19,9 @@ export function HomeScreen() {
       return response;
     }
     catch (error) {
-      `Error fetching search results: ${error instanceof Error ? error.message : "Unknown error"}`;
-  }}, 
+      throw new Error(`Error fetching search results: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+  },
     staleTime: 1 * 60 * 60 * 1000,
   })
 

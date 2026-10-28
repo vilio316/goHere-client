@@ -3,7 +3,7 @@ import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import type { OSMPlace } from "../../types/osm";
-import LoaderComp from "../LoaderComp";
+import GlobeLoader from "../GlobeLoader";
 import { FaMap } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
 import { MapRender } from "../maps/RenderMap";
@@ -35,15 +35,17 @@ export function DetailScreen() {
       if (!q) {
         return;
       }
+      try{
       const request = await fetch(
-        `${import.meta.env.VITE_API_URL}/search/${searchProcessor(q)}`,
+        `${import.meta.env.VITE_API_URL}/lookup/${id}`,
       );
       const response = await request.json();
-      const [data] = response.filter((item: OSMPlace) => item.osm_id == id);
-      console.log(data);
-
-      return data;
-    },
+      return response;
+    }catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Unknown error",
+      );
+    }} 
   });
 
   const {data: routeData, refetch} = useQuery({
@@ -102,7 +104,7 @@ export function DetailScreen() {
   return (
     <>
     <div className="flex flex-col overflow-hidden">
-      {isLoading && <LoaderComp />}
+      {isLoading && <GlobeLoader />}
       {isSuccess && (
         <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
           <div className="max-w-xl mx-auto w-full">

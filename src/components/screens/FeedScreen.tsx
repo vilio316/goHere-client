@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
 import { moods } from "../../data/moods";
-import LoaderComp from "../LoaderComp";
+import GlobeLoader from "../GlobeLoader";
 
 export function FeedScreen() {
   const navigate = useNavigate();
@@ -101,7 +101,7 @@ export function FeedScreen() {
     return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4 pb-20">
-        <div className="w-full">
+        <div className="w-full my-2 md:my-4">
           <div className="mb-6">
             <h2 className="font-display font-bold text-2xl mb-2">Right Now</h2>
             <p className="text-label-s text-text-secondary">
@@ -109,7 +109,7 @@ export function FeedScreen() {
             </p>
           </div>
 
-          {isLoading && <LoaderComp />}
+          {isLoading && <GlobeLoader />}
 
           {isError && (
             <div className="text-center py-8 text-alert-text">
