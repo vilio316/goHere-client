@@ -1,7 +1,11 @@
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
+import {authClient} from "../../lib/authClient";
 
 export function SavedScreen() {
+  const {data: session} = authClient.useSession();
+
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4 pb-20">

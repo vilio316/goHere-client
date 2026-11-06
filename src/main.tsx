@@ -7,6 +7,7 @@ import { DetailScreen } from "./components/screens/DetailScreen";
 // import { DirectionsScreen } from "./components/screens/DirectionsScreen";
 import { SavedScreen } from "./components/screens/SavedScreen";
 import { ProfileScreen } from "./components/screens/ProfileScreen";
+import { AuthScreen } from "./components/screens/AuthScreen";
 import ErrorPage from "./components/ErrorPage";
 import { LocationProvider } from "./contexts/LocationContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -23,6 +24,11 @@ declare global {
 window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
 const browserRouter = createBrowserRouter([
+  {
+    path: "/auth",
+    Component: AuthScreen,
+    errorElement: <ErrorPage />,
+  },
   {
     path: "/",
     Component: App,

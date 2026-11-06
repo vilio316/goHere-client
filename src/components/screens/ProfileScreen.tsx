@@ -1,8 +1,19 @@
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { ThemeToggle } from "../layout/ThemeToggle";
+import  { authClient}  from "../../lib/authClient";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export function ProfileScreen() {
+  const {data: session} = authClient.useSession();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+  if (!session || !session.user) {
+    navigate('/auth')
+  }}, [])
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4 pb-20">

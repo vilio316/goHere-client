@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { useQuery } from "@tanstack/react-query";
 import { ThemeToggle } from "./ThemeToggle";
+import { authClient } from "../../lib/authClient";
 
 export interface StatusBarProps {
   onMenuClick: () => void;
@@ -17,6 +18,11 @@ export function StatusBar({
   menuButtonRef,
 }: StatusBarProps) {
    const {location} = useLocationCoords();
+   const {data: session} = authClient.useSession()
+    useEffect(() => {
+      console.log(session)
+    }, [])
+
    const {data: placeData} = useQuery({
       queryKey: ["location"],
       staleTime: 30 * 60 * 1000,  
@@ -60,6 +66,7 @@ export function StatusBar({
       )}
       </div>
       <div className="flex items-center gap-1">
+        {session && session.user && <p>{session.user.name.split(" ")[0]}</p>}
         <ThemeToggle />
         <button
           ref={menuButtonRef}

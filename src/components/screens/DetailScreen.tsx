@@ -3,7 +3,6 @@ import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import GlobeLoader from "../GlobeLoader";
-import { FaMap } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
 import { MapRender } from "../maps/RenderMap";
 import { useLocationCoords } from "../../contexts/LocationContext";
@@ -24,9 +23,6 @@ export function DetailScreen() {
     queryKey: ["details", id],
     staleTime: 1 * 60 * 60 * 1000,
     queryFn: async () => {
-      if (!q) {
-        return;
-      }
       try{
       const request = await fetch(
         `${import.meta.env.VITE_API_URL}/search/lookup/${id}`,
@@ -42,7 +38,7 @@ export function DetailScreen() {
     }} 
   });
 
-  const {data: routeData, refetch} = useQuery({
+  const {data: routeData} = useQuery({
     queryKey: ["geometry", id],
     staleTime: 1 * 60 * 60 * 1000,  
     queryFn: async () => {
@@ -72,15 +68,15 @@ export function DetailScreen() {
     );
   }
 
-  const handleDirections = () => {
-    refetch()
-  };
+  // const handleDirections = () => {
+  //   refetch()
+  // };
   return (
     <>
-    <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4">
+    <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4 p-3 md:p-6">
       {isLoading && <GlobeLoader />}
       {isSuccess && (
-        <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
+        <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 md:gap-x-8 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
           <div className="max-w-xl mx-auto w-full">
             <div className="flex items-center justify-between mb-4">
               <Button
@@ -135,7 +131,7 @@ export function DetailScreen() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button
+                  {/* <Button
                     variant="primary"
                     fullWidth
                     onClick={handleDirections}
@@ -143,7 +139,7 @@ export function DetailScreen() {
                   >
                     <FaMap />
                     <span>Get Directions</span>
-                  </Button>
+                  </Button> */}
                   <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
                   >
                     <span><FaSave /></span>
