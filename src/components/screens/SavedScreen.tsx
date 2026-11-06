@@ -5,13 +5,20 @@ import {authClient} from "../../lib/authClient";
 export function SavedScreen() {
   const {data: session} = authClient.useSession();
 
+  if(!session || !session.user) {
+    return (
+<p>
+  You're not signed in yet. Please sign in to view your saved places.
+</p>
+    )
+  }
 
-  return (
-    <div className="flex flex-col h-screen overflow-hidden">
+   {
+    session && session.user ? <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4 pb-20">
         <div className="max-w-xl mx-auto w-full py-12">
           <h2 className="font-display font-bold text-2xl mb-6 text-center">
-            Saved Places
+            Your Saved Places, {session.user.name.split(" ")[0]}
           </h2>
           <Card>
             <CardBody className="text-center py-12">
@@ -26,6 +33,6 @@ export function SavedScreen() {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div> : null
+   }
 }

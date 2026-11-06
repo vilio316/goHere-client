@@ -19,9 +19,7 @@ export function StatusBar({
 }: StatusBarProps) {
    const {location} = useLocationCoords();
    const {data: session} = authClient.useSession()
-    useEffect(() => {
-      console.log(session)
-    }, [])
+   
 
    const {data: placeData} = useQuery({
       queryKey: ["location"],

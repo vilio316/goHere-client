@@ -12,13 +12,14 @@ import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { Card, CardBody } from "./Card";
 import { Input } from "./Input";
+import { authClient } from "../../lib/authClient";
+import { useNavigate } from "react-router";
 
 export type AuthMode = "signin" | "signup";
 
 export interface SignInValues {
   email: string;
   password: string;
-  remember: boolean;
 }
 
 export interface SignUpValues {
@@ -58,8 +59,7 @@ const features = [
 
 export function AuthPage({
   initialMode = "signin",
-  onSignIn,
-  onSignUp,
+  
   onGuest,
   onForgotPassword,
   onTermsClick,
@@ -74,6 +74,7 @@ export function AuthPage({
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const switchMode = (nextMode: AuthMode) => {
     setMode(nextMode);
@@ -88,9 +89,13 @@ export function AuthPage({
 
     try {
       if (mode === "signin") {
-        await onSignIn?.({ email, password, remember });
+        await authClient.signIn.email({ email, password}, {
+          onSuccess: () =>{
+            navigate("/");
+          }
+        });
       } else {
-        await onSignUp?.({ name, email, password });
+        await authClient.signUp.email({ name, email, password });
       }
     } catch (error) {
       setFormError(
@@ -139,7 +144,7 @@ export function AuthPage({
                   GoHere
                 </p>
                 <p className="font-data text-[10px] uppercase tracking-[0.24em] text-text-secondary">
-                  City guide / after dark
+                  Understand Your City
                 </p>
               </div>
             </div>

@@ -27,7 +27,7 @@ export function ProfileScreen() {
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-lg">
-                    Solo Traveler
+                    {session?.user?.name}
                   </h3>
                   <p className="text-text-secondary text-sm">Exploring since 2026</p>
                 </div>
@@ -44,17 +44,12 @@ export function ProfileScreen() {
                 </span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-border-subtle">
-                <span className="text-text-primary">Places visited</span>
+                <span className="text-text-primary">Places Saved</span>
                 <span className="font-data font-semibold text-accent-text">
                   0
                 </span>
               </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-text-primary">Cities explored</span>
-                <span className="font-data font-semibold text-accent-text">
-                  0
-                </span>
-              </div>
+           
             </CardBody>
           </Card>
 
@@ -76,6 +71,7 @@ export function ProfileScreen() {
                 variant="ghost"
                 fullWidth
                 className="text-alert-text border-alert-text/30 hover:bg-alert-text/10"
+                onClick={() => authClient.signOut()}
               >
                 Sign out
               </Button>
