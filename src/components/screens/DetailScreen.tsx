@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useSearchParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +10,6 @@ import RouteDirections from "./DirectionsScreen";
 
 export function DetailScreen() {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
-  const q = searchParams.get("q");
   const navigate = useNavigate();
   const location = useLocationCoords();
 
