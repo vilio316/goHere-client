@@ -46,6 +46,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.setAttribute("data-theme", theme);
     root.style.colorScheme = theme;
 
+    // Keep the browser/PWA chrome in sync with the in-app theme.
+    const themeColor = document.querySelector<HTMLMetaElement>(
+      'meta[name="theme-color"]',
+    );
+    themeColor?.setAttribute(
+      "content",
+      theme === "light" ? "#f7f5f0" : "#12162a",
+    );
+
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {

@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Outlet } from "react-router";
 import {
   BottomNavigation,
+  InstallPrompt,
   MobileNavigation,
   StatusBar,
 } from "./components/layout";
@@ -29,6 +30,7 @@ export default function App() {
       <Outlet />
       <BottomNavigation />
       <MobileNavigation open={isMobileNavOpen} onClose={closeMobileNav} />
+      <InstallPrompt />
     </div>
   );
 }

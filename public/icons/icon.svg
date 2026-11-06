@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GoHere">
+  <rect width="512" height="512" fill="#12162a" />
+  <circle cx="256" cy="210" r="176" fill="none" stroke="#2a2f52" stroke-width="10" />
+  <circle
+    cx="256"
+    cy="210"
+    r="140"
+    fill="none"
+    stroke="#3a4066"
+    stroke-width="6"
+    stroke-dasharray="4 14"
+    stroke-linecap="round"
+  />
+  <path
+    fill="#f2a63d"
+    d="M256 68c-73.5 0-133 59.5-133 133 0 96.5 115.6 212.3 126 222.7a10 10 0 0 0 14 0c10.4-10.4 126-126.2 126-222.7 0-73.5-59.5-133-133-133Z"
+  />
+  <circle cx="256" cy="201" r="56" fill="#12162a" />
+  <circle cx="256" cy="201" r="22" fill="#34d399" />
+</svg>

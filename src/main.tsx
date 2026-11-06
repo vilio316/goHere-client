@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { registerSW } from "virtual:pwa-register";
 import App from "./App";
 import { HomeScreen } from "./components/screens/HomeScreen";
 import { FeedScreen } from "./components/screens/FeedScreen";
@@ -53,3 +54,6 @@ createRoot(document.getElementById("root")!).render(
     </ThemeProvider>
   </QueryClientProvider>,
 );
+
+// autoUpdate keeps the installed app current; no update UI is required.
+registerSW({ immediate: true });

@@ -2,8 +2,22 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="GoHere helps you understand your city — discover solo-friendly places near you, follow your mood, and find your next spot."
+    />
+    <meta name="application-name" content="GoHere" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="GoHere" />
+    <meta name="theme-color" content="#12162a" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script>
       // Apply the saved theme before first paint to avoid a dark/light flash.
       (function () {
@@ -14,6 +28,14 @@
           }
           document.documentElement.setAttribute("data-theme", theme);
           document.documentElement.style.colorScheme = theme;
+
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) {
+            themeColor.setAttribute(
+              "content",
+              theme === "light" ? "#f7f5f0" : "#12162a",
+            );
+          }
         } catch (error) {
           document.documentElement.setAttribute("data-theme", "dark");
         }
