@@ -1,8 +1,11 @@
 import { useNavigate, useSearchParams } from "react-router";
+import { useCallback, useState } from "react";
 import { PlaceCard } from "../layout/PlaceCard";
 import { SwipeHint } from "../layout/SwipeHint";
+import { SaveLocationModal } from "../ui";
 import { useQuery } from "@tanstack/react-query";
 import { useLocationCoords } from "../../contexts/LocationContext";
+import { authClient } from "../../lib/authClient";
 import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
 import { moods } from "../../data/moods";
 import GlobeLoader from "../GlobeLoader";
@@ -12,6 +15,16 @@ export function FeedScreen() {
   const [searchParams] = useSearchParams();
   const moodQuery = searchParams.get("q");
   const { location } = useLocationCoords();
+  const { data: session } = authClient.useSession();
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [saveTargetName, setSaveTargetName] = useState<string | undefined>(
+    undefined,
+  );
+
+  const closeSaveModal = useCallback(() => {
+    setIsSaveModalOpen(false);
+    setSaveTargetName(undefined);
+  }, []);
 
   const { data, isSuccess, isLoading, isError, error } = useQuery({
     queryKey: ["moodResults", moodQuery],
@@ -47,7 +60,13 @@ export function FeedScreen() {
     navigate(`/place/${placeId}?q=${placeName}`);
   };
 
-  const handleSaveClick = (placeId: string) => {
+  const handleSaveClick = (placeId: string, placeName?: string) => {
+    if (!session?.user) {
+      setSaveTargetName(placeName);
+      setIsSaveModalOpen(true);
+      return;
+    }
+
     console.log("Save place:", placeId);
   };
     
@@ -133,7 +152,9 @@ export function FeedScreen() {
                   onDetailClick={() =>
                     handleDetailClick(place.osm_id, place.name)
                   }
-                  onSaveClick={() => handleSaveClick(place.osm_id)}
+                  onSaveClick={() =>
+                    handleSaveClick(place.osm_id, place.name)
+                  }
                 />
               ))}
             </div>
@@ -141,6 +162,11 @@ export function FeedScreen() {
           <SwipeHint />
         </div>
       </div>
+      <SaveLocationModal
+        open={isSaveModalOpen}
+        onClose={closeSaveModal}
+        placeName={saveTargetName}
+      />
     </div>
   );
 }

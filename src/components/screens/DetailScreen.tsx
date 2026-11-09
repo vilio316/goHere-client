@@ -1,17 +1,23 @@
 import { useParams, useNavigate } from "react-router";
+import { useCallback, useState } from "react";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
+import { SaveLocationModal } from "../ui";
 import { useQuery } from "@tanstack/react-query";
 import GlobeLoader from "../GlobeLoader";
 import { FaSave } from "react-icons/fa";
 import { MapRender } from "../maps/RenderMap";
 import { useLocationCoords } from "../../contexts/LocationContext";
+import { authClient } from "../../lib/authClient";
 import RouteDirections from "./DirectionsScreen";
 
 export function DetailScreen() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocationCoords();
+  const { data: session } = authClient.useSession();
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const closeSaveModal = useCallback(() => setIsSaveModalOpen(false), []);
 
   const {
     data: place,
@@ -69,6 +75,16 @@ export function DetailScreen() {
   // const handleDirections = () => {
   //   refetch()
   // };
+
+  const handleSaveClick = () => {
+    if (!session?.user) {
+      setIsSaveModalOpen(true);
+      return;
+    }
+
+    console.log("Save place:", place?.osm_id ?? id);
+  };
+
   return (
     <>
     <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4 p-3 md:p-6">
@@ -139,6 +155,7 @@ export function DetailScreen() {
                     <span>Get Directions</span>
                   </Button> */}
                   <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
+                    onClick={handleSaveClick}
                   >
                     <span><FaSave /></span>
                     <span>Save</span>
@@ -155,6 +172,11 @@ export function DetailScreen() {
     <div className="p-4">
      {routeData && <RouteDirections leg={routeData.routes[0].legs[0]} className="min-h-[600px]"/>}
     </div>
+    <SaveLocationModal
+      open={isSaveModalOpen}
+      onClose={closeSaveModal}
+      placeName={place?.name}
+    />
   </>
   );
 }
