@@ -33,7 +33,6 @@ export function DetailScreen() {
       );
       const response = await request.json();
       const [data] = response;
-      console.log(data)
       return data;
     }catch (error) {
       throw new Error(
@@ -42,7 +41,7 @@ export function DetailScreen() {
     }} 
   });
 
-  const {data: routeData} = useQuery({
+  const {data: routeData, isLoading: isRouteLoading} = useQuery({
     queryKey: ["geometry", id],
     staleTime: 1 * 60 * 60 * 1000,  
     queryFn: async () => {
@@ -71,10 +70,6 @@ export function DetailScreen() {
       </div>
     );
   }
-
-  // const handleDirections = () => {
-  //   refetch()
-  // };
 
   const handleSaveClick = () => {
     if (!session?.user) {
@@ -170,6 +165,7 @@ export function DetailScreen() {
       )}
     </div>
     <div className="p-4">
+      {isRouteLoading && <p>Loading map...</p>}
      {routeData && <RouteDirections leg={routeData.routes[0].legs[0]} className="min-h-[600px]"/>}
     </div>
     <SaveLocationModal

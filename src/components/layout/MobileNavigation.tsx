@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { NavLink } from "react-router";
 import { FiX } from "react-icons/fi";
 import { navItems } from "./navigation";
+import { authClient } from "../../lib/authClient";
+import { FaUser } from "react-icons/fa6";
 
 export interface MobileNavigationProps {
   open: boolean;
@@ -11,6 +13,7 @@ export interface MobileNavigationProps {
 export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const {data: session} = authClient.useSession()
 
   useEffect(() => {
     if (!open) {
@@ -98,6 +101,44 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
           aria-label="Mobile navigation"
           className="flex flex-1 flex-col gap-2 overflow-y-auto p-4"
         >
+          {session && session.user && (
+            <p className="text-lg font-bold text-text-on-dark">
+              {session.user.name.split(" ")[0]}
+            </p>
+          )}
+          {!session || session == null ? (
+            <NavLink
+              to="/auth"
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition-colors ${
+                  isActive
+                    ? "bg-amber-500/10 text-amber-500"
+                    : "text-slate-400 hover:bg-dusk-800 hover:text-text-on-dark"
+                }`
+              }
+            >
+              <span className="font-medium">Guest</span>
+            </NavLink>
+          ) : null}
+          {session && session.user && (
+            <NavLink
+              to="/profile"
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition-colors ${
+                  isActive
+                    ? "bg-amber-500/10 text-amber-500"
+                    : "text-slate-400 hover:bg-dusk-800 hover:text-text-on-dark"
+                }`
+              }
+            >
+              <span className="font-medium">
+                <FaUser/>
+              </span>
+              <span className="font-medium">{session.user.name}</span>
+            </NavLink>
+          )}
           {navItems.map((item) => {
             const Icon = item.icon;
 

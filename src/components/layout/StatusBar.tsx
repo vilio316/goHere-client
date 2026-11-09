@@ -5,6 +5,7 @@ import { useLocationCoords } from "../../contexts/LocationContext";
 import { useQuery } from "@tanstack/react-query";
 import { ThemeToggle } from "./ThemeToggle";
 import { authClient } from "../../lib/authClient";
+import { Link } from "react-router";
 
 export interface StatusBarProps {
   onMenuClick: () => void;
@@ -63,8 +64,17 @@ export function StatusBar({
         </p>
       )}
       </div>
-      <div className="flex items-center gap-1">
-        {session && session.user && <p>{session.user.name.split(" ")[0]}</p>}
+      <div className="flex items-center gap-1 md:gap-x-3">
+        {!session || session == null ? (
+          <Link className="text-lg font-bold hover:underline" to="/auth">
+            Guest
+          </Link>
+        ) : null}
+        {session && session.user && (
+          <Link className="text-lg font-bold hover:underline" to="/profile">
+            {session.user.name.split(" ")[0]}
+          </Link>
+        )}
         <ThemeToggle />
         <button
           ref={menuButtonRef}

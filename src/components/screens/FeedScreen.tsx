@@ -66,8 +66,6 @@ export function FeedScreen() {
       setIsSaveModalOpen(true);
       return;
     }
-
-    console.log("Save place:", placeId);
   };
     
   if (!moodQuery) {
