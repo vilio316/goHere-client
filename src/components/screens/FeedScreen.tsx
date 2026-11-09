@@ -60,7 +60,7 @@ export function FeedScreen() {
     navigate(`/place/${placeId}?q=${placeName}`);
   };
 
-  const handleSaveClick = (placeId: string, placeName?: string) => {
+  const handleSaveClick = (placeName?: string) => {
     if (!session?.user) {
       setSaveTargetName(placeName);
       setIsSaveModalOpen(true);
@@ -151,7 +151,7 @@ export function FeedScreen() {
                     handleDetailClick(place.osm_id, place.name)
                   }
                   onSaveClick={() =>
-                    handleSaveClick(place.osm_id, place.name)
+                    handleSaveClick(place.name)
                   }
                 />
               ))}
