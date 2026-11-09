@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { SaveLocationModal } from "../ui";
@@ -9,7 +9,45 @@ import { FaSave } from "react-icons/fa";
 import { MapRender } from "../maps/RenderMap";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { authClient } from "../../lib/authClient";
-import RouteDirections from "./DirectionsScreen";
+import { JourneyStops, type JourneyWaypoint } from "../layout";
+import RouteDirections, { type OSRMRouteLeg } from "./DirectionsScreen";
+
+function combineRouteLegs(
+  legs?: OSRMRouteLeg[] | null,
+): OSRMRouteLeg | undefined {
+  if (!Array.isArray(legs) || legs.length === 0) {
+    return undefined;
+  }
+
+  if (legs.length === 1) {
+    return legs[0];
+  }
+
+  return {
+    distance: legs.reduce(
+      (total, leg) => total + (Number.isFinite(leg.distance) ? leg.distance : 0),
+      0,
+    ),
+    duration: legs.reduce(
+      (total, leg) => total + (Number.isFinite(leg.duration) ? leg.duration : 0),
+      0,
+    ),
+    summary: legs.map((leg) => leg.summary?.trim()).find(Boolean),
+    // Intermediate legs end at a waypoint and the next leg starts there.
+    // Drop those duplicate arrivals/departures so the instructions read as
+    // one continuous journey to the final destination.
+    steps: legs.flatMap((leg, legIndex) =>
+      (Array.isArray(leg.steps) ? leg.steps : []).filter((step) => {
+        const type = step.maneuver?.type;
+
+        return !(
+          (legIndex < legs.length - 1 && type === "arrive") ||
+          (legIndex > 0 && type === "depart")
+        );
+      }),
+    ),
+  };
+}
 
 export function DetailScreen() {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +55,20 @@ export function DetailScreen() {
   const location = useLocationCoords();
   const { data: session } = authClient.useSession();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [waypoints, setWaypoints] = useState<JourneyWaypoint[]>([]);
   const closeSaveModal = useCallback(() => setIsSaveModalOpen(false), []);
+  const handleAddWaypoint = useCallback(
+    (waypoint: JourneyWaypoint) =>
+      setWaypoints((current) => [...current, waypoint]),
+    [],
+  );
+  const handleRemoveWaypoint = useCallback(
+    (waypointId: string) =>
+      setWaypoints((current) =>
+        current.filter((waypoint) => waypoint.id !== waypointId),
+      ),
+    [],
+  );
 
   const {
     data: place,
@@ -41,18 +92,45 @@ export function DetailScreen() {
     }} 
   });
 
-  const {data: routeData, isLoading: isRouteLoading} = useQuery({
-    queryKey: ["geometry", id],
-    staleTime: 1 * 60 * 60 * 1000,  
+  // OSRM accepts extra coordinates between the origin and destination, so
+  // every added stop becomes an ordered waypoint on the same journey.
+  const routePath = useMemo(() => {
+    if (!place || place.lat == null || place.lon == null) {
+      return "";
+    }
+
+    return [
+      `${location.location.long},${location.location.lat}`,
+      ...waypoints.map((waypoint) => `${waypoint.lon},${waypoint.lat}`),
+      `${place.lon},${place.lat}`,
+    ].join(";");
+  }, [location.location.lat, location.location.long, place, waypoints]);
+
+  const {
+    data: routeData,
+    isLoading: isRouteLoading,
+    isFetching: isRouteFetching,
+    isError: isRouteError,
+  } = useQuery({
+    queryKey: ["geometry", id, routePath],
+    staleTime: 1 * 60 * 60 * 1000,
+    enabled: Boolean(routePath),
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const request = await fetch(
-        `${import.meta.env.VITE_API_URL}/osrm/route/${`${location.location.long},${location.location.lat};${place?.lon},${place?.lat}`}`,
+        `${import.meta.env.VITE_API_URL}/osrm/route/${routePath}`,
       );
-      const response = await request.json();
-      return response;
-    }, 
-    enabled: !!place
+
+      if (!request.ok) {
+        throw new Error("Unable to load directions for this journey.");
+      }
+
+      return request.json();
+    },
   });
+
+  const route = routeData?.routes?.[0];
+  const routeLeg = combineRouteLegs(route?.legs);
 
   if (isSuccess && !place) {
     return (
@@ -158,15 +236,35 @@ export function DetailScreen() {
                 </div>
               </CardBody>
             </Card>
+
+            <JourneyStops
+              waypoints={waypoints}
+              onAdd={handleAddWaypoint}
+              onRemove={handleRemoveWaypoint}
+              className="mb-6"
+            />
           </div>
-          {routeData && <MapRender geometry={routeData.routes[0].geometry} />}
+          {route && (
+            <MapRender geometry={route.geometry} waypoints={waypoints} />
+          )}
          
         </div>
       )}
     </div>
     <div className="p-4">
-      {isRouteLoading && <p>Loading map...</p>}
-     {routeData && <RouteDirections leg={routeData.routes[0].legs[0]} className="min-h-[600px]"/>}
+      {(isRouteLoading || isRouteFetching) && (
+        <p className="mb-3 text-body-m text-text-secondary" role="status">
+          {isRouteLoading ? "Loading route…" : "Updating route…"}
+        </p>
+      )}
+      {isRouteError && (
+        <p className="mb-3 text-body-m text-alert-text" role="alert">
+          We couldn't update the route. Try removing a stop or searching again.
+        </p>
+      )}
+      {routeLeg && (
+        <RouteDirections leg={routeLeg} className="min-h-[600px]" />
+      )}
     </div>
     <SaveLocationModal
       open={isSaveModalOpen}
