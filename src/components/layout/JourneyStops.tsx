@@ -1,5 +1,5 @@
-import { useId, useState, type FormEvent } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   FaCirclePlus,
   FaLocationDot,
@@ -134,56 +134,102 @@ export function JourneyStops({
 }: JourneyStopsProps) {
   const inputId = useId();
   const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [submissionCount, setSubmissionCount] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const handledSubmission = useRef(0);
 
-  const searchForStop = useMutation({
-    mutationFn: async (searchTerm: string) => {
-      const waypoint = (await lookupPlaces(searchTerm))
+  // Search results are keyed by the submitted place name and cached for an
+  // hour. Re-submitting the same place reuses the same coordinates instead of
+  // repeatedly hitting the lookup endpoint.
+  const stopSearch = useQuery({
+    queryKey: ["journey-stop-search", submittedQuery],
+    queryFn: async () => {
+      const waypoint = (await lookupPlaces(submittedQuery))
         .map(toWaypoint)
         .find((result): result is JourneyWaypoint => result !== null);
 
       if (!waypoint) {
         throw new Error(
-          `No places found for "${searchTerm}". Try a more specific address.`,
+          `No places found for "${submittedQuery}". Try a more specific address.`,
         );
-      }
-
-      if (waypoints.some((existing) => isSamePlace(existing, waypoint))) {
-        throw new Error(`${waypoint.name} is already a stop on this journey.`);
       }
 
       return waypoint;
     },
-    onSuccess: (waypoint) => {
-      onAdd(waypoint);
-      setQuery("");
-      setFeedback({
-        tone: "success",
-        message: `Added ${waypoint.name}. Your route and directions are updating.`,
-      });
-    },
-    onError: (error) => {
+    enabled: submittedQuery.length > 0,
+    staleTime: 60 * 60 * 1000,
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (
+      submissionCount === 0 ||
+      handledSubmission.current === submissionCount
+    ) {
+      return;
+    }
+
+    if (stopSearch.isFetching) {
+      return;
+    }
+
+    if (stopSearch.isError) {
+      handledSubmission.current = submissionCount;
       setFeedback({
         tone: "error",
         message:
-          error instanceof Error
-            ? error.message
+          stopSearch.error instanceof Error
+            ? stopSearch.error.message
             : "We couldn't add that stop. Please try again.",
       });
-    },
-  });
+      return;
+    }
+
+    const waypoint = stopSearch.data;
+
+    if (!waypoint) {
+      return;
+    }
+
+    handledSubmission.current = submissionCount;
+
+    if (waypoints.some((existing) => isSamePlace(existing, waypoint))) {
+      setFeedback({
+        tone: "error",
+        message: `${waypoint.name} is already a stop on this journey.`,
+      });
+      return;
+    }
+
+    onAdd(waypoint);
+    setQuery("");
+    setFeedback({
+      tone: "success",
+      message: `Added ${waypoint.name}. Your route and directions are updating.`,
+    });
+  }, [
+    onAdd,
+    stopSearch.data,
+    stopSearch.error,
+    stopSearch.isError,
+    stopSearch.isFetching,
+    submissionCount,
+    waypoints,
+  ]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const searchTerm = query.trim();
 
-    if (!searchTerm || searchForStop.isPending) {
+    if (!searchTerm || stopSearch.isFetching) {
       return;
     }
 
     setFeedback(null);
-    searchForStop.mutate(searchTerm);
+    setSubmittedQuery(searchTerm);
+    setSubmissionCount((count) => count + 1);
   };
 
   const handleQueryChange = (value: string) => {
@@ -248,10 +294,10 @@ export function JourneyStops({
             <Button
               type="submit"
               aria-label="Look up and add this stop"
-              disabled={searchForStop.isPending || query.trim() === ""}
+              disabled={stopSearch.isFetching || query.trim() === ""}
               className="shrink-0 gap-2 px-4 py-3.5 disabled:pointer-events-none disabled:opacity-50"
             >
-              {searchForStop.isPending ? (
+              {stopSearch.isFetching ? (
                 <FaSpinner aria-hidden="true" className="animate-spin" />
               ) : (
                 <FaMagnifyingGlassArrowRight aria-hidden="true" size={18} />
