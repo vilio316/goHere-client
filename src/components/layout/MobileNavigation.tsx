@@ -101,11 +101,7 @@ export function MobileNavigation({ open, onClose }: MobileNavigationProps) {
           aria-label="Mobile navigation"
           className="flex flex-1 flex-col gap-2 overflow-y-auto p-4"
         >
-          {session && session.user && (
-            <p className="text-lg font-bold text-text-on-dark">
-              {session.user.name.split(" ")[0]}
-            </p>
-          )}
+       
           {!session || session == null ? (
             <NavLink
               to="/auth"

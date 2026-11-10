@@ -11,5 +11,5 @@ export const navItems: NavItem[] = [
   { path: "/", icon: FaHome, label: "Home" },
   { path: "/explore", icon: FaCompass, label: "Explore" },
   { path: "/saved", icon: FaSave, label: "Saved" },
-  { path: "/profile", icon: FaUser, label: "Profile" },
+ 
 ];

@@ -71,7 +71,15 @@ export function ProfileScreen() {
                 variant="ghost"
                 fullWidth
                 className="text-alert-text border-alert-text/30 hover:bg-alert-text/10"
-                onClick={() => authClient.signOut()}
+                onClick={() => authClient.signOut(
+                {
+                  fetchOptions:{
+                    onSuccess: () => {
+                      navigate('/')
+                    }
+                  }
+                }
+                )}
               >
                 Sign out
               </Button>
