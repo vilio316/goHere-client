@@ -163,8 +163,8 @@ export function DetailScreen() {
     <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4 p-3 md:p-6">
       {isLoading && <GlobeLoader />}
       {isSuccess && (
-        <div className="grid flex-col-reverse md:grid-cols-2 gap-x-2 md:gap-x-8 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
-          <div className="max-w-xl mx-auto w-full">
+        <div className="grid w-full min-w-0 flex-col-reverse md:grid-cols-2 gap-x-2 md:gap-x-8 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
+          <div className="min-w-0 max-w-xl mx-auto w-full">
             <div className="flex items-center justify-between mb-4">
               <Button
                 variant="secondary"

@@ -225,7 +225,7 @@ export function MapRender({
   }, [waypoints]);
 
   return (
-    <div>
+    <div className="min-w-0">
       <p className="font-display text-heading-m my-2">Detailed Map</p>
       <div
         ref={containerRef}

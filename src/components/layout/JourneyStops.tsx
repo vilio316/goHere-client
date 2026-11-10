@@ -311,7 +311,7 @@ export function JourneyStops({
           <p
             id={`${inputId}-feedback`}
             role={feedback.tone === "error" ? "alert" : "status"}
-            className={`mt-3 text-body-m ${
+            className={`mt-3 break-words text-body-m ${
               feedback.tone === "error"
                 ? "text-alert-text"
                 : "text-live-text"
@@ -337,7 +337,7 @@ export function JourneyStops({
                     {index + 1}
                   </span>
 
-                  <div className="min-w-0 flex-1">
+                  <div className="w-0 min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-text-primary">
                       {waypoint.name}
                     </p>
