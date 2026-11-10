@@ -51,7 +51,7 @@ export function StatusBar({
     }, []);
 
     return (
-      <span className="text-lg font-bold">{time.toLocaleTimeString()}</span>
+      <span className="md:text-lg font-bold">{time.toLocaleTimeString()}</span>
     );
   }
   return (
@@ -59,7 +59,7 @@ export function StatusBar({
       <div>
       <DigitalClock />
       {placeData && (
-        <p className="text-lg font-bold">
+        <p className="md:text-lg font-bold">
           {placeData.address.suburb}, {placeData.address.city}
         </p>
       )}
