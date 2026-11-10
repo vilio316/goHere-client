@@ -16,7 +16,7 @@ export function HeroCTA({
     <div className="bg-hero border border-border-subtle rounded-lg p-8 text-center md:my-4 my-2">
       <h1 className="font-display font-bold text-3xl mb-4 text-text-primary">{title}</h1>
       <p className="text-text-lede mb-6 text-body-m">{subtitle}</p>
-      <Button variant="primary" size="default" onClick={onClick} className="flex items-center justify-center gap-x-2">
+      <Button variant="primary" size="sm" onClick={onClick} className="flex items-center justify-center gap-x-2">
        <span><FaRandom size={24} /></span>
         <span>{buttonText} </span>
       </Button>

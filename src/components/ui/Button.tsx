@@ -8,7 +8,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, variant = "primary", size = "default", fullWidth = false, className = "", disabled, ...props }, ref) => {
+  ({ children, variant = "primary", size = "sm", fullWidth = false, className = "", disabled, ...props }, ref) => {
     const baseClasses =
       "inline-flex items-center justify-center font-body font-semibold transition-standard focus-visible-ring";
 
