@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import { useLocationCoords } from "../../contexts/LocationContext";
 import { useQuery } from "@tanstack/react-query";
 import { ThemeToggle } from "./ThemeToggle";
+import { WeatherStatus } from "./WeatherStatus";
 import { authClient } from "../../lib/authClient";
 import { Link } from "react-router";
 
@@ -57,12 +58,15 @@ export function StatusBar({
   return (
     <div className="bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-text-on-dark py-2">
       <div>
-      <DigitalClock />
-      {placeData && (
-        <p className="md:text-lg font-bold">
-          {placeData.address.suburb}, {placeData.address.city}
-        </p>
-      )}
+        <div className="flex items-center gap-2 md:gap-3">
+          <DigitalClock />
+          <WeatherStatus />
+        </div>
+        {placeData && (
+          <p className="md:text-lg font-bold">
+            {placeData.address.suburb}, {placeData.address.city}
+          </p>
+        )}
       </div>
       <div className="flex items-center gap-1 md:gap-x-3">
         {!session || session == null ? (

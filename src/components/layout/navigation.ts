@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { FaCompass, FaHome, FaSave, FaUser } from "react-icons/fa";
+import { FaCompass, FaHome, FaSave } from "react-icons/fa";
 
 export interface NavItem {
   path: string;
