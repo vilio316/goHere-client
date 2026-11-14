@@ -11,6 +11,7 @@ import { useLocationCoords } from "../../contexts/LocationContext";
 import { authClient } from "../../lib/authClient";
 import { JourneyStops, type JourneyWaypoint } from "../layout";
 import RouteDirections, { type OSRMRouteLeg } from "./DirectionsScreen";
+import { useSaveActions } from "../../utils/saveMutations";
 
 function combineRouteLegs(
   legs?: OSRMRouteLeg[] | null,
@@ -69,6 +70,8 @@ export function DetailScreen() {
       ),
     [],
   );
+
+  const {savePlace, isSavingPlace} = useSaveActions()
 
   const {
     data: place,
@@ -149,13 +152,16 @@ export function DetailScreen() {
     );
   }
 
-  const handleSaveClick = () => {
+  const handleSaveClick = (placeName: string, placeId: number) => {
     if (!session?.user) {
       setIsSaveModalOpen(true);
       return;
     }
+    savePlace({
+      osm_id: placeId, 
+      name: placeName
+    })
 
-    console.log("Save place:", place?.osm_id ?? id);
   };
 
   return (
@@ -228,10 +234,12 @@ export function DetailScreen() {
                     <span>Get Directions</span>
                   </Button> */}
                   <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
-                    onClick={handleSaveClick}
+                    onClick={()=> handleSaveClick(
+                      place.name, Number(id)
+                    )}
                   >
                     <span><FaSave /></span>
-                    <span>Save</span>
+                    <span>{isSavingPlace? "Saving...": "Save"}</span>
                   </Button>
                 </div>
               </CardBody>

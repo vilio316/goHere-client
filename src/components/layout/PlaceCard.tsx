@@ -26,12 +26,14 @@ export interface PlaceCardProps {
   onDetailClick?: () => void;
   onSaveClick?: () => void;
   compact?: boolean;
+  saveState?: boolean
 }
 
 export function PlaceCard({
   place,
   onDetailClick,
   onSaveClick,
+  saveState,
   compact = false,
 }: PlaceCardProps) {
   if (compact) {
@@ -120,7 +122,7 @@ export function PlaceCard({
           </Button>
           <Button variant="secondary" size="sm" fullWidth onClick={onSaveClick}  className="group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-xl transition-standard px-2 py-1 gap-x-1" >
             <span><FaSave /></span>
-            <span>Save Location</span>
+            <span>{saveState ? "Saving..." : "Save Location"}</span>
           </Button>
         </CardActions>
       </CardBody>

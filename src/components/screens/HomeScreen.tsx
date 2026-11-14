@@ -11,7 +11,7 @@ export function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const {location} = useLocationCoords();
   
-  const {data: searchResults, isSuccess: resultsRetrieved, isFetching: isSearching, refetch: useAISearch} = useQuery({
+  const {data: searchResults, isSuccess: resultsRetrieved, isFetching: isSearching, refetch: doAISearch} = useQuery({
     queryKey: ["search_result_AI", searchQuery],
     enabled: false, 
     queryFn: async () => {
@@ -67,7 +67,7 @@ export function HomeScreen() {
           <div className="flex-1" />
           <SearchField placeholder="Search or explore…" submit={()=> {
            if (searchQuery.length > 15){
-            useAISearch()
+            doAISearch()
            }
            else{
             doPlain()

@@ -5,13 +5,30 @@ import { authClient } from "../../lib/authClient";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Card, CardBody } from "../ui/Card";
+import { useQuery } from "@tanstack/react-query";
+import { FaTrash } from "react-icons/fa6";
+import { useSaveActions } from "../../utils/saveMutations";
 
 export function SavedScreen() {
   const { data: session, isPending } = authClient.useSession();
   const navigate = useNavigate();
   const user = session?.user;
+  const {deletePlace, isDeletingPlace} = useSaveActions()
 
-  if (isPending) {
+  const {data: userLocations, isFetching: gettingLocations, isSuccess: loadedSavedLocations} = useQuery({
+    queryKey: ["saved-places"],
+    queryFn: async ()=>{
+      const savedRequest = await fetch(`${import.meta.env.VITE_API_URL}/locations/${user?.id}`, {
+        credentials: "include",
+      })
+      const savedResponse : any[] = await savedRequest.json()
+      return savedResponse
+    }, 
+    staleTime: 1* 60 * 60 * 1000, 
+    enabled: !!user,
+  })
+
+  if (isPending || gettingLocations) {
     return (
       <SavedScreenShell>
         <Card variant="elevated" className="animate-phrase-in">
@@ -36,21 +53,68 @@ export function SavedScreen() {
     );
   }
 
-  return (
+  if(loadedSavedLocations && userLocations && userLocations.length === 0){
+    return (
+      <SavedScreenShell>
+        <EmptySavedState
+          firstName={user.name?.split(" ")[0] || "GUEST"}
+          onExplore={() => navigate("/explore")}
+        />
+      </SavedScreenShell>
+    );
+  }
+
+    if(loadedSavedLocations && userLocations && userLocations.length > 0){
+      return(
     <SavedScreenShell>
-      <EmptySavedState
-        firstName={user.name?.split(" ")[0] || "GUEST"}
-        onExplore={() => navigate("/explore")}
-      />
-    </SavedScreenShell>
-  );
+      <div className="animate-phrase-in">
+        <h2 className="font-display text-2xl font-bold text-text-primary">
+          Your Saved Places
+        </h2>
+        <p className="mt-1 text-body-m text-text-secondary">
+          {userLocations.length} saved place{userLocations.length > 1 ? "s" : ""}
+        </p>
+
+        <ul className="mt-6 flex flex-col gap-4">
+          {userLocations.map((location) => (
+            <li key={location.osm_id}>
+              <Card variant="elevated" className="group md:max-w-4/5">
+                <CardBody className="grid grid-cols-5 items-center justify-between md:gap-4 gap-2">
+                  <div className="col-span-3">
+                    <h3 className="font-medium text-text-primary">
+                      {location.name}
+                    </h3>
+                 
+                  </div>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate(`/place/${location.osm_id}`)}
+                    className="text-text-secondary hover:text-text-primary"
+                  >
+                    View
+                  </Button>
+                  <Button className="bg-transparent hover:bg-transparent" onClick={()=> {
+                    deletePlace({
+                      user_id: user.id, osm_id: location.osm_id
+                    })
+                  }}>
+                    <FaTrash className="text-lg hover:text-xl transition-all" fill={isDeletingPlace?`yellow` :`red`} />
+                  </Button>
+                </CardBody>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </SavedScreenShell>)
+  }
 }
 
 function SavedScreenShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <div className="flex-1 overflow-y-auto px-4 pb-20">
-        <div className="mx-auto w-full max-w-xl py-12">{children}</div>
+      <div className="flex-1 overflow-y-auto md:px-8 px-4 md:pb-20 pb-6">
+        <div className="mx-auto w-full md:py-12 py-4">{children}</div>
       </div>
     </div>
   );
@@ -132,7 +196,7 @@ function EmptySavedState({ firstName, onExplore }: EmptySavedStateProps) {
         </span>
 
         <p className="mt-4 text-label-s uppercase text-text-secondary">
-          Saved places
+          Saved Places
         </p>
 
         <h2

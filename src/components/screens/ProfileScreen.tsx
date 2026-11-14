@@ -2,8 +2,9 @@ import { Card, CardBody } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { ThemeToggle } from "../layout/ThemeToggle";
 import  { authClient}  from "../../lib/authClient";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
+import {useQuery} from "@tanstack/react-query";
 
 export function ProfileScreen() {
   const {data: session} = authClient.useSession();
@@ -12,7 +13,25 @@ export function ProfileScreen() {
   useEffect(() => {
   if (!session || !session.user) {
     navigate('/auth')
-  }}, [])
+  }}, [session, navigate])
+
+  const {data: userLocations, isFetching: gettingLocations, isSuccess: loadedSavedLocations} = useQuery({
+      queryKey: ["saved-places"],
+      queryFn: async ()=>{
+        try{
+        const savedRequest = await fetch(`${import.meta.env.VITE_API_URL}/locations/${session?.user?.id}`, {
+          credentials: "include",
+        })
+        const savedResponse : any[] = await savedRequest.json()
+        return savedResponse
+      }
+      catch(error){
+        throw new Error(`Error getting saved places: ${error instanceof Error ? error.message : "Unknown error"}`)
+      }
+    }, 
+      staleTime: 1* 60 * 60 * 1000, 
+      enabled: !!session?.user,
+    })
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -35,23 +54,25 @@ export function ProfileScreen() {
             </CardBody>
           </Card>
 
-          <Card className="mb-4">
+        {
+          gettingLocations && <p>Loading your saved places...</p>
+        }
+
+          {
+            loadedSavedLocations && userLocations && userLocations.length > 0 && 
+            <Link to="/saved">
+            <Card className="mb-4">
             <CardBody className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-border-subtle">
-                <span className="text-text-primary">Saved places</span>
-                <span className="font-data font-semibold text-accent-text">
-                  0
-                </span>
-              </div>
               <div className="flex justify-between items-center py-2 border-b border-border-subtle">
                 <span className="text-text-primary">Places Saved</span>
                 <span className="font-data font-semibold text-accent-text">
-                  0
+                  {userLocations?.length || 0}
                 </span>
               </div>
            
             </CardBody>
           </Card>
+          </Link>}
 
           <Card>
             <CardBody className="space-y-3">

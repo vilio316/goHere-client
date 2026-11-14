@@ -58,7 +58,7 @@ export function StatusBar({
   return (
     <div className="bg-dusk-950 flex items-center justify-between px-4 border-b border-dusk-700 font-data text-xs text-text-on-dark py-2">
       <div>
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 my-1">
           <DigitalClock />
           <WeatherStatus />
         </div>

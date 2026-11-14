@@ -9,6 +9,7 @@ import { authClient } from "../../lib/authClient";
 import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
 import { moods } from "../../data/moods";
 import GlobeLoader from "../GlobeLoader";
+import { useSaveActions } from "../../utils/saveMutations";
 
 export function FeedScreen() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export function FeedScreen() {
   const [saveTargetName, setSaveTargetName] = useState<string | undefined>(
     undefined,
   );
+  const {savePlace, isSavingPlace}= useSaveActions()
 
   const closeSaveModal = useCallback(() => {
     setIsSaveModalOpen(false);
@@ -29,6 +31,7 @@ export function FeedScreen() {
   const { data, isSuccess, isLoading, isError, error } = useQuery({
     queryKey: ["moodResults", moodQuery],
     staleTime: 1 * 60 * 60 * 1000,
+    gcTime: 45* 60 * 1000,
     enabled: Boolean(moodQuery),
     queryFn: async () => {
       try {
@@ -60,12 +63,16 @@ export function FeedScreen() {
     navigate(`/place/${placeId}?q=${placeName}`);
   };
 
-  const handleSaveClick = (placeName?: string) => {
+  const handleSaveClick = (placeName: string, placeId: number) => {
     if (!session?.user) {
       setSaveTargetName(placeName);
       setIsSaveModalOpen(true);
       return;
     }
+    savePlace({
+      name: placeName, osm_id: placeId
+    })
+
   };
     
   if (!moodQuery) {
@@ -135,12 +142,6 @@ export function FeedScreen() {
             </div>
           )}
 
-          {/* {isSuccess && data.places.length === 0 && (
-            <div className="text-center py-8 text-text-secondary">
-              No places found for this mood
-            </div>
-          )} */}
-
           {isSuccess && (
             <div className="grid md:grid-cols-3 lg:grid-cols-4 md:gap-2 lg:gap-3">
               {data.data.places.map((place: any) => (
@@ -151,8 +152,9 @@ export function FeedScreen() {
                     handleDetailClick(place.osm_id, place.name)
                   }
                   onSaveClick={() =>
-                    handleSaveClick(place.name)
+                    handleSaveClick(place.name, place.osm_id)
                   }
+                  saveState={isSavingPlace}
                 />
               ))}
             </div>
