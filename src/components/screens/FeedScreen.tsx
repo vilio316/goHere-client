@@ -10,6 +10,7 @@ import { transformOSMPlaceToPlace } from "../../utils/placeTransformer";
 import { moods } from "../../data/moods";
 import GlobeLoader from "../GlobeLoader";
 import { useSaveActions } from "../../utils/saveMutations";
+import type { OSMPlace } from "../../types/osm";
 
 export function FeedScreen() {
   const navigate = useNavigate();
@@ -63,14 +64,27 @@ export function FeedScreen() {
     navigate(`/place/${placeId}?q=${placeName}`);
   };
 
-  const handleSaveClick = (placeName: string, placeId: number) => {
+  const handleSaveClick = (place: OSMPlace) => {
     if (!session?.user) {
-      setSaveTargetName(placeName);
+      setSaveTargetName(place.name);
       setIsSaveModalOpen(true);
       return;
     }
+     function transformType(raw: "W" |"N" |"R"){
+      if(raw === "W") return "way"
+      else if(raw === "N") return "node"
+      else if(raw === "R") return "relation"
+      else{
+        return "node"
+      }
+
+    }
     savePlace({
-      name: placeName, osm_id: placeId
+       name: place.name, 
+      osm_id: Number(place.osm_id), 
+      osm_type: transformType(place.osm_type), 
+      lat: place.lat, 
+      lon: place.lon
     })
 
   };
@@ -152,7 +166,7 @@ export function FeedScreen() {
                     handleDetailClick(place.osm_id, place.name)
                   }
                   onSaveClick={() =>
-                    handleSaveClick(place.name, place.osm_id)
+                    handleSaveClick(place)
                   }
                   saveState={isSavingPlace}
                 />

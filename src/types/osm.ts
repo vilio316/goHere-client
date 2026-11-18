@@ -18,8 +18,8 @@ export interface OSMPlace {
   osm_class: string;
   osm_type_tag: string;
   tags: OSMTags;
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
   distance_meters: string;
 }
 

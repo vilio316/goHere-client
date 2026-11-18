@@ -1,11 +1,20 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {authClient} from '../lib/authClient'
 
+interface SaveLocationsParams {
+name: string; 
+osm_id: number;
+osm_type: "node" | "way" | "relation";
+lat: string | number;
+lon: string | number;
+
+}
+
 
 export const useSaveActions = () => {
 const queryClient = useQueryClient()
 const {mutateAsync: savePlace, isPending: isSavingPlace, isSuccess: isPlaceSaved} = useMutation({
-    mutationFn: async (object: { osm_id: number; name: string }) => {
+    mutationFn: async (object: SaveLocationsParams) => {
         const session = await authClient.getSession()
         if(!session) {
             throw new Error('User not authenticated')
@@ -17,8 +26,7 @@ const {mutateAsync: savePlace, isPending: isSavingPlace, isSuccess: isPlaceSaved
             },
             credentials: 'include',
             body: JSON.stringify({
-                osm_id: object.osm_id,
-                name: object.name,
+                location: object,
                 user_id: session.data?.user.id
             }),
         });
@@ -39,9 +47,7 @@ const {mutateAsync: deletePlace, isPending: isDeletingPlace, isSuccess: placeDel
             credentials:'include'
         })
         const response = await request.json()
-        if(!response.ok){
-            throw new Error ("Delete Failed")
-        }
+       return response
     }, 
     onSuccess: async ()=> {
         await queryClient.invalidateQueries({queryKey: ['saved-places']})

@@ -12,6 +12,7 @@ import { authClient } from "../../lib/authClient";
 import { JourneyStops, type JourneyWaypoint } from "../layout";
 import RouteDirections, { type OSRMRouteLeg } from "./DirectionsScreen";
 import { useSaveActions } from "../../utils/saveMutations";
+import type { OSMPlace } from "../../types/osm";
 
 function combineRouteLegs(
   legs?: OSRMRouteLeg[] | null,
@@ -152,14 +153,35 @@ export function DetailScreen() {
     );
   }
 
-  const handleSaveClick = (placeName: string, placeId: number) => {
+  const handleSaveClick = (place: OSMPlace) => {
     if (!session?.user) {
       setIsSaveModalOpen(true);
       return;
     }
+
+    function transformType(raw: "W" |"N" |"R"){
+     switch (raw) {
+      case ("W"):
+        return "way"
+      
+      case ("N"):
+        return "node"
+         case ("R"):
+        return "relation"
+      default:
+        return "node"
+     }
+      
+    }
+
+    console.log(place.lat, place.lon)
+
     savePlace({
-      osm_id: placeId, 
-      name: placeName
+      name: place.name, 
+      osm_id: Number(place.osm_id), 
+      osm_type: transformType(place.osm_type), 
+      lat: Number(place.lat), 
+      lon: Number(place.lon)
     })
 
   };
@@ -235,7 +257,7 @@ export function DetailScreen() {
                   </Button> */}
                   <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
                     onClick={()=> handleSaveClick(
-                      place.name, Number(id)
+                      place
                     )}
                   >
                     <span><FaSave /></span>
