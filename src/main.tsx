@@ -4,6 +4,7 @@ import { registerSW } from "virtual:pwa-register";
 import App from "./App";
 import { HomeScreen } from "./components/screens/HomeScreen";
 import { FeedScreen } from "./components/screens/FeedScreen";
+import { RecommendationsScreen } from "./components/screens/RecommendationsScreen";
 import { DetailScreen } from "./components/screens/DetailScreen";
 // import { DirectionsScreen } from "./components/screens/DirectionsScreen";
 import { SavedScreen } from "./components/screens/SavedScreen";
@@ -36,6 +37,7 @@ const browserRouter = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, Component: HomeScreen },
+      { path: "recommendations", Component: RecommendationsScreen },
       { path: "explore", Component: FeedScreen },
       { path: "place/:id", Component: DetailScreen },
       // { path: "directions/:id", Component: DirectionsScreen },
