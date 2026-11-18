@@ -6,7 +6,6 @@ import { HomeScreen } from "./components/screens/HomeScreen";
 import { FeedScreen } from "./components/screens/FeedScreen";
 import { RecommendationsScreen } from "./components/screens/RecommendationsScreen";
 import { DetailScreen } from "./components/screens/DetailScreen";
-// import { DirectionsScreen } from "./components/screens/DirectionsScreen";
 import { SavedScreen } from "./components/screens/SavedScreen";
 import { ProfileScreen } from "./components/screens/ProfileScreen";
 import { AuthScreen } from "./components/screens/AuthScreen";
