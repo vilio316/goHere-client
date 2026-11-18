@@ -173,9 +173,6 @@ export function DetailScreen() {
      }
       
     }
-
-    console.log(place.lat, place.lon)
-
     savePlace({
       name: place.name, 
       osm_id: Number(place.osm_id), 
@@ -183,7 +180,6 @@ export function DetailScreen() {
       lat: Number(place.lat), 
       lon: Number(place.lon)
     })
-
   };
 
   return (
@@ -275,7 +271,9 @@ export function DetailScreen() {
             />
           </div>
           {route && (
-            <MapRender geometry={route.geometry} waypoints={waypoints} />
+            <MapRender geometry={route.geometry} waypoints={waypoints} destinationCoord={{
+              lat: place.lat, long: place.lon 
+            }}/>
           )}
          
         </div>

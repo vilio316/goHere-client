@@ -19,6 +19,10 @@ setWorkerUrl(workerUrl);
 export interface MapRenderProps {
   geometry?: Geometry;
   waypoints?: JourneyWaypoint[];
+  destinationCoord: {
+    long: number, 
+    lat: number
+  }
 }
 
 type Coordinate = [number, number];
@@ -76,6 +80,7 @@ function fitRoute(map: MapLibreMap, geometry?: Geometry) {
 export function MapRender({
   geometry,
   waypoints = [],
+  destinationCoord
 }: MapRenderProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -111,6 +116,9 @@ export function MapRender({
     );
 
     new Marker().setLngLat([center.long, center.lat]).addTo(map);
+    new Marker({
+      color: "#ff0000",}
+    ).setLngLat([destinationCoord.long, destinationCoord.lat]).addTo(map)
 
     map.addControl(
       new GeolocateControl({

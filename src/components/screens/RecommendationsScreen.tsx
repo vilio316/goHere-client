@@ -5,16 +5,16 @@ import {
 } from "../layout/RecommendationCard";
 
 import { useQuery } from "@tanstack/react-query";
-import { useLocationCoords } from "../../contexts/LocationContext";
+import { GuestSavedState } from "./SavedScreen";
 import { authClient } from "../../lib/authClient";
 import GlobeLoader from "../GlobeLoader";
 import type { OSMPlace } from "../../types/osm";
+import { useNavigate } from "react-router";
 
 export function RecommendationsScreen() {
-
-  const {location} = useLocationCoords()
-
-  const {data: recommendations, isFetching: isLoadingRecommendations, isSuccess: loadedRecommendations} = useQuery({
+  const {data} = authClient.useSession()
+  const navigate = useNavigate()
+  const {data: recommendations, isFetching: isLoadingRecommendations, isSuccess: loadedRecommendations, isError, error} = useQuery({
   queryFn: async() => {
     try{
     const userData = await authClient.getSession()
@@ -60,19 +60,8 @@ export function RecommendationsScreen() {
   queryKey: ['user-recs'],   
   staleTime: 1 * 60 * 60 * 1000, 
   gcTime: 45 * 60 * 1000, 
-  enabled: !!location
+  enabled: !!data?.user
 })
-
-  // const handleExplore = useCallback(
-  //   (recommendation: Recommendation) => {
-  //     const query = recommendation.mood
-  //       ? `?q=${encodeURIComponent(recommendation.mood)}`
-  //       : "";
-
-  //     navigate(`/explore${query}`);
-  //   },
-  //   [navigate],
-  // );
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -133,6 +122,16 @@ export function RecommendationsScreen() {
       </div>}
       {
         isLoadingRecommendations && <GlobeLoader />
+      }
+      {
+        !data?.user &&   
+        <div className="h-screen md:h-[80vh] w-screen grid items-center md:justify-items-center p-3 md:p-6">
+        <GuestSavedState
+          onSignUp={() => navigate("/profile")}
+          onExplore={() => navigate("/explore")}
+          text="Get Recommendations"
+        />
+  </div>
       }
     </div>
   );

@@ -48,6 +48,7 @@ export function SavedScreen() {
         <GuestSavedState
           onSignUp={() => navigate("/profile")}
           onExplore={() => navigate("/explore")}
+          text="Save Places"
         />
       </SavedScreenShell>
     );
@@ -123,9 +124,10 @@ function SavedScreenShell({ children }: { children: ReactNode }) {
 interface GuestSavedStateProps {
   onSignUp: () => void;
   onExplore: () => void;
+  text?: string
 }
 
-function GuestSavedState({ onSignUp, onExplore }: GuestSavedStateProps) {
+export function GuestSavedState({ onSignUp, onExplore, text }: GuestSavedStateProps) {
   return (
     <section
       aria-labelledby="saved-guest-title"
@@ -137,14 +139,14 @@ function GuestSavedState({ onSignUp, onExplore }: GuestSavedStateProps) {
         </span>
 
         <Badge variant="solo" className="mt-4">
-          Save places
+          {text}
         </Badge>
 
         <h2
           id="saved-guest-title"
           className="mt-3 font-display text-2xl font-bold text-text-primary"
         >
-          Sign up to save places
+          Sign up to {text}
         </h2>
 
         <p className="mx-auto mt-2 max-w-md text-body-m text-text-secondary">
