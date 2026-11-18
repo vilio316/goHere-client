@@ -34,7 +34,10 @@ const {mutateAsync: savePlace, isPending: isSavingPlace, isSuccess: isPlaceSaved
         return data;
     },
     onSuccess: async() =>{
-        await queryClient.invalidateQueries({queryKey: ['saved-places']})
+          await Promise.all([
+        queryClient.invalidateQueries({queryKey: ['saved-places']}), 
+        queryClient.invalidateQueries({queryKey: ['user-recs']}),
+        ])
     }
 })
 
@@ -50,7 +53,10 @@ const {mutateAsync: deletePlace, isPending: isDeletingPlace, isSuccess: placeDel
        return response
     }, 
     onSuccess: async ()=> {
-        await queryClient.invalidateQueries({queryKey: ['saved-places']})
+        await Promise.all([
+        queryClient.invalidateQueries({queryKey: ['saved-places']}), 
+        queryClient.invalidateQueries({queryKey: ['user-recs']}),
+        ])
     }
 }
 )

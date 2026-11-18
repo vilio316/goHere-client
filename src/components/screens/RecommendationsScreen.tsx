@@ -35,8 +35,8 @@ export function RecommendationsScreen() {
               "Content-Type": "application/json",
             },
       body:  JSON.stringify({
-        radiusMeters: 5000, 
-        limit: 7, 
+        radiusMeters: 10000, 
+        limit: 10, 
         anchors: savedResults.map((result) => {
           const newObj = {
             id: result.name, 
