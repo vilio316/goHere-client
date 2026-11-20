@@ -13,6 +13,7 @@ import { JourneyStops, type JourneyWaypoint } from "../layout";
 import RouteDirections, { type OSRMRouteLeg } from "./DirectionsScreen";
 import { useSaveActions } from "../../utils/saveMutations";
 import type { OSMPlace } from "../../types/osm";
+import { FaMap } from "react-icons/fa6";
 
 function combineRouteLegs(
   legs?: OSRMRouteLeg[] | null,
@@ -57,8 +58,10 @@ export function DetailScreen() {
   const location = useLocationCoords();
   const { data: session } = authClient.useSession();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [mobileCardShown, showFullCard] = useState(false)
   const [waypoints, setWaypoints] = useState<JourneyWaypoint[]>([]);
   const closeSaveModal = useCallback(() => setIsSaveModalOpen(false), []);
+  const [isViewingDirections, switchDirectionsView] = useState(false)
   const handleAddWaypoint = useCallback(
     (waypoint: JourneyWaypoint) =>
       setWaypoints((current) => [...current, waypoint]),
@@ -184,10 +187,10 @@ export function DetailScreen() {
 
   return (
     <>
-    <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4 p-3 md:p-6">
+    <div className="flex flex-col overflow-hidden place-items-center gap-x-2 md:gap-x-4 md:p-6">
       {isLoading && <GlobeLoader />}
       {isSuccess && (
-        <div className="grid w-full min-w-0 flex-col-reverse md:grid-cols-2 gap-x-2 md:gap-x-8 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
+        <div className="hidden md:grid w-full min-w-0 flex-col-reverse md:grid-cols-2 gap-x-2 md:gap-x-8 overflow-y-auto px-4 md:pt-6 pt-3 pb-20">
           <div className="min-w-0 max-w-xl mx-auto w-full">
             <div className="flex items-center justify-between mb-4">
               <Button
@@ -203,10 +206,6 @@ export function DetailScreen() {
             </div>
 
             <Card className="mb-6">
-              {/* <CardPhoto style={{ height: "200px" }}>
-              <div className="flex gap-2">{badges}</div>
-            </CardPhoto> */}
-
               <CardBody>
                 <h3 className="font-display font-bold text-xl text-text-primary mb-4">
                   {place.name}
@@ -217,18 +216,6 @@ export function DetailScreen() {
                 </p>
 
                 <div className="space-y-4 mb-6">
-                  <div className="pb-4 border-b border-border-subtle">
-                    {/* <p className="text-label-s text-text-secondary mb-1">Site</p>
-                    <p className="font-semibold text-live-text">
-                      {place.website}
-                    </p> */}
-                  </div>
-                  {/* <div className="pb-4 border-b border-dusk-600">
-                    <p className="text-label-s text-slate-400 mb-1">Distance</p>
-                    <p className="font-semibold text-fog-050">
-                      {place.walkTime} walk · {place.distance}
-                    </p>
-                  </div> */}
                   <div className="pb-4 border-b border-border-subtle">
                     <p className="text-label-s text-text-secondary mb-1">
                       Place Type
@@ -242,15 +229,6 @@ export function DetailScreen() {
                 </div>
 
                 <div className="flex gap-3">
-                  {/* <Button
-                    variant="primary"
-                    fullWidth
-                    onClick={handleDirections}
-                    className="gap-x-3 p-2"
-                  >
-                    <FaMap />
-                    <span>Get Directions</span>
-                  </Button> */}
                   <Button variant="secondary" fullWidth className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
                     onClick={()=> handleSaveClick(
                       place
@@ -279,7 +257,7 @@ export function DetailScreen() {
         </div>
       )}
     </div>
-    <div className="p-4">
+    <div className="p-4 hidden md:grid">
       {(isRouteLoading || isRouteFetching) && (
         <p className="mb-3 text-body-m text-text-secondary" role="status">
           {isRouteLoading ? "Loading route…" : "Updating route…"}
@@ -291,9 +269,105 @@ export function DetailScreen() {
         </p>
       )}
       {routeLeg && (
-        <RouteDirections leg={routeLeg} className="min-h-[600px]" />
+        <RouteDirections leg={routeLeg} className="min-h-[600px]" destName={place.name}/>
       )}
     </div>
+
+    {/*Mobile-only map UI test here */}
+        {route && !isViewingDirections && (
+          <div className="grid md:hidden h-90vh w-screen p-2 relative">
+            <MapRender geometry={route.geometry} waypoints={waypoints} destinationCoord={{
+              lat: place.lat, long: place.lon 
+            }}/>
+            <div className="min-w-0 max-w-xl mx-auto w-full absolute -bottom-[64px]">
+            {/* <div className="flex items-center justify-between mb-4 bg-surface-raised">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate(-1)}
+                className="px-3 py-2"
+              >
+                ← Back
+              </Button>
+              <h3 className="font-display font-bold text-lg">Details</h3>
+              <div className="w-10" />
+            </div> */}
+
+            <Card className="mb-6">
+              <CardBody>
+              <div className="flex items-center" onClick={()=> showFullCard(!mobileCardShown)}>
+                <h3 className={`font-display font-bold text-xl text-text-primary ${mobileCardShown?'my-2' :'mb-0'} w-3/4`}>
+                  {place.name}
+                </h3>
+                <button onClick={()=> showFullCard(!mobileCardShown)} className="rounded-2xl bg-transparent hover:text-amber-300 hover:underline">
+                  {mobileCardShown ? "Hide" : "Show"}
+                </button>
+                </div>
+               {mobileCardShown && <>
+                <p className="underline">Detailed Address</p>
+                <p className="text-text-meta text-body-m mb-6">
+                  {place.display_name}
+                </p>
+
+                <div className="space-y-4 mb-6">
+                  <div className="pb-4 border-b border-border-subtle">
+                    <p className="text-label-s text-text-secondary mb-1">
+                      Place Type
+                    </p>
+                    <p className="font-semibold text-text-primary">
+                      {String(place.type).charAt(0).toUpperCase() +
+                        String(place.type).slice(1)}
+                    </p>
+                  </div>
+                  <div></div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button variant="secondary" className="flex w-1/2 gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
+                    onClick={()=> handleSaveClick(
+                      place
+                    )}
+                  >
+                    <span><FaSave /></span>
+                    <span>{isSavingPlace? "Saving...": "Save"}</span>
+                  </Button>
+     <Button variant="secondary" className="flex gap-x-2 px-2 py-1 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
+              onClick={() => {switchDirectionsView(true); showFullCard
+                (false)
+              }}
+              >
+                    <span><FaMap /></span>
+                    <span>View Directions</span>
+                  </Button>
+                </div>
+                </>}
+              </CardBody>
+            </Card>
+
+            {/* <JourneyStops
+              waypoints={waypoints}
+              onAdd={handleAddWaypoint}
+              onRemove={handleRemoveWaypoint}
+              className="mb-6"
+            /> */}
+          </div>
+            </div>
+          )}
+          {
+            route && isViewingDirections && (
+              <div className="p-2 my-1 bg-inherit">
+                <div className="flex justify-end">
+                   <Button variant="secondary" className="flex gap-x-2 px-2 py-1 my-2 group hover:text-accent-text hover:text-[15px] hover:bg-surface-hover rounded-pill transition-standard"
+                  onClick={()=> switchDirectionsView(false)}   
+                  >
+                    <span>Hide Directions</span>
+                  </Button>
+              </div>
+              <RouteDirections leg={routeLeg} destName= {place.name}/>
+                    </div>
+            )
+          }
+
     <SaveLocationModal
       open={isSaveModalOpen}
       onClose={closeSaveModal}

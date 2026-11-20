@@ -8,6 +8,7 @@ import {
   LngLatBounds,
   setWorkerUrl,
   Marker,
+  AttributionControl
 } from "maplibre-gl";
 import type { Feature, Geometry } from "geojson";
 
@@ -103,9 +104,14 @@ export function MapRender({
 
       center: [center.long, center.lat],
       zoom: 12,
+      attributionControl: false
     });
 
     mapRef.current = map;
+
+    map.addControl(new AttributionControl({
+  compact: true // Optional: collapses into an "i" icon on smaller screens
+}), 'top-left');
 
     map.addControl(
       new NavigationControl({
@@ -242,7 +248,7 @@ export function MapRender({
         style={{
           width: "100%",
           height: "100%",
-          minHeight: "300px",
+          minHeight: "450px",
           borderRadius: "8px",
         }}
       />

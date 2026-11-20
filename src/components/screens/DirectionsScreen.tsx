@@ -33,7 +33,6 @@ export interface OSRMStep {
   destinations?: string;
   exits?: string;
   mode?: string;
-
   maneuver: OSRMManeuver;
 }
 
@@ -48,6 +47,7 @@ export interface OSRMRouteLeg {
 interface RouteDirectionsProps {
   leg?: OSRMRouteLeg | null;
   className?: string;
+  destName: string;
 }
 
 /* =========================================================
@@ -323,6 +323,7 @@ function ManeuverIcon({ step }: { step: OSRMStep }) {
 export default function RouteDirections({
   leg,
   className = "",
+  destName
 }: RouteDirectionsProps) {
   const steps = useMemo(() => {
     if (!Array.isArray(leg?.steps)) {
@@ -385,6 +386,8 @@ export default function RouteDirections({
       {/* Route summary */}
       <header className="flex items-center justify-between gap-6 border-b border-border-subtle px-5 py-5">
         <div className="min-w-0">
+          <p className="text-lg font-bold text-text-primary my-2 md:my-4">Viewing Directions to {destName}</p>
+
           <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
             Route
           </span>

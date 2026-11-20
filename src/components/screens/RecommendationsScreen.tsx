@@ -14,7 +14,7 @@ import { useNavigate } from "react-router";
 export function RecommendationsScreen() {
   const {data} = authClient.useSession()
   const navigate = useNavigate()
-  const {data: recommendations, isFetching: isLoadingRecommendations, isSuccess: loadedRecommendations, isError, error} = useQuery({
+  const {data: recommendations, isFetching: isLoadingRecommendations, isSuccess: loadedRecommendations} = useQuery({
   queryFn: async() => {
     try{
     const userData = await authClient.getSession()
