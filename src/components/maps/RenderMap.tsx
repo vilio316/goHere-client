@@ -152,7 +152,7 @@ export function MapRender({
       map.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [destinationCoord.lat, destinationCoord.long]);
 
   // Keep the drawn route in sync when stops are added or removed.
   useEffect(() => {

@@ -54,7 +54,7 @@ export function RecommendationsScreen() {
     return response
   }
     catch(error){
-      error instanceof Error ? error.message : "Unknown error"
+     throw new Error(error instanceof Error ? error.message : "Unknown error")
     }
   },
   queryKey: ['user-recs'],   
@@ -65,8 +65,8 @@ export function RecommendationsScreen() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-    {loadedRecommendations &&<div className="flex-1 overflow-y-auto px-4 pb-20">
-        <div className="mx-auto w-full max-w-6xl py-4 md:py-10">
+    {loadedRecommendations &&<div className="flex-1 overflow-y-auto px-4 md:pb-20 pb-4">
+        <div className="mx-auto w-full py-4 md:py-10">
           <header className="animate-phrase-in">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="solo">For you</Badge>

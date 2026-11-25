@@ -113,8 +113,8 @@ export function SavedScreen() {
 
 function SavedScreenShell({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <div className="flex-1 overflow-y-auto md:px-8 px-4 md:pb-20 pb-6">
+    <div className="flex flex-col h-screen overflow-hidden place-items-center">
+      <div className="flex-1 overflow-y-auto md:px-8 px-4 md:pb-20 pb-6 h-full flex place-items-center">
         <div className="mx-auto w-full md:py-12 py-4">{children}</div>
       </div>
     </div>

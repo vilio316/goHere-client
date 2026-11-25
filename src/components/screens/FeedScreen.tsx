@@ -91,7 +91,7 @@ export function FeedScreen() {
     
   if (!moodQuery) {
     return (
-      <div className="flex flex-col h-screen overflow-hidden">
+      <div className="flex flex-col h-screen overflow-hidden animate-phrase-in">
         <div className="flex-1 overflow-y-auto px-4 pb-20">
           <div className="max-w-4xl mx-auto w-full py-8 md:py-12">
             <div className="mb-6 md:mb-8">

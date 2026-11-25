@@ -64,7 +64,7 @@ export function StatusBar({
         </div>
         {placeData && (
           <p className="md:text-lg font-bold">
-            {placeData.address.suburb}, {placeData.address.city}
+            {placeData.address.suburb ? `${placeData.address.suburb},`: null} {placeData.address.city}
           </p>
         )}
       </div>
