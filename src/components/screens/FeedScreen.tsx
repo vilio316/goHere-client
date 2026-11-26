@@ -33,7 +33,7 @@ export function FeedScreen() {
     queryKey: ["moodResults", moodQuery],
     staleTime: 1 * 60 * 60 * 1000,
     gcTime: 45* 60 * 1000,
-    enabled: Boolean(moodQuery),
+    enabled: Boolean(moodQuery) && location.lat !== 0,
     queryFn: async () => {
       try {
         const request = await fetch(
